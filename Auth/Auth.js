@@ -9,7 +9,7 @@ exports.register = async (req, res, next) => {
   if (password.length < 6) {
     return res
       .status(400)
-      .json({message: 'Password must be at least 6 characters long'});
+      .json({message: 'Password must be at least 6 characters long', error: 'Password must be at least 6 characters long'});
   }
   try {
     bcrypt.hash(password, 10).then(async (hash) => {
@@ -38,6 +38,8 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   const {username, password} = req.body;
+  console.log(req.body);
+  console.log(username + ' ' + password);
   if (!username || !password) {
     return res.status(400).json({message: 'Username or Password not provided'});
   };
