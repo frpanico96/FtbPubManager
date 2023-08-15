@@ -8,23 +8,23 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const HomePage = ({navigation, route}) => {
+const HomePage = ({onNavigate}) => {
   const onPressCustomer = () => {
-    console.log('Pressed Customer');
+    onNavigate('Login');
   };
   const onPressGuest = () => {
-    console.log('Pressed Guest');
+    onNavigate('Help');
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('./assets/home-neutral-background-img.jpeg')}
+        source={require('../assets/home-neutral-background-img.jpeg')}
         resizeMode="cover"
         style={styles.backgroundImage}>
         <View style={styles.imageContainer}>
           <Image
-            source={require('./assets/FTB_PubManager_LOGO-removebg-preview.png')}
+            source={require('../assets/FTB_PubManager_LOGO-removebg-preview.png')}
             style={styles.image}
           />
         </View>
@@ -34,7 +34,7 @@ const HomePage = ({navigation, route}) => {
               imageStyle={styles.backgroundImgBtnImageStyle}
               style={styles.backgroundImgBtn}
               resizeMode="cover"
-              source={require('./assets/home-guest-btn-img.webp')}>
+              source={require('../assets/home-guest-btn-img.webp')}>
               <Text style={styles.guestBtnTxt}>I am a Guest</Text>
             </ImageBackground>
           </TouchableOpacity>

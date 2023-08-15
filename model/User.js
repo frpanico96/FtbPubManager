@@ -1,5 +1,6 @@
 const Mongoose = require('mongoose');
 
+
 const UserSchema = new Mongoose.Schema({
   username: {
     type: String,
@@ -13,9 +14,11 @@ const UserSchema = new Mongoose.Schema({
   },
   role: {
     type: String,
-    default: 'Basic',
+    default: 'customer',
     required: true,
+    enum: ['customer','owner','admin'],
   },
+  pubs: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'pub' }],
 });
 
 const User = Mongoose.model('user', UserSchema);

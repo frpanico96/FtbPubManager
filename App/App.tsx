@@ -64,7 +64,7 @@ function App({navigation}): JSX.Element {
   };
 
   const onPressBtn = () => {
-    navigation.navigate('HomePage', {name: 'Francesco'});
+    navigation.navigate('HomePubContainer', {name: 'Francesco'});
   }
 
   return (
