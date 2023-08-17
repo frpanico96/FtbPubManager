@@ -7,6 +7,14 @@ const PubSchema = new Mongoose.Schema({
       required: true,
     },
     owner: {type: Schema.Types.ObjectId, ref: 'user'},
+    logo: {
+      type: String,
+      default: 'pub-default-btn',
+    },
+    showOwner:{
+      type: Boolean,
+      default: true,
+    }
 })
 
 

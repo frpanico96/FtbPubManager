@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {TextInput, TouchableOpacity, View, Text} from 'react-native';
 import {ImageBackground, StyleSheet} from 'react-native';
 import Toast from 'react-native-toast-message';
+import IMAGES from '../assets/asset';
 
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
 
@@ -9,10 +10,10 @@ const Login = ({navigation, route}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigateToPubList = () => {
+  const navigateToPubList = (userInfo) => {
     navigation.navigate({
       name: 'HomePubContainer',
-      params: {hasUserOrGuestLoggedIn: true},
+      params: {hasUserOrGuestLoggedIn: true, userInfo},
       merge: true,
     });
   };
@@ -38,7 +39,8 @@ const Login = ({navigation, route}) => {
           position: 'bottom',
         });
         if (!jsonRes.error) {
-          navigateToPubList();
+          const objToRoute = {username: jsonRes.user.username, role: jsonRes.user.role}
+          navigateToPubList(objToRoute);
         }
       })
       .catch(error => console.log(error));
@@ -72,7 +74,7 @@ const Login = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../assets/home-neutral-background-img.jpeg')}
+        source={IMAGES['home-background']}
         resizeMode="cover"
         style={styles.backgroundImage}>
         <View style={{flex: 1}} />
