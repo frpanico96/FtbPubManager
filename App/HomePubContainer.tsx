@@ -7,12 +7,16 @@ const HomePubContainer = ({navigation, route}) => {
     navigation.navigate(cmp);
   };
 
+  const handlePubNavigation = pub => {
+    console.log('# Pub: ' + JSON.stringify(pub));
+  }
+
   return (
     <>
       {!route.params?.hasUserOrGuestLoggedIn ? (
         <HomePage onNavigate={handleNavigate} />
       ) : (
-        <PubList/>
+        <PubList onPubNavigate={handlePubNavigation} userInfo={route.params?.userInfo} onLogOut={handleNavigate}/>
       )}
     </>
   );

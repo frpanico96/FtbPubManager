@@ -7,26 +7,24 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import IMAGES from '../assets/asset';
 
 const HomePage = ({onNavigate}) => {
   const onPressCustomer = () => {
     onNavigate('Login');
   };
   const onPressGuest = () => {
-    onNavigate('Help');
+    onNavigate('Guest');
   };
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../assets/home-neutral-background-img.jpeg')}
+        source={IMAGES['home-background']}
         resizeMode="cover"
         style={styles.backgroundImage}>
         <View style={styles.imageContainer}>
-          <Image
-            source={require('../assets/FTB_PubManager_LOGO-removebg-preview.png')}
-            style={styles.image}
-          />
+          <Image source={IMAGES['home-logo']} style={styles.image} />
         </View>
         <View style={styles.loginBtnCotainer}>
           <TouchableOpacity style={styles.guestBtn} onPress={onPressGuest}>
@@ -34,7 +32,7 @@ const HomePage = ({onNavigate}) => {
               imageStyle={styles.backgroundImgBtnImageStyle}
               style={styles.backgroundImgBtn}
               resizeMode="cover"
-              source={require('../assets/home-guest-btn-img.webp')}>
+              source={IMAGES['home-guest-btn']}>
               <Text style={styles.guestBtnTxt}>I am a Guest</Text>
             </ImageBackground>
           </TouchableOpacity>
