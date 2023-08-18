@@ -1,5 +1,13 @@
+/**@frpanico
+ * User Schema File
+ * The user is the entity that interacts with the app
+ * It is currentyly defined by three fields
+ * -- Username
+ * -- Password
+ * -- Role
+ * Has a "parent-child" with PUBS
+ */
 const Mongoose = require('mongoose');
-
 
 const UserSchema = new Mongoose.Schema({
   username: {
@@ -16,9 +24,9 @@ const UserSchema = new Mongoose.Schema({
     type: String,
     default: 'customer',
     required: true,
-    enum: ['customer','owner','admin'],
+    enum: ['customer', 'owner', 'admin'],
   },
-  pubs: [{ type: Mongoose.Schema.Types.ObjectId, ref: 'pub' }],
+  pubs: [{type: Mongoose.Schema.Types.ObjectId, ref: 'pub'}],
 });
 
 const User = Mongoose.model('user', UserSchema);

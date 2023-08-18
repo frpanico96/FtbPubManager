@@ -1,10 +1,12 @@
+/**@frpanico
+ * Middleware file to logout
+ */
 import React, {useEffect} from 'react';
 
 const Logout = ({navigation, route}) => {
-
   /* To Do: Effective Logout
-  * Expiring jwt token
-  */
+   * Expiring jwt token
+   */
 
   useEffect(() => {
     console.log('### Logout Mounted');

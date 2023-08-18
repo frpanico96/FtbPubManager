@@ -1,3 +1,6 @@
+/**@frpanico
+ * Routing file
+ */
 const express = require('express');
 const {adminAuth} = require('../middleware/auth');
 const router = express.Router();

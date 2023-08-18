@@ -1,3 +1,7 @@
+/**@frpanico
+ * UI file for PubList
+ * Shows all available pubs and it is possible to interact with them
+ */
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -79,13 +83,17 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
         </Text>
         {pubs}
         <View style={styles.pubListBtnContainer}>
-        {userInfo && userInfo?.role === 'admin' && (
-          <TouchableOpacity style={styles.pubListNewPubBtn}>
-            <Text style={styles.pubListNewPubBtnTxt}>Create New Pub</Text>
-          </TouchableOpacity>
-        )}
-          <TouchableOpacity style={styles.pubListNewPubBtn} onPress={onPressLogOut}>
-            <Text style={styles.pubListNewPubBtnTxt}>{userInfo ? 'Log Out' : 'Home Page'}</Text>
+          {userInfo && userInfo?.role === 'admin' && (
+            <TouchableOpacity style={styles.pubListNewPubBtn}>
+              <Text style={styles.pubListNewPubBtnTxt}>Create New Pub</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            style={styles.pubListNewPubBtn}
+            onPress={onPressLogOut}>
+            <Text style={styles.pubListNewPubBtnTxt}>
+              {userInfo ? 'Log Out' : 'Home Page'}
+            </Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -115,14 +123,24 @@ const PubTile = ({pub, onSelectPub}) => {
 };
 
 const styles = StyleSheet.create({
-  pubListHeader: {fontFamily: 'sans-serif', fontSize: 40, fontWeight: '700', padding: 10},
+  pubListHeader: {
+    fontFamily: 'sans-serif',
+    fontSize: 40,
+    fontWeight: '700',
+    padding: 10,
+  },
   pubListContainer: {flex: 1},
   pubListBackgroundImage: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  pubListBtnContainer: {flex: 1, padding: 10, justifyContent: 'space-evenly', alignItems: 'center'},
+  pubListBtnContainer: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+  },
   pubListNewPubBtn: {
     width: '40%',
     padding: 10,

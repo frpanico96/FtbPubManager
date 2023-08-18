@@ -65,7 +65,7 @@ function App({navigation}): JSX.Element {
 
   const onPressBtn = () => {
     navigation.navigate('HomePubContainer', {name: 'Francesco'});
-  }
+  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -82,7 +82,7 @@ function App({navigation}): JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Navigation Button">
-            <Button title="Navigation Button" onPress={onPressBtn}></Button>
+            <Button title="Navigation Button" onPress={onPressBtn} />
           </Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
