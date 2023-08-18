@@ -1,3 +1,6 @@
+/**@frpanico
+ * Middleware file to join as a guest
+ */
 import React, {useEffect} from 'react';
 
 const GuestLogin = ({navigation, route}) => {

@@ -1,3 +1,7 @@
+/**@frpanico
+ * UI file for the HomePage
+ * the Home allows to login or join as a guest
+ */
 import React from 'react';
 import {
   Image,

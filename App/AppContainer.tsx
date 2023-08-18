@@ -1,5 +1,8 @@
-import App from '../App/App';
-import React, {useState} from 'react';
+/**@frpanico
+ * Main UI file that contains
+ * all the screens for the app
+ */
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../App/Login';
@@ -11,12 +14,6 @@ import Logout from './Logout';
 const Stack = createNativeStackNavigator();
 
 const AppContainer = () => {
-  const [hasUserOrGuestLoggedIn, setHasUserOrGuestLoggedIn] = useState(false);
-
-  const handleUserOrGuestLoggedIn = () => {
-    setHasUserOrGuestLoggedIn(true);
-  };
-
   return (
     <>
       <NavigationContainer>

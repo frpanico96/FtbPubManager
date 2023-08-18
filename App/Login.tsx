@@ -1,3 +1,7 @@
+/**@frpanico
+ * UI login file
+ * From this page the user can log in or sign up
+ */
 import React, {useState} from 'react';
 import {TextInput, TouchableOpacity, View, Text} from 'react-native';
 import {ImageBackground, StyleSheet} from 'react-native';
@@ -10,7 +14,7 @@ const Login = ({navigation, route}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigateToPubList = (userInfo) => {
+  const navigateToPubList = userInfo => {
     navigation.navigate({
       name: 'HomePubContainer',
       params: {hasUserOrGuestLoggedIn: true, userInfo},
@@ -39,7 +43,10 @@ const Login = ({navigation, route}) => {
           position: 'bottom',
         });
         if (!jsonRes.error) {
-          const objToRoute = {username: jsonRes.user.username, role: jsonRes.user.role}
+          const objToRoute = {
+            username: jsonRes.user.username,
+            role: jsonRes.user.role,
+          };
           navigateToPubList(objToRoute);
         }
       })
