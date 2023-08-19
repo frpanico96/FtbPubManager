@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message';
 import HomePubContainer from './HomePubContainer';
 import GuestLogin from './GuestLogin';
 import Logout from './Logout';
+import PubMain from './PubMain';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ const AppContainer = () => {
             name="Logout"
             component={Logout}
           />
+          <Stack.Screen name="PubMain" component={PubMain} />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

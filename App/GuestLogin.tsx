@@ -2,7 +2,7 @@
  * Middleware file to join as a guest
  */
 import React, {useEffect} from 'react';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from './utility/LoadingSpinner';
 
 const GuestLogin = ({navigation, route}) => {
   useEffect(() => {

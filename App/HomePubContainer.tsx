@@ -14,6 +14,11 @@ const HomePubContainer = ({navigation, route}) => {
 
   const handlePubNavigation = pub => {
     console.log('# Pub: ' + JSON.stringify(pub));
+    navigation.navigate({
+      name: 'PubMain',
+      params: {userInfo: route.params?.userInfo, pub: pub},
+      merge: true,
+    });
   };
 
   return (
