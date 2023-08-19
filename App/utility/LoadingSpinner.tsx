@@ -1,3 +1,10 @@
+/**@frpanico
+ * Utility Component
+ * Showing a loading spinner
+ * Accepts params
+ * -- size
+ * -- color
+ */
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 
