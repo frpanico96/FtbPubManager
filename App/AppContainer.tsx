@@ -18,10 +18,22 @@ const AppContainer = () => {
     <>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="HomePubContainer" component={HomePubContainer} />
+          <Stack.Screen
+            options={{headerShown: false, title: 'Home'}}
+            name="HomePubContainer"
+            component={HomePubContainer}
+          />
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Guest" component={GuestLogin} />
-          <Stack.Screen name="Logout" component={Logout} />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Guest"
+            component={GuestLogin}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="Logout"
+            component={Logout}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
