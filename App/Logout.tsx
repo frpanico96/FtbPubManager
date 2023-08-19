@@ -2,6 +2,7 @@
  * Middleware file to logout
  */
 import React, {useEffect} from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 const Logout = ({navigation, route}) => {
   /* To Do: Effective Logout
@@ -11,14 +12,20 @@ const Logout = ({navigation, route}) => {
   useEffect(() => {
     console.log('### Logout Mounted');
 
-    navigation.navigate({
-      name: 'HomePubContainer',
-      params: {hasUserOrGuestLoggedIn: false, userInfo: undefined},
-      merge: true,
-    });
-  }, []);
+    setTimeout(() => {
+      navigation.navigate({
+        name: 'HomePubContainer',
+        params: {hasUserOrGuestLoggedIn: false, userInfo: undefined},
+        merge: true,
+      });
+    }, 1500);
+  }, [navigation]);
 
-  return <></>;
+  return (
+    <>
+      <LoadingSpinner size="large" color="pink" />
+    </>
+  );
 };
 
 export default Logout;
