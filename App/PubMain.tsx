@@ -10,7 +10,7 @@ import {
   ImageBackground,
   StyleSheet,
 } from 'react-native';
-import IMAGES from '../assets/asset';
+import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 
 type PubActionObj = {
@@ -27,12 +27,21 @@ type PubTileProps = {
 
 const PUB_UTILS = UTILS.pubMain;
 
-const PubMain: JSX.Element = ({navigation, route}) => {
+const PubMain = ({navigation, route}) => {
   console.log('### Route Params: ' + JSON.stringify(route.params));
   console.log(PUB_UTILS);
 
   const onPressAction = ({actionName}) => {
     console.log('### Action pressed: ' + actionName);
+    navigation.navigate({
+      name: 'PubMainManager',
+      params: {userInfo: route.params?.userInfo, pub: route.params?.pub, cmp: actionName},
+      merge: true,
+    });
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
   };
 
   const pubTilesRaw = PUB_UTILS.map(tile => {
@@ -101,20 +110,25 @@ const PubMain: JSX.Element = ({navigation, route}) => {
 
   const pubTiles = pubTilesRaw.filter(el => el !== null);
   return (
-    <View style={sytles.container}>
+    <View style={styles.container}>
       <ImageBackground
         source={IMAGES['home-background']}
         resizeMode="cover"
-        style={sytles.containerBackgroundImg}>
-        <View style={sytles.pubMainHeader}>
-          <Text style={sytles.pubNameText}>{route.params.pub.name}</Text>
+        style={styles.containerBackgroundImg}>
+        <View style={styles.pubMainHeader}>
+          <Text style={styles.pubNameText}>{route.params.pub.name}</Text>
           {route.params.pub.showOwner && (
-            <Text style={sytles.pubOwnerText}>
+            <Text style={styles.pubOwnerText}>
               by: {route.params.pub.owner}
             </Text>
           )}
         </View>
         {pubTiles}
+        <View style={styles.goBackBtnContainer}>
+          <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
+            <Text style={styles.goBackBtnTxt}>Go Back</Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -131,19 +145,19 @@ const PubMainTile: React.FC<PubTileProps> = ({
   };
 
   return (
-    <View style={sytles.btnContainer}>
+    <View style={styles.btnContainer}>
       <TouchableOpacity
         disabled={disabled}
-        style={sytles.btnTouchable}
+        style={styles.btnTouchable}
         onPress={onPressTile}>
         <ImageBackground
           source={IMAGES['pub-main-btn']}
           resizeMode="cover"
-          style={sytles.btnBackgroundImage}
-          imageStyle={sytles.btnBackgroundInsideImage}>
-          <Text style={sytles.btnText}>{pubAction.label}</Text>
+          style={styles.btnBackgroundImage}
+          imageStyle={styles.btnBackgroundInsideImage}>
+          <Text style={styles.btnText}>{pubAction.label}</Text>
           {additionalText && (
-            <Text style={sytles.btnAdditionalText}>{additionalText}</Text>
+            <Text style={styles.btnAdditionalText}>{additionalText}</Text>
           )}
         </ImageBackground>
       </TouchableOpacity>
@@ -151,7 +165,7 @@ const PubMainTile: React.FC<PubTileProps> = ({
   );
 };
 
-const sytles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {flex: 1},
   containerBackgroundImg: {
     flex: 1,
@@ -180,6 +194,16 @@ const sytles = StyleSheet.create({
   btnTouchable: {},
   btnText: {fontSize: 18, textAlign: 'center', color: 'white'},
   btnAdditionalText: {textAlign: 'center', color: 'white'},
+  goBackBtnContainer: {flex: 1, justifyContent: 'center'},
+  goBackBtn: {
+    width: '40%',
+    backgroundColor: 'pink',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderRadius: 6,
+    padding: 10,
+  },
+  goBackBtnTxt: {fontSize: 18},
 });
 
 export default PubMain;

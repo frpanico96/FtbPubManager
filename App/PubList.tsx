@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import IMAGES from '../assets/asset';
+import IMAGES from '../utilities/asset';
 
 /* Example of pub Object
 const testPub = {

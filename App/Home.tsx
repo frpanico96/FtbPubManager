@@ -11,7 +11,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import IMAGES from '../assets/asset';
+import IMAGES from '../utilities/asset';
 
 const HomePage = ({onNavigate}) => {
   const onPressCustomer = () => {
