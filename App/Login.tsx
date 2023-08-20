@@ -6,7 +6,7 @@ import React, {useState} from 'react';
 import {TextInput, TouchableOpacity, View, Text} from 'react-native';
 import {ImageBackground, StyleSheet} from 'react-native';
 import Toast from 'react-native-toast-message';
-import IMAGES from '../assets/asset';
+import IMAGES from '../utilities/asset';
 
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
 

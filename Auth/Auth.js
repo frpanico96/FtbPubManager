@@ -13,7 +13,7 @@ const jwtSecret =
   '61ee06e2929764ddd97faf6339e56aea9bd5f83b5c6ee3130625c4ff54bdfc3eaf98c6';
 
 exports.register = async (req, res, next) => {
-  const {username, password} = req.body;
+  const {username, password, isOwner} = req.body;
 
   if (password.length < 6) {
     return res.status(400).json({
@@ -26,6 +26,7 @@ exports.register = async (req, res, next) => {
       await User.create({
         username,
         password: hash,
+        role: isOwner ? 'owner' : 'customer',
       })
         .then(user => {
           const maxAge = 3 * 60 * 60;
