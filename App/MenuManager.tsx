@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import FtbButton from './utility/FtbButton';
+import UTILS from '../utilities/utils';
+
+const MM_UTILS = UTILS.menuManager;
 
 type MenuManagerProps = {
   role: String;
@@ -31,29 +33,26 @@ const MenuManager: React.FC<MenuManagerProps> = ({role, onModifyMenu}) => {
 
 const ManagerBtn: React.FC<MenuManagerBtnProps> = ({onPressAction}) => {
   const handleNewFoodCategory = () => {
-    onPressAction({action: 'new', name: 'food-category'});
+    onPressAction({action: 'new', name: MM_UTILS['food-category-action']});
   };
   const handleNewFood = () => {
-    onPressAction({action: 'new', name: 'food'});
+    onPressAction({action: 'new', name: MM_UTILS['food-action']});
   };
   return (
     <View style={styles.btnContainer}>
-      <FtbButton
-        btnStyles={{btnStyle: styles.btn, btnTextStyle: styles.btnText}}
-        onPressBtn={handleNewFoodCategory}
-        text="New Food Category"
-      />
-      <FtbButton
-        btnStyles={{btnStyle: styles.btn, btnTextStyle: styles.btnText}}
-        onPressBtn={handleNewFood}
-        text="New Food"
-      />
+      <TouchableOpacity style={styles.btn} onPress={handleNewFoodCategory}>
+        <Text style={styles.btnText}>{MM_UTILS['mm-new-food-category']}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={handleNewFood}>
+        <Text style={styles.btnText}>{MM_UTILS['mm-new-food']}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   btnContainer: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     alignItems: 'center',

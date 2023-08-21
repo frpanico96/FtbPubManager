@@ -12,6 +12,7 @@ import GuestLogin from './GuestLogin';
 import Logout from './Logout';
 import PubMain from './PubMain';
 import PubMainManager from './PubMainManager';
+import PubMainManagerDetail from './PubMainManagerDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,7 +38,8 @@ const AppContainer = () => {
             component={Logout}
           />
           <Stack.Screen options={{headerShown: false}} name="PubMain" component={PubMain} />
-          <Stack.Screen name="PubMainManager" component={PubMainManager} />
+          <Stack.Screen options={{headerShown: false}} name="PubMainManager" component={PubMainManager} />
+          <Stack.Screen name="PubMainManagerDetail" component={PubMainManagerDetail} />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

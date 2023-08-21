@@ -6,6 +6,17 @@ const UTILS = {
     {name: 'pub-main-manage-reservation', label: 'Manage Reservation'},
     {name: 'pub-main-close-pub', label: 'Close Pub'},
   ],
+  menuManager: {
+    'mm-new-food-category': 'New Category',
+    'mm-new-food': 'New Food',
+    'food-category-action': 'food-category',
+    'food-action': 'food',
+    'food-category-card': 'Food Category',
+    'food-card': 'Food',
+    'food-category-placeholder': 'Category Name',
+    'food-placeholder': 'Food Name',
+  },
+  goBack: 'Go Back',
 };
 
 export default UTILS;
