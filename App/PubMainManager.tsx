@@ -1,8 +1,14 @@
 import React from 'react';
 import MenuManager from './MenuManager';
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
-import FtbButton from './utility/FtbButton';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import IMAGES from '../utilities/asset';
+import UTILS from '../utilities/utils';
 
 type navigateToDetailObj = {
   action: String;
@@ -14,6 +20,11 @@ const PubMainManager = ({navigation, route}) => {
 
   const handleNavigateToDetail = (navigationInfo: navigateToDetailObj) => {
     console.log('### NavigationInfo' + JSON.stringify(navigationInfo));
+    navigation.navigate({
+      name: 'PubMainManagerDetail',
+      params: {navigationInfo},
+      merge: true,
+    });
   };
 
   const handleGoBack = () => {
@@ -32,17 +43,15 @@ const PubMainManager = ({navigation, route}) => {
     <>
       <ImageBackground
         source={IMAGES['home-background']}
-          resizeMode="cover"
-        style={styles.pubListBackgroundImage}>
-          <View style={styles.container}>
-            {componentToShow}
-            <FtbButton
-              btnStyles={{btnStyle: styles.btn, btnTextStyle: styles.btnText}}
-              text="Go Back"
-              onPressBtn={handleGoBack}
-            />
-          </View>
-       </ImageBackground>
+        resizeMode="cover"
+        style={styles.backgroundImage}>
+        {componentToShow}
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.btn} onPress={handleGoBack}>
+            <Text style={styles.btnText}>{UTILS.goBack}</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </>
   );
 };
@@ -54,6 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  btnContainer: {padding: 7},
   btn: {
     backgroundColor: 'pink',
     width: '40%',
