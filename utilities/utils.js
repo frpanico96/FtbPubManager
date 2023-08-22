@@ -7,6 +7,7 @@ const UTILS = {
     {name: 'pub-main-close-pub', label: 'Close Pub'},
   ],
   menuManager: {
+    'mm-new-menu': 'New Menu Item',
     'mm-new-food-category': 'New Category',
     'mm-new-food': 'New Food',
     'food-category-action': 'food-category',
@@ -17,6 +18,8 @@ const UTILS = {
     'food-placeholder': 'Food Name',
   },
   goBack: 'Go Back',
+  save: 'Save',
+  serverBasePath: 'http://localhost:5001/api/auth',
 };
 
 export default UTILS;

@@ -44,6 +44,7 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
         const rawPubList = res.pubs;
         const pubList = rawPubList.reduce((accumulator, currentValue) => {
           const newPub = {
+            id: currentValue._id,
             name: currentValue.name,
             owner: currentValue.owner.username,
             showOwner: currentValue.showOwner,
