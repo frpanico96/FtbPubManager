@@ -4,28 +4,75 @@
  * and new foods
  */
 
-const Food = require('../model/Food');
-const FoodCategory = require('../model/FoodCategory');
+//const Food = require('../model/Food');
+//const FoodCategory = require('../model/FoodCategory');
+const Menu = require('../model/Menu');
+const Pub = require('../model/Pub');
 
-exports.getMenu = async ({req, res, next}) => {
-  await FoodCategory.find()
+exports.getMenu = async (req, res, next) => {
+  const {pubId} = req.body;
+  await Menu.findOne({pub: pubId})
     .then(menu => res.status(200).json({message: 'Success', menu}))
     .catch(error =>
       res.status(400).json({message: 'Error', error: error.message}),
     );
 };
 
-exports.insertFoodCategory = async ({req, res, next}) => {
-  const {name, logo} = req.body;
+exports.insertMenuItem = async (req, res, next) => {
+  const {food, foodCategory, ingredients, isVeganOk, isVegetarianOk, pub} =
+    req.body;
+  if (food && foodCategory && ingredients) {
+    await Menu.create({
+      food,
+      foodCategory,
+      ingredients,
+      isVeganOk,
+      isVegetarianOk,
+      pub,
+    })
+      .then(menuItem => {
+        Pub.findById(pub)
+          .then(pubToUpdate => {
+            pubToUpdate.menu.push(menuItem._id);
+            pubToUpdate.save().then(newPub => {
+              return res
+                .status(200)
+                .json({message: 'Success', newPub, menuItem});
+            });
+          })
+          .catch(error =>
+            res.status(400).json({
+              message: 'Error!',
+              error: error.message,
+            }),
+          );
+      })
+      .catch(error =>
+        res.status(400).json({
+          message: 'Error!',
+          error: error.message,
+        }),
+      );
+  } else {
+    return res.status(400).json({
+      message: 'Error!',
+      error: 'Missing Required Fields!',
+    });
+  }
+};
 
+/*
+exports.insertFoodCategory = async (req, res, next) => {
+  const {name} = req.body;
   if (name) {
+    console.log(name);
     await FoodCategory.create({
       name,
-      logo,
     })
-      .then(foodCategory =>
-        res.status(200).json({message: 'Success', foodCategory}),
-      )
+      .then(foodCategory => {
+        console.log(foodCategory);
+        return res.status(200).json({message: 'Success', foodCategory});
+      })
       .catch(error =>
         res.status(400).json({message: 'Error', error: error.message}),
       );
@@ -37,7 +84,7 @@ exports.insertFoodCategory = async ({req, res, next}) => {
   }
 };
 
-exports.insertFood = async ({req, res, next}) => {
+exports.insertFood = async (req, res, next) => {
   const {name, foodCategory, number, ingredients} = req.body;
   if (name && foodCategory && ingredients) {
     Food.create({
@@ -52,7 +99,7 @@ exports.insertFood = async ({req, res, next}) => {
             foodCategoryToUpdate.foods.push(food._id);
             foodCategoryToUpdate
               .save()
-              .then(newFoodCategory => 
+              .then(newFoodCategory =>
                 res.status(200).json({
                   message: 'Success',
                   food,
@@ -77,3 +124,4 @@ exports.insertFood = async ({req, res, next}) => {
     });
   }
 };
+*/

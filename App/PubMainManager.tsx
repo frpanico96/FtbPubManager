@@ -35,6 +35,7 @@ const PubMainManager = ({navigation, route}) => {
     route.params?.cmp === 'pub-main-menu' ? (
       <MenuManager
         role={route.params?.userInfo?.role}
+        pub={route.params?.pub}
         onModifyMenu={handleNavigateToDetail}
       />
     ) : null;

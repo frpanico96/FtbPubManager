@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import UTILS from '../utilities/utils';
 
@@ -6,6 +6,7 @@ const MM_UTILS = UTILS.menuManager;
 
 type MenuManagerProps = {
   role: String;
+  pub: Object;
   onModifyMenu: Function;
 };
 
@@ -16,13 +17,33 @@ type MenuManagerBtnProps = {
 type ActionType = {
   action: String;
   name: String;
+  pubId: String;
 };
 
-const MenuManager: React.FC<MenuManagerProps> = ({role, onModifyMenu}) => {
+const MenuManager: React.FC<MenuManagerProps> = ({role, pub, onModifyMenu}) => {
   const handlePressAction = (action: ActionType) => {
     console.log(action);
-    onModifyMenu(action);
+    const actionObj : ActionType = {action: action.action, pubId: pub['id']};
+    onModifyMenu(actionObj);
   };
+
+  console.log(pub);
+
+  const fetchMenu = () => {
+    const apiToCall = UTILS.serverBasePath + '/getMenu';
+    fetch(apiToCall, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'GET',
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+      });
+  };
+
+  useEffect(() => {
+    //fetchMenu();
+  }, []);
 
   return (
     <>
@@ -32,19 +53,13 @@ const MenuManager: React.FC<MenuManagerProps> = ({role, onModifyMenu}) => {
 };
 
 const ManagerBtn: React.FC<MenuManagerBtnProps> = ({onPressAction}) => {
-  const handleNewFoodCategory = () => {
-    onPressAction({action: 'new', name: MM_UTILS['food-category-action']});
-  };
-  const handleNewFood = () => {
-    onPressAction({action: 'new', name: MM_UTILS['food-action']});
+  const handleNewMenuItem = () => {
+    onPressAction({action: 'new'});
   };
   return (
     <View style={styles.btnContainer}>
-      <TouchableOpacity style={styles.btn} onPress={handleNewFoodCategory}>
-        <Text style={styles.btnText}>{MM_UTILS['mm-new-food-category']}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={handleNewFood}>
-        <Text style={styles.btnText}>{MM_UTILS['mm-new-food']}</Text>
+      <TouchableOpacity style={styles.btn} onPress={handleNewMenuItem}>
+        <Text style={styles.btnText}>{MM_UTILS['mm-new-menu']}</Text>
       </TouchableOpacity>
     </View>
   );

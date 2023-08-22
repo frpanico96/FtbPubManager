@@ -16,6 +16,7 @@ const PubSchema = new Mongoose.Schema({
     required: true,
   },
   owner: {type: Schema.Types.ObjectId, ref: 'user'},
+  menu: [{type: Schema.Types.ObjectId, ref: 'menu'}],
   logo: {
     type: String,
     default: 'pub-default-btn',
