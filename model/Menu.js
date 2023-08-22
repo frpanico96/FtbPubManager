@@ -20,11 +20,11 @@ const MenuSchema = Mongoose.Schema({
       'others',
     ],
   },
-  ingredients:{
+  ingredients: {
     type: String,
     unique: false,
     required: true,
-  }
+  },
   isVeganOk: {
     type: Boolean,
     required: false,
