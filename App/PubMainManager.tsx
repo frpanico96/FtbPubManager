@@ -13,6 +13,7 @@ import UTILS from '../utilities/utils';
 type navigateToDetailObj = {
   action: String;
   name: String;
+  pubId: String;
 };
 
 const PubMainManager = ({navigation, route}) => {

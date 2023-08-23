@@ -8,16 +8,15 @@ const PubMainManagerDetail = ({navigation, route}) => {
   console.log('### Routing Params: ' + JSON.stringify(route.params));
   const actionName = route.params?.navigationInfo.name;
   const actionType = route.params?.navigationInfo.action;
+  const pubId = route.params?.navigationInfo.pubId;
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const componentToShow =
-    actionName === UTILS.menuManager['food-action'] ||
-    actionName === UTILS.menuManager['food-category-action'] ? (
+  const componentToShow = actionName === UTILS.menuManager['menu-action-name'] ? (
       <MenuManagerDetail
-        name={actionName}
+        pubId={pubId}
         actionType={actionType}
         onGoBack={handleGoBack}
       />

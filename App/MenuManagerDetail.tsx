@@ -8,115 +8,162 @@ import {
 } from 'react-native';
 import Toast from 'react-native-toast-message';
 import DropDownPicker from 'react-native-dropdown-picker';
+import CheckBox from '@react-native-community/checkbox';
 import UTILS from '../utilities/utils';
 
 type MenuManagerDetailProps = {
-  name: String;
+  pubId: String;
   actionType: String;
   onGoBack: Function;
 };
 
-type FoodCategoryFormProps = {
-  isCategory: Boolean;
-  foodOrCategoryName: String;
+type MenuItemProps = {
+  foodName: String;
+  foodCategory: String;
   ingredients: String;
-  menuNumber: String;
-  categories: Array<String>;
-  category: String;
+  isVeganOk: Boolean;
+  isVegetarianOk: Boolean;
   onSave: Function;
 };
 
-type SaveFormObj = {
-  categoryOrFoodName: String;
+type SaveFormProps = {
+  food: String;
   foodCategory: String;
-  number: Number;
   ingredients: String;
-};
+  isVeganOk: Boolean;
+  isVegetarianOk: Boolean;
+  pub: String;
+}
 
 const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
-  name,
+  pubId,
   actionType,
   onGoBack,
 }) => {
-  const isCategory = name === UTILS.menuManager['food-category-action'];
-  const apiToCall = isCategory
-    ? UTILS.serverBasePath + '/createFoodCategory'
-    : UTILS.serverBasePath + '/createFood';
-  console.log(apiToCall);
-  const handleSave = (formObj: SaveFormObj) => {
-    console.log('### MM_CategoryName: ' + formObj.categoryOrFoodName);
-    fetch(apiToCall, {
+
+  const handleSaveToDb = (formObj: SaveFormProps) => {
+    fetch(UTILS.serverBasePath + '/createMenu', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
-      body: JSON.stringify({name: formObj.categoryOrFoodName}),
+      body: JSON.stringify(formObj),
     })
       .then(res => res.json())
       .then(jsonRes => {
         console.log(jsonRes);
-        Toast.show({
-          type: jsonRes.error ? 'error' : 'success',
-          text1: jsonRes.error ? jsonRes.error : 'Success',
-          text2: jsonRes.error
-            ? jsonRes.error
-            : 'Category Successfully Created',
-          position: 'top',
-        });
-      });
+      })
+      .catch(error => console.log(error));
   };
+
+  const handleSaveForm = (saveObj: SaveFormProps) => {
+    const formObj = {...saveObj};
+    formObj.pub = pubId;
+    console.log(formObj);
+    handleSaveToDb(formObj);
+  };
+
   return (
     <>
-      <FoodOrCategoryForm
-        foodOrCategoryName=""
-        isCategory={isCategory}
-        onSave={handleSave}
-      />
+      <View style={styles.fakeRow} />
+      <View style={styles.card}>
+        <MenuItemForm
+          foodName=""
+          foodCategory=""
+          ingredients=""
+          isVeganOk={false}
+          isVegetarianOk={false}
+          onSave={handleSaveForm}
+        />
+      </View>
+      <View style={styles.fakeRow} />
     </>
   );
 };
 
-const FoodOrCategoryForm: React.FC<FoodCategoryFormProps> = ({
-  foodOrCategoryName,
-  menuNumber,
+const MenuItemForm: React.FC<MenuItemProps> = ({
+  foodName,
+  foodCategory,
   ingredients,
-  categories,
-  category,
+  isVeganOk,
+  isVegetarianOk,
   onSave,
 }) => {
-  const [foodOrCategoryInput, setfoodOrCategoryInput] =
-    useState(foodOrCategoryName);
-  const [selectedMenuNumber, setSelectedMenuNumber] = useState(menuNumber);
-  const [selectedIngredients, setSelectedIngredients] = useState(ingredients);
+  const [foodInput, setFoodInput] = useState(foodName);
+  const [ingredientsInput, setIngredientsInput] = useState(ingredients);
+  const [isVegan, setIsVegan] = useState(isVeganOk);
+  const [isVegetarian, setIsVegetarian] = useState(isVegetarianOk);
   const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(category);
-  const [items, setItems] = useState(categories);
+  const [foodCategoryInput, setFoodCategoryInput] = useState(foodCategory);
+  const [items, setItems] = useState(UTILS.menuManager['menu-food-categories']);
+
   const onPressSave = () => {
-    console.log('### Cateogry Name: ' + foodOrCategoryInput);
-    const saveObj: SaveFormObj = {categoryOrFoodName: foodOrCategoryInput};
+    const saveObj: SaveFormProps = {
+      food: foodInput,
+      ingredients: ingredientsInput,
+      foodCategory: foodCategoryInput,
+      isVeganOk: isVegan,
+      isVegetarianOk: isVegetarian,
+      pub: '',
+    };
     onSave(saveObj);
   };
-  const header = 'New Menu Item';
+
   return (
     <>
-      <View style={{flex: 1}} />
-      <View style={styles.card}>
-        <Text style={styles.cardHeader}>{header}</Text>
-
-        <TouchableOpacity style={styles.btn} onPress={onPressSave}>
-          <Text style={styles.btnText}>{UTILS.save}</Text>
-        </TouchableOpacity>
+      <TextInput
+        style={styles.inputTxt}
+        placeholder="Food Name"
+        value={foodInput}
+        onChangeText={setFoodInput}
+      />
+      <TextInput
+        style={styles.inputTxt}
+        placeholder="Garlic, Onion, ..."
+        value={ingredientsInput}
+        onChangeText={setIngredientsInput}
+      />
+      <View style={styles.combobox}>
+        <DropDownPicker
+          open={open}
+          value={foodCategoryInput}
+          items={items}
+          setOpen={setOpen}
+          setValue={setFoodCategoryInput}
+          setItems={setItems}
+        />
       </View>
-      <View style={{flex: 1}} />
+      <View style={styles.checkBoxesContainer}>
+        <View style={styles.checkBoxContainer}>
+          <CheckBox
+            style={styles.checkBox}
+            value={isVegan}
+            onValueChange={newValue => setIsVegan(newValue)}
+          />
+          <Text>VeganOK?</Text>
+        </View>
+        <View style={styles.checkBoxContainer}>
+          <CheckBox
+            style={styles.checkBox}
+            value={isVegetarian}
+            onValueChange={newValue => setIsVegetarian(newValue)}
+          />
+          <Text>VegetarianOK?</Text>
+        </View>
+      </View>
+      <TouchableOpacity style={styles.btn} onPress={onPressSave}>
+        <Text style={styles.btnText}>Save</Text>
+      </TouchableOpacity>
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  fakeRow: {flex: 1},
   card: {
     width: 300,
     height: 300,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
-    flex: 2,
+    flex: 3,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
@@ -130,7 +177,25 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     width: '80%',
-    height: '20%',
+    height: '15%',
+  },
+  combobox: {
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 2000,
+  },
+  checkBoxesContainer: {
+    justifyContent: 'center',
+  },
+  checkBoxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 3,
+  },
+  checkBox: {
+    alignSelf: 'center',
+    marginRight: 10,
   },
   btn: {
     backgroundColor: 'pink',

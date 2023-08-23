@@ -23,7 +23,7 @@ type ActionType = {
 const MenuManager: React.FC<MenuManagerProps> = ({role, pub, onModifyMenu}) => {
   const handlePressAction = (action: ActionType) => {
     console.log(action);
-    const actionObj : ActionType = {action: action.action, pubId: pub['id']};
+    const actionObj : ActionType = {name:MM_UTILS['menu-action-name'], action: action.action, pubId: pub['id']};
     onModifyMenu(actionObj);
   };
 
@@ -33,7 +33,8 @@ const MenuManager: React.FC<MenuManagerProps> = ({role, pub, onModifyMenu}) => {
     const apiToCall = UTILS.serverBasePath + '/getMenu';
     fetch(apiToCall, {
       headers: {'Content-Type': 'application/json'},
-      method: 'GET',
+      method: 'POST',
+      body: JSON.stringify({pubId: pub.id}),
     })
       .then(res => res.json())
       .then(jsonRes => {
@@ -42,7 +43,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({role, pub, onModifyMenu}) => {
   };
 
   useEffect(() => {
-    //fetchMenu();
+    fetchMenu();
   }, []);
 
   return (
