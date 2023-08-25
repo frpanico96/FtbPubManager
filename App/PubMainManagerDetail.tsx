@@ -1,5 +1,11 @@
 import React from 'react';
-import {ImageBackground, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 import MenuManagerDetail from './MenuManagerDetail';
@@ -14,11 +20,25 @@ const PubMainManagerDetail = ({navigation, route}) => {
     navigation.goBack();
   };
 
-  const componentToShow = actionName === UTILS.menuManager['menu-action-name'] ? (
+  const handleNavigateToPreviousScreen = () => {
+    navigation.navigate({
+      name: 'PubMainManager',
+      params: {
+        userInfo: route.params?.userInfo,
+        pub: route.params?.pub,
+        cmp: route.params?.cmp,
+        refreshMenu: true,
+      },
+      merge: true,
+    });
+  };
+
+  const componentToShow =
+    actionName === UTILS.menuManager['menu-action-name'] ? (
       <MenuManagerDetail
         pubId={pubId}
         actionType={actionType}
-        onGoBack={handleGoBack}
+        onGoBack={handleNavigateToPreviousScreen}
       />
     ) : (
       <Text>Hello</Text>
@@ -32,10 +52,10 @@ const PubMainManagerDetail = ({navigation, route}) => {
         style={styles.backgroundImage}>
         {componentToShow}
         <View style={styles.btnContainer}>
-        <TouchableOpacity style={styles.btn} onPress={handleGoBack}>
-          <Text style={styles.btnText}>{UTILS.goBack}</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity style={styles.btn} onPress={handleGoBack}>
+            <Text style={styles.btnText}>{UTILS.goBack}</Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
     </View>
   );

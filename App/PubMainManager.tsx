@@ -23,7 +23,12 @@ const PubMainManager = ({navigation, route}) => {
     console.log('### NavigationInfo' + JSON.stringify(navigationInfo));
     navigation.navigate({
       name: 'PubMainManagerDetail',
-      params: {navigationInfo},
+      params: {
+        navigationInfo,
+        userInfo: route.params?.userInfo,
+        pub: route.params?.pub,
+        cmp: route.params?.cmp,
+      },
       merge: true,
     });
   };
@@ -38,6 +43,7 @@ const PubMainManager = ({navigation, route}) => {
         role={route.params?.userInfo?.role}
         pub={route.params?.pub}
         onModifyMenu={handleNavigateToDetail}
+        refresher={route.params?.refreshMenu}
       />
     ) : null;
 
