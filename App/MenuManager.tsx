@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Accordion from 'react-native-collapsible/Accordion';
 import UTILS from '../utilities/utils';
 
 const MM_UTILS = UTILS.menuManager;
@@ -8,6 +10,7 @@ type MenuManagerProps = {
   role: String;
   pub: Object;
   onModifyMenu: Function;
+  refresher: Boolean;
 };
 
 type MenuManagerBtnProps = {
@@ -20,16 +23,29 @@ type ActionType = {
   pubId: String;
 };
 
-const MenuManager: React.FC<MenuManagerProps> = ({role, pub, onModifyMenu}) => {
+const MenuManager: React.FC<MenuManagerProps> = ({
+  role,
+  pub,
+  onModifyMenu,
+  refresher,
+}) => {
+
+  const [test, setTest] = useState(false);
+
   const handlePressAction = (action: ActionType) => {
     console.log(action);
-    const actionObj : ActionType = {name:MM_UTILS['menu-action-name'], action: action.action, pubId: pub['id']};
+    const actionObj: ActionType = {
+      name: MM_UTILS['menu-action-name'],
+      action: action.action,
+      pubId: pub.id,
+    };
     onModifyMenu(actionObj);
   };
 
   console.log(pub);
 
-  const fetchMenu = () => {
+  const fetchMenu = (refresh: Boolean) => {
+    console.log(refresh);
     const apiToCall = UTILS.serverBasePath + '/getMenu';
     fetch(apiToCall, {
       headers: {'Content-Type': 'application/json'},
@@ -42,12 +58,21 @@ const MenuManager: React.FC<MenuManagerProps> = ({role, pub, onModifyMenu}) => {
       });
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchMenu(refresher);
+    }, [refresher]),
+  );
+
   useEffect(() => {
-    fetchMenu();
+    //fetchMenu();
   }, []);
 
   return (
     <>
+      <TouchableOpacity style={{marginTop: 200}} onPress={() => setTest(currentValue => !currentValue)}>
+        <Text>Test</Text>
+      </TouchableOpacity>
       {role !== 'customer' && <ManagerBtn onPressAction={handlePressAction} />}
     </>
   );
@@ -77,6 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
     width: '100%',
     padding: 3,
+    marginTop: 100,
     borderStyle: 'solid',
     borderWidth: 1,
     borderRadius: 6,

@@ -11,7 +11,7 @@ const Pub = require('../model/Pub');
 
 exports.getMenu = async (req, res, next) => {
   const {pubId} = req.body;
-  await Menu.findOne({pub: pubId})
+  await Menu.find({pub: pubId})
     .then(menu => res.status(200).json({message: 'Success', menu}))
     .catch(error =>
       res.status(400).json({message: 'Error', error: error.message}),

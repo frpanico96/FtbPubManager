@@ -33,14 +33,13 @@ type SaveFormProps = {
   isVeganOk: Boolean;
   isVegetarianOk: Boolean;
   pub: String;
-}
+};
 
 const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
   pubId,
   actionType,
   onGoBack,
 }) => {
-
   const handleSaveToDb = (formObj: SaveFormProps) => {
     fetch(UTILS.serverBasePath + '/createMenu', {
       headers: {'Content-Type': 'application/json'},
@@ -50,6 +49,15 @@ const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
       .then(res => res.json())
       .then(jsonRes => {
         console.log(jsonRes);
+        Toast.show({
+          type: jsonRes.error ? 'error' : 'success',
+          text1: jsonRes.error ? jsonRes.error : 'Success',
+          text2: jsonRes.error
+            ? 'Menu Item not correctly created'
+            : 'Menu Item created correctly',
+          position: 'bottom',
+        });
+        onGoBack();
       })
       .catch(error => console.log(error));
   };
