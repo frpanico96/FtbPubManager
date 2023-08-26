@@ -35,6 +35,15 @@ const MenuSchema = Mongoose.Schema({
     required: false,
     default: false,
   },
+  price:{
+    type: Number,
+    required: true,
+  },
+  currency:{
+    type: String,
+    required: true,
+    enum: ['USD','EUR'],
+  },
   pub: {
     type: Schema.Types.ObjectId,
     ref: 'pub',

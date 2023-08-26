@@ -23,6 +23,8 @@ type MenuItemProps = {
   ingredients: String;
   isVeganOk: Boolean;
   isVegetarianOk: Boolean;
+  price: Number;
+  currency: String;
   onSave: Function;
 };
 
@@ -32,6 +34,8 @@ type SaveFormProps = {
   ingredients: String;
   isVeganOk: Boolean;
   isVegetarianOk: Boolean;
+  price: Number;
+  currency: String;
   pub: String;
 };
 
@@ -93,16 +97,25 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
   ingredients,
   isVeganOk,
   isVegetarianOk,
+  price,
+  currency,
   onSave,
 }) => {
   const [foodInput, setFoodInput] = useState(foodName);
   const [ingredientsInput, setIngredientsInput] = useState(ingredients);
   const [isVegan, setIsVegan] = useState(isVeganOk);
   const [isVegetarian, setIsVegetarian] = useState(isVegetarianOk);
+  const [priceInput, setPriceInput] = useState(price);
+  /* Food Category Combobox State */
   const [open, setOpen] = useState(false);
   const [foodCategoryInput, setFoodCategoryInput] = useState(foodCategory);
   const [items, setItems] = useState(UTILS.menuManager['menu-food-categories']);
-
+  /* Currency Combobox State */
+  const [openCurr, setOpenCurr] = useState(false);
+  const [currInput, setCurrInput] = useState(currency);
+  const [itemsCurr, setItemsCurr] = useState(
+    UTILS.menuManager['menu-item-currency'],
+  );
   const onPressSave = () => {
     const saveObj: SaveFormProps = {
       food: foodInput,
@@ -110,6 +123,8 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
       foodCategory: foodCategoryInput,
       isVeganOk: isVegan,
       isVegetarianOk: isVegetarian,
+      price: priceInput,
+      currency: currInput,
       pub: '',
     };
     onSave(saveObj);
@@ -138,6 +153,23 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
           setValue={setFoodCategoryInput}
           setItems={setItems}
         />
+      </View>
+      <View style={styles.priceContainer}>
+        <TextInput style={styles.inputTxtPrice}
+        value={priceInput}
+        onChangeText={setPriceInput}
+        placeholder="12.39" />
+        <View style={styles.comboboxCurrency}>
+          <DropDownPicker
+            open={openCurr}
+            value={currInput}
+            items={itemsCurr}
+            setOpen={setOpenCurr}
+            setValue={setCurrInput}
+            setItems={setItemsCurr}
+            placeholder=""
+          />
+        </View>
       </View>
       <View style={styles.checkBoxesContainer}>
         <View style={styles.checkBoxContainer}>
@@ -192,6 +224,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 2000,
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    width: '80%',
+    zIndex: 1000,
+  },
+  inputTxtPrice: {
+    flex: 2,
+    borderStyle: 'solid',
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  comboboxCurrency: {
+    flex: 1,
   },
   checkBoxesContainer: {
     justifyContent: 'center',

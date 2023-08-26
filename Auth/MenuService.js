@@ -19,7 +19,7 @@ exports.getMenu = async (req, res, next) => {
 };
 
 exports.insertMenuItem = async (req, res, next) => {
-  const {food, foodCategory, ingredients, isVeganOk, isVegetarianOk, pub} =
+  const {food, foodCategory, ingredients, isVeganOk, isVegetarianOk, price, currency, pub} =
     req.body;
   if (food && foodCategory && ingredients) {
     await Menu.create({
@@ -28,6 +28,8 @@ exports.insertMenuItem = async (req, res, next) => {
       ingredients,
       isVeganOk,
       isVegetarianOk,
+      price,
+      currency,
       pub,
     })
       .then(menuItem => {
@@ -47,11 +49,13 @@ exports.insertMenuItem = async (req, res, next) => {
             }),
           );
       })
-      .catch(error =>
-        res.status(400).json({
+      .catch(error =>{
+        console.log(error);
+        return res.status(400).json({
           message: 'Error!',
           error: error.message,
-        }),
+        });
+      }
       );
   } else {
     return res.status(400).json({
