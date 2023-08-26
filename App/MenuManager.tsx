@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,6 +11,7 @@ import {
 import Accordion from 'react-native-collapsible/Accordion';
 import CheckBox from '@react-native-community/checkbox';
 import UTILS from '../utilities/utils';
+import IMAGES from '../utilities/asset';
 
 const MM_UTILS = UTILS.menuManager;
 
@@ -27,13 +29,16 @@ type MenuManagerBtnProps = {
 type MenuAccordionProps = {
   menuSection: Array;
   activeSection: Array;
+  isAtLeastOwner: Boolean;
   onSetActiveSection: Function;
+  onPressMenuItem: Function;
 };
 
 type ActionType = {
   action: String;
   name: String;
   pubId: String;
+  menu: Object;
 };
 
 const MenuManager: React.FC<MenuManagerProps> = ({
@@ -45,12 +50,15 @@ const MenuManager: React.FC<MenuManagerProps> = ({
   const [menuSection, setMenuSection] = useState([]);
   const [activeSection, setActiveSections] = useState([]);
 
+  const isAtLeastOwner = role && (role === 'owner' || role === 'admin');
+
   const handlePressAction = (action: ActionType) => {
     console.log(action);
     const actionObj: ActionType = {
       name: MM_UTILS['menu-action-name'],
       action: action.action,
       pubId: pub.id,
+      menu: action.menu,
     };
     onModifyMenu(actionObj);
   };
@@ -105,16 +113,33 @@ const MenuManager: React.FC<MenuManagerProps> = ({
     setActiveSections(activeSections);
   };
 
+  const handleMenuItemPress = menuItem => {
+    console.log(menuItem);
+    const actionObj: ActionType = {
+      action: 'edit',
+      menu: menuItem,
+    };
+    _updateActiveSections([]);
+    handlePressAction(actionObj);
+  };
+
   console.log(menuSection);
 
   return (
     <>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Menu</Text>
+      </View>
       <MenuAccordion
         menuSection={menuSection}
         activeSection={activeSection}
         onSetActiveSection={_updateActiveSections}
+        onPressMenuItem={handleMenuItemPress}
+        isAtLeastOwner={isAtLeastOwner}
       />
-      {role !== 'customer' && <ManagerBtn onPressAction={handlePressAction} />}
+      <View style={styles.btnContainer}>
+        {isAtLeastOwner && <ManagerBtn onPressAction={handlePressAction} />}
+      </View>
     </>
   );
 };
@@ -135,6 +160,8 @@ const ManagerBtn: React.FC<MenuManagerBtnProps> = ({onPressAction}) => {
 const MenuAccordion: React.FC<MenuAccordionProps> = ({
   menuSection,
   activeSection,
+  isAtLeastOwner,
+  onPressMenuItem,
   onSetActiveSection,
 }) => {
   const _renderSectionTitle = section => {
@@ -142,9 +169,23 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
   };
 
   const _renderHeader = section => {
+    const titleSplit = section.title.split(' ');
+    let title = '';
+    for (let i = 0; i < titleSplit.length; ++i) {
+      title += titleSplit[i].charAt(0).toUpperCase() + titleSplit[i].slice(1);
+      if (i < titleSplit.length - 1) {
+        title += ' ';
+      }
+    }
     return (
       <View style={styles.menuHeader}>
-        <Text>{section.title}</Text>
+        <ImageBackground
+          style={styles.backgroundImage}
+          imageStyle={styles.backgroundInsideImage}
+          source={IMAGES['menu-btn-background']}
+          resizeMode="cover">
+          <Text style={styles.accordionSectionTitle}>{title}</Text>
+        </ImageBackground>
       </View>
     );
   };
@@ -155,7 +196,11 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
         {section.content.map(el => {
           return (
             <>
-              <TouchableOpacity key={el.id} style={styles.menuContentBtn}>
+              <TouchableOpacity
+                key={el._id}
+                disabled={!isAtLeastOwner}
+                style={styles.menuContentBtn}
+                onLongPress={() => onPressMenuItem(el)}>
                 <View style={styles.menuContentBtnInfoContainer}>
                   <View style={styles.menuContantentBtnInfoSubContainer}>
                     <Text style={styles.menuContentFoodName}>{el.food}</Text>
@@ -164,26 +209,33 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
                     </Text>
                   </View>
                   <View style={styles.menuContantentBtnInfoSubContainer}>
-                    {el.isVeganOk && <View style={styles.checkBoxContainer}>
-                      <CheckBox
-                        style={styles.checkBox}
-                        disabled={true}
-                        value={true}
-                      />
-                      <Text>Vegan OK</Text>
-                    </View>}
-                    {el.isVegetarianOk && <View style={styles.checkBoxContainer}>
-                      <CheckBox
-                        style={styles.checkBox}
-                        disabled={true}
-                        value={true}
-                      />
-                      <Text>Vegetarian OK</Text>
-                    </View>}
+                    {el.isVeganOk && (
+                      <View style={styles.checkBoxContainer}>
+                        <CheckBox
+                          style={styles.checkBox}
+                          disabled={true}
+                          value={true}
+                        />
+                        <Text>Vegan OK</Text>
+                      </View>
+                    )}
+                    {el.isVegetarianOk && (
+                      <View style={styles.checkBoxContainer}>
+                        <CheckBox
+                          style={styles.checkBox}
+                          disabled={true}
+                          value={true}
+                        />
+                        <Text>Vegetarian OK</Text>
+                      </View>
+                    )}
                   </View>
                   <View style={styles.menuPriceContainer}>
-                    <Text>{el.currency ? el.currency === 'USD' ? '$' : '€' : ''} {el.price}</Text>
-                  </View> 
+                    <Text>
+                      {el.currency ? (el.currency === 'USD' ? '$' : '€') : ''}{' '}
+                      {el.price}
+                    </Text>
+                  </View>
                 </View>
               </TouchableOpacity>
             </>
@@ -214,6 +266,13 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
 };
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    paddingTop: 50,
+  },
+  headerText: {
+    fontSize: 30,
+    fontWeight: '700',
+  },
   accordionContainer: {
     flex: 3,
     padding: 20,
@@ -223,6 +282,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  backgroundImage: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  backgroundInsideImage: {
+    borderRadius: 6,
+  },
+  accordionSectionTitle: {
+    color: 'white',
+    padding: 5,
+    fontWeight: '700',
+  },
   menuHeader: {
     width: 300,
     paddingTop: 15,
@@ -230,7 +301,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginBottom: 5,
-    backgroundColor: 'green',
+    backgroundColor: '#baf55b',
     color: 'white',
     borderWidth: 1,
     borderStyle: 'solid',
@@ -282,9 +353,9 @@ const styles = StyleSheet.create({
     marginRight: 3,
   },
   btnContainer: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   btn: {

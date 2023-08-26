@@ -15,6 +15,8 @@ const PubMainManagerDetail = ({navigation, route}) => {
   const actionName = route.params?.navigationInfo.name;
   const actionType = route.params?.navigationInfo.action;
   const pubId = route.params?.navigationInfo.pubId;
+  const 
+  menuItem = route.params?.navigationInfo.menu;
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -38,6 +40,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
       <MenuManagerDetail
         pubId={pubId}
         actionType={actionType}
+        menu={menuItem}
         onGoBack={handleNavigateToPreviousScreen}
       />
     ) : (

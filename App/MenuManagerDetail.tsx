@@ -14,6 +14,7 @@ import UTILS from '../utilities/utils';
 type MenuManagerDetailProps = {
   pubId: String;
   actionType: String;
+  menu: Object;
   onGoBack: Function;
 };
 
@@ -42,13 +43,16 @@ type SaveFormProps = {
 const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
   pubId,
   actionType,
+  menu,
   onGoBack,
 }) => {
   const handleSaveToDb = (formObj: SaveFormProps) => {
-    fetch(UTILS.serverBasePath + '/createMenu', {
+    const apiToCall = actionType === 'new' ? '/createMenu' : '/updateMenu';
+    const body = actionType === 'new' ? formObj : {...formObj, _id: menu._id};
+    fetch(UTILS.serverBasePath + apiToCall, {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
-      body: JSON.stringify(formObj),
+      body: JSON.stringify(body),
     })
       .then(res => res.json())
       .then(jsonRes => {
@@ -57,8 +61,12 @@ const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
           type: jsonRes.error ? 'error' : 'success',
           text1: jsonRes.error ? jsonRes.error : 'Success',
           text2: jsonRes.error
-            ? 'Menu Item not correctly created'
-            : 'Menu Item created correctly',
+            ? `Menu Item not correctly ${
+                actionType === 'new' ? 'created' : 'updated'
+              }`
+            : `Menu Item ${
+                actionType === 'new' ? 'created' : 'updated'
+              } correctly'`,
           position: 'bottom',
         });
         onGoBack();
@@ -78,11 +86,13 @@ const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
       <View style={styles.fakeRow} />
       <View style={styles.card}>
         <MenuItemForm
-          foodName=""
-          foodCategory=""
-          ingredients=""
-          isVeganOk={false}
-          isVegetarianOk={false}
+          foodName={menu?.food}
+          foodCategory={menu?.foodCategory}
+          ingredients={menu?.ingredients}
+          isVeganOk={menu?.isVeganOk ? menu.isVeganOk : false}
+          isVegetarianOk={menu?.isVegetarianOk ? menu.isVegetarianOk : false}
+          price={menu?.price?.toString()}
+          currency={menu?.currency}
           onSave={handleSaveForm}
         />
       </View>
@@ -155,10 +165,12 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
         />
       </View>
       <View style={styles.priceContainer}>
-        <TextInput style={styles.inputTxtPrice}
-        value={priceInput}
-        onChangeText={setPriceInput}
-        placeholder="12.39" />
+        <TextInput
+          style={styles.inputTxtPrice}
+          value={priceInput}
+          onChangeText={setPriceInput}
+          placeholder="12.39"
+        />
         <View style={styles.comboboxCurrency}>
           <DropDownPicker
             open={openCurr}
