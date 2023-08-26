@@ -19,8 +19,17 @@ exports.getMenu = async (req, res, next) => {
 };
 
 exports.insertMenuItem = async (req, res, next) => {
-  const {food, foodCategory, ingredients, isVeganOk, isVegetarianOk, price, currency, pub} =
-    req.body;
+  const {
+    food,
+    foodCategory,
+    ingredients,
+    isVeganOk,
+    isVegetarianOk,
+    price,
+    currency,
+    pub,
+  } = req.body;
+
   if (food && foodCategory && ingredients) {
     await Menu.create({
       food,
@@ -49,14 +58,13 @@ exports.insertMenuItem = async (req, res, next) => {
             }),
           );
       })
-      .catch(error =>{
+      .catch(error => {
         console.log(error);
         return res.status(400).json({
           message: 'Error!',
           error: error.message,
         });
-      }
-      );
+      });
   } else {
     return res.status(400).json({
       message: 'Error!',
@@ -65,67 +73,58 @@ exports.insertMenuItem = async (req, res, next) => {
   }
 };
 
-/*
-exports.insertFoodCategory = async (req, res, next) => {
-  const {name} = req.body;
-  if (name) {
-    console.log(name);
-    await FoodCategory.create({
-      name,
-    })
-      .then(foodCategory => {
-        console.log(foodCategory);
-        return res.status(200).json({message: 'Success', foodCategory});
-      })
-      .catch(error =>
-        res.status(400).json({message: 'Error', error: error.message}),
-      );
-  } else {
-    return res.status(401).json({
-      message: 'Error',
-      error: 'A name must be required',
-    });
-  }
-};
+exports.updateMenu = async (req, res, next) => {
+  const {
+    food,
+    foodCategory,
+    ingredients,
+    isVeganOk,
+    isVegetarianOk,
+    price,
+    currency,
+    _id,
+  } = req.body;
 
-exports.insertFood = async (req, res, next) => {
-  const {name, foodCategory, number, ingredients} = req.body;
-  if (name && foodCategory && ingredients) {
-    Food.create({
-      name,
-      foodCategory,
-      ingredients,
-      number,
-    })
-      .then(food => {
-        FoodCategory.findById(foodCategory)
-          .then(foodCategoryToUpdate => {
-            foodCategoryToUpdate.foods.push(food._id);
-            foodCategoryToUpdate
-              .save()
-              .then(newFoodCategory =>
-                res.status(200).json({
-                  message: 'Success',
-                  food,
-                  newFoodCategory,
-                }),
-              )
-              .catch(error =>
-                res.status(400).json({message: 'Error', error: error.message}),
-              );
+  if (_id) {
+    await Menu.findById(_id)
+      .then(oldMenu => {
+        oldMenu.food = food ? food : oldMenu.food;
+        oldMenu.foodCategory = foodCategory
+          ? foodCategory
+          : oldMenu.foodCategory;
+        oldMenu.ingredients = ingredients ? ingredients : oldMenu.ingredients;
+        oldMenu.isVeganOk =
+          isVeganOk !== undefined && isVeganOk !== null
+            ? isVeganOk
+            : oldMenu.isVeganOk;
+        oldMenu.isVegetarianOk =
+          isVegetarianOk !== undefined && isVegetarianOk !== null
+            ? isVegetarianOk
+            : oldMenu.isVegetarianOk;
+        oldMenu.price = price ? price : oldMenu.price;
+        oldMenu.currency = currency ? currency : oldMenu.currency;
+        oldMenu
+          .save()
+          .then(newMenu => {
+            return res.status(200).json({message: 'Success', newMenu});
           })
-          .catch(error =>
-            res.status(400).json({message: 'Error', error: error.message}),
-          );
+          .catch(error => {
+            return res.status(400).json({
+              message: 'Error!',
+              error: error.message,
+            });
+          });
       })
-      .catch(error =>
-        res.status(400).json({message: 'Error', error: error.message}),
-      );
+      .catch(error => {
+        return res.status(400).json({
+          message: 'Error!',
+          error: error.message,
+        });
+      });
   } else {
-    return res.status(401).json({
-      message: 'Error',
-      error: 'Missing required info: name, foodCategory, ingredients',
+    return res.status(400).json({
+      message: 'Error!',
+      error: 'Missing Required Fields!',
     });
   }
 };
-*/
