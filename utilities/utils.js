@@ -17,6 +17,10 @@ const UTILS = {
       {label: 'Drinks', value: 'drinks'},
       {label: 'Others', value: 'others'},
     ],
+    'menu-item-currency': [
+      {label: 'EUR', value: 'EUR'},
+      {label: 'USD', value: 'USD'},
+    ],
   },
   goBack: 'Go Back',
   save: 'Save',
