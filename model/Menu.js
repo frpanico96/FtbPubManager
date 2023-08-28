@@ -1,3 +1,15 @@
+/**@frpanico
+ * MENU schema file
+ * It is currentyly defined by three field
+ * -- food
+ * -- foodCategory
+ * -- ingredients
+ * -- isVeganOk
+ * -- isVegetarianOk
+ * -- price
+ * -- currency
+ * -- pub
+ */
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
 
@@ -35,14 +47,14 @@ const MenuSchema = Mongoose.Schema({
     required: false,
     default: false,
   },
-  price:{
+  price: {
     type: Number,
     required: true,
   },
-  currency:{
+  currency: {
     type: String,
     required: true,
-    enum: ['USD','EUR'],
+    enum: ['USD', 'EUR'],
   },
   pub: {
     type: Schema.Types.ObjectId,

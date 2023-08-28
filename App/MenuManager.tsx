@@ -1,3 +1,7 @@
+/**@frpanico
+ * Component that renders the menu
+ * It is possible to create a new menu Item o modify an existing one
+ */
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {

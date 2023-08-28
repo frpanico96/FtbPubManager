@@ -1,3 +1,7 @@
+/**@frpanico
+ * This component renders a component
+ * which is the "detail" of an action selected in the PubMain component
+ */
 import React from 'react';
 import {
   ImageBackground,

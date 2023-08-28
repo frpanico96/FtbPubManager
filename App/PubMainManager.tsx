@@ -1,3 +1,7 @@
+/**@frpanico
+ * This component renders a specific component
+ * Based on the action selected in the PubMain component
+ */
 import React from 'react';
 import MenuManager from './MenuManager';
 import {
