@@ -24,6 +24,7 @@ type MenuManagerProps = {
   pub: Object;
   onModifyMenu: Function;
   refresher: Boolean;
+  isPubOwner: Boolean;
 };
 
 type MenuManagerBtnProps = {
@@ -42,7 +43,7 @@ type ActionType = {
   action: String;
   name: String;
   pubId: String;
-  menu: Object;
+  mainItem: Object;
 };
 
 const MenuManager: React.FC<MenuManagerProps> = ({
@@ -50,11 +51,12 @@ const MenuManager: React.FC<MenuManagerProps> = ({
   pub,
   onModifyMenu,
   refresher,
+  isPubOwner,
 }) => {
   const [menuSection, setMenuSection] = useState([]);
   const [activeSection, setActiveSections] = useState([]);
 
-  const isAtLeastOwner = role && (role === 'owner' || role === 'admin');
+  const isAtLeastOwner = isPubOwner || (role && role === 'admin');
 
   const handlePressAction = (action: ActionType) => {
     console.log(action);
@@ -62,7 +64,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({
       name: MM_UTILS['menu-action-name'],
       action: action.action,
       pubId: pub.id,
-      menu: action.menu,
+      mainItem: action.menu,
     };
     onModifyMenu(actionObj);
   };
@@ -121,7 +123,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({
     console.log(menuItem);
     const actionObj: ActionType = {
       action: 'edit',
-      menu: menuItem,
+      mainItem: menuItem,
     };
     _updateActiveSections([]);
     handlePressAction(actionObj);
@@ -134,13 +136,15 @@ const MenuManager: React.FC<MenuManagerProps> = ({
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Menu</Text>
       </View>
-      <MenuAccordion
-        menuSection={menuSection}
-        activeSection={activeSection}
-        onSetActiveSection={_updateActiveSections}
-        onPressMenuItem={handleMenuItemPress}
-        isAtLeastOwner={isAtLeastOwner}
-      />
+      {menuSection && (
+        <MenuAccordion
+          menuSection={menuSection}
+          activeSection={activeSection}
+          onSetActiveSection={_updateActiveSections}
+          onPressMenuItem={handleMenuItemPress}
+          isAtLeastOwner={isAtLeastOwner}
+        />
+      )}
       <View style={styles.btnContainer}>
         {isAtLeastOwner && <ManagerBtn onPressAction={handlePressAction} />}
       </View>
@@ -182,7 +186,7 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
       }
     }
     return (
-      <View style={styles.menuHeader}>
+      <View key={title} style={styles.menuHeader}>
         <ImageBackground
           style={styles.backgroundImage}
           imageStyle={styles.backgroundInsideImage}

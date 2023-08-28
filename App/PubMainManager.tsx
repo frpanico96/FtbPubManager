@@ -37,6 +37,10 @@ const PubMainManager = ({navigation, route}) => {
     });
   };
 
+  const isPubOwner = route.params?.userInfo.username === route.params?.pub.owner;
+
+  console.log('### Is Pub Owner ', isPubOwner);
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -48,6 +52,7 @@ const PubMainManager = ({navigation, route}) => {
         pub={route.params?.pub}
         onModifyMenu={handleNavigateToDetail}
         refresher={route.params?.refreshMenu}
+        isPubOwner={isPubOwner}
       />
     ) : null;
 
