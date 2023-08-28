@@ -5,7 +5,8 @@
  * -- Username
  * -- Password
  * -- Role
- * Has a "parent-child" with PUBS
+ * -- Pubs
+ * -- Contacts
  */
 const Mongoose = require('mongoose');
 
@@ -27,6 +28,7 @@ const UserSchema = new Mongoose.Schema({
     enum: ['customer', 'owner', 'admin'],
   },
   pubs: [{type: Mongoose.Schema.Types.ObjectId, ref: 'pub'}],
+  contacts: [{type: Mongoose.Schema.Types.ObjectId, ref: 'contact'}],
 });
 
 const User = Mongoose.model('user', UserSchema);
