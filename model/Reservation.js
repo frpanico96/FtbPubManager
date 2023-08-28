@@ -2,10 +2,10 @@
  * Reservation schema file
  * Allows to handle reservation for a Pub
  * It is currentyly defined by three fields
- * -- phoneNumber
- * -- phonePrefix
- * -- isGuest
- * -- user
+ * -- contact
+ * -- numberOfPeople
+ * -- dateTimeOfReservation
+ * -- pub
  */
 
 const Mongoose = require('mongoose');
@@ -27,6 +27,15 @@ const ReservationSchema = new Mongoose.Schema({
   pub: {
     type: Schema.Types.ObjectId,
     ref: 'pub',
+  },
+  status: {
+    type: String,
+    default: 'booked',
+    enum: ['booked', 'cancelled', 'shown', 'not shown'],
+  },
+  callBack: {
+    type: Boolean,
+    default: false,
   },
 });
 
