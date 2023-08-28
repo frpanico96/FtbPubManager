@@ -1,3 +1,7 @@
+/**@frpanico
+ * This component renders a component
+ * which is the "detail" of an action selected in the PubMain component
+ */
 import React from 'react';
 import {
   ImageBackground,
@@ -15,8 +19,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
   const actionName = route.params?.navigationInfo.name;
   const actionType = route.params?.navigationInfo.action;
   const pubId = route.params?.navigationInfo.pubId;
-  const 
-  menuItem = route.params?.navigationInfo.menu;
+  const mainItem = route.params?.navigationInfo.menu;
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -40,7 +43,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
       <MenuManagerDetail
         pubId={pubId}
         actionType={actionType}
-        menu={menuItem}
+        menu={mainItem}
         onGoBack={handleNavigateToPreviousScreen}
       />
     ) : (

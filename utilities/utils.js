@@ -1,3 +1,7 @@
+/**@frpanico
+ * Utils file to store all static strings
+ * In order to not hardCode them in the component files
+ */
 const UTILS = {
   pubMain: [
     {name: 'pub-main-menu', label: 'Menu'},

@@ -1,3 +1,8 @@
+/**@frpanico
+ * Since React-Native need to know all the images that will be used
+ * They are required in this js file
+ * In order to not hardcode them in the component file
+ */
 const IMAGES = {
   'home-background': require('../assets/home-neutral-background-img.jpeg'),
   'home-logo': require('../assets/FTB_PubManager_LOGO-removebg-preview.png'),

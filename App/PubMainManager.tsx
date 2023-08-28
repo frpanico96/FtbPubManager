@@ -1,3 +1,7 @@
+/**@frpanico
+ * This component renders a specific component
+ * Based on the action selected in the PubMain component
+ */
 import React from 'react';
 import MenuManager from './MenuManager';
 import {
@@ -33,6 +37,10 @@ const PubMainManager = ({navigation, route}) => {
     });
   };
 
+  const isPubOwner = route.params?.userInfo.username === route.params?.pub.owner;
+
+  console.log('### Is Pub Owner ', isPubOwner);
+
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -44,6 +52,7 @@ const PubMainManager = ({navigation, route}) => {
         pub={route.params?.pub}
         onModifyMenu={handleNavigateToDetail}
         refresher={route.params?.refreshMenu}
+        isPubOwner={isPubOwner}
       />
     ) : null;
 

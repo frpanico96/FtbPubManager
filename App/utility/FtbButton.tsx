@@ -1,3 +1,7 @@
+/**@frpanico
+ * Generic Button
+ * Actually not used beacuse of not responding well with flexbox
+ */
 import React from 'react';
 import {TouchableOpacity, Text, View, StyleSheet} from 'react-native';
 

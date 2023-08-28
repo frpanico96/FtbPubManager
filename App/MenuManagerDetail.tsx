@@ -1,3 +1,7 @@
+/**@frpanico
+ * Component that renders the form
+ * To create a new Menu Item or edit an existing one
+ */
 import React, {useState} from 'react';
 import {
   StyleSheet,
