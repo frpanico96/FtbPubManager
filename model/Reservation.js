@@ -6,6 +6,8 @@
  * -- numberOfPeople
  * -- dateTimeOfReservation
  * -- pub
+ * -- status
+ * -- callback
  */
 
 const Mongoose = require('mongoose');

@@ -7,6 +7,13 @@ const router = express.Router();
 const {register, login, update, deleteUser} = require('./Auth');
 const {insertPub, getAllPubs, updatePub, deletePub} = require('./PubService');
 const {getMenu, insertMenuItem, updateMenu} = require('./MenuService');
+const {
+  getReservationByDateAndPub,
+  insertReservation,
+  updateReservation,
+  updateReservationStatus,
+} = require('./ReservationService');
+
 router.route('/register').post(register);
 router.route('/login').post(login);
 router.route('/update').put(adminAuth, update);
@@ -18,6 +25,10 @@ router.route('/deletePub').delete(adminAuth, deletePub);
 router.route('/getMenu').post(getMenu);
 router.route('/createMenu').post(insertMenuItem);
 router.route('/updateMenu').post(updateMenu);
+router.route('/getReservation').post(getReservationByDateAndPub);
+router.route('/createReservation').post(insertReservation);
+router.route('/updateReservation').post(updateReservation);
+router.route('/updateReservationStatus').post(updateReservationStatus);
 //router.route('/createFoodCategory').post(insertFoodCategory);
 //router.route('/createFood').post(insertFood);
 module.exports = router;
