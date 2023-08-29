@@ -29,6 +29,10 @@ const UserSchema = new Mongoose.Schema({
   },
   pubs: [{type: Mongoose.Schema.Types.ObjectId, ref: 'pub'}],
   contacts: [{type: Mongoose.Schema.Types.ObjectId, ref: 'contact'}],
+  score: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const User = Mongoose.model('user', UserSchema);
