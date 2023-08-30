@@ -72,7 +72,11 @@ const Login = ({navigation, route}) => {
           position: 'bottom',
         });
         if (!jsonRes.error) {
-          navigateToPubList();
+          const objToRoute = {
+            username: jsonRes.user.username,
+            role: jsonRes.user.role,
+          };
+          navigateToPubList(objToRoute);
         }
       })
       .catch(error => console.log(error));
@@ -92,6 +96,7 @@ const Login = ({navigation, route}) => {
             placeholder="Username"
             value={username}
             onChangeText={setUsername}
+            autoCapitalize="none"
           />
           <TextInput
             secureTextEntry={true}

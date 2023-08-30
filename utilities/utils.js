@@ -10,6 +10,8 @@ const UTILS = {
     {name: 'pub-main-manage-reservation', label: 'Manage Reservation'},
     {name: 'pub-main-close-pub', label: 'Close Pub'},
   ],
+  menuAction: 'pub-main-menu',
+  reservationAction: 'pub-main-resevation',
   menuManager: {
     'mm-new-menu': 'New Menu Item',
     'menu-action-name': 'new-menu-item',
@@ -25,6 +27,9 @@ const UTILS = {
       {label: 'EUR', value: 'EUR'},
       {label: 'USD', value: 'USD'},
     ],
+  },
+  reservation: {
+    'prefix-options': [{label: '+39', value: '+39'}],
   },
   goBack: 'Go Back',
   save: 'Save',

@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import MenuManager from './MenuManager';
+import Reservation from './Reservation';
 import {
   ImageBackground,
   StyleSheet,
@@ -46,7 +47,7 @@ const PubMainManager = ({navigation, route}) => {
   };
 
   const componentToShow =
-    route.params?.cmp === 'pub-main-menu' ? (
+    route.params?.cmp === UTILS.menuAction ? (
       <MenuManager
         role={route.params?.userInfo?.role}
         pub={route.params?.pub}
@@ -54,7 +55,8 @@ const PubMainManager = ({navigation, route}) => {
         refresher={route.params?.refreshMenu}
         isPubOwner={isPubOwner}
       />
-    ) : null;
+    ) : route.params?.cmp === UTILS.reservationAction ? <Reservation reservationForm={undefined} 
+    pubId={route.params?.pub.id}/> : null;
 
   return (
     <>
