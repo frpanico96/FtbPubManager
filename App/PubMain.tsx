@@ -70,10 +70,10 @@ const PubMain = ({navigation, route}) => {
       }
     } else if (manageReservation) {
       if (
-        route.params.userInfo &&
+        route.params.userInfo /*&&
         (route.params.userInfo?.role === 'admin' ||
           (route.params.userInfo.role === 'owner' &&
-            route.params.userInfo.username === route.params.pub.owner))
+            route.params.userInfo.username === route.params.pub.owner))*/
       ) {
         return (
           <PubMainTile
