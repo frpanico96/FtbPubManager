@@ -38,7 +38,8 @@ const PubMainManager = ({navigation, route}) => {
     });
   };
 
-  const isPubOwner = route.params?.userInfo.username === route.params?.pub.owner;
+  const isPubOwner =
+    route.params?.userInfo.username === route.params?.pub.owner;
 
   console.log('### Is Pub Owner ', isPubOwner);
 
@@ -55,8 +56,14 @@ const PubMainManager = ({navigation, route}) => {
         refresher={route.params?.refreshMenu}
         isPubOwner={isPubOwner}
       />
-    ) : route.params?.cmp === UTILS.reservationAction ? <Reservation reservationForm={undefined} 
-    pubId={route.params?.pub.id}/> : null;
+    ) : route.params?.cmp === UTILS.reservationAction ? (
+      <Reservation
+        reservationForm={undefined}
+        pubId={route.params?.pub.id}
+        username={route.params?.userInfo?.username}
+        onBookSaved={handleGoBack}
+      />
+    ) : null;
 
   return (
     <>
