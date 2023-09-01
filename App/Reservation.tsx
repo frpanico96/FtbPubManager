@@ -1,3 +1,7 @@
+/**@frpanico
+ * Reservation UI Component
+ * It allows to book a reservation
+ */
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -8,6 +12,7 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
+import Toast from 'react-native-toast-message';
 import UTILS from '../utilities/utils';
 
 type ContactInfo = {
@@ -16,10 +21,19 @@ type ContactInfo = {
   username: String;
 };
 
+type DateObj = {
+  dateStr: String;
+  year: String;
+  month: String;
+  day: String;
+  hour: String;
+  minute: String;
+};
+
 type ReservationPropObj = {
   contactInfo: ContactInfo;
   numberOfPeople: Number;
-  dateTimeOfReservation: Date;
+  dateTimeOfReservation: DateObj;
 };
 
 type ReservationPropForm = {
@@ -30,12 +44,52 @@ type ReservationPropForm = {
 type ReservationProp = {
   reservationForm: ReservationPropObj;
   pubId: String;
+  username: String;
+  onBookSaved: Function;
 };
 
-const Reservation: React.FC<ReservationProp> = ({reservationForm, pubId}) => {
-  const handleSave = (reservationFormObj: ReservationPropObj) => {
-    console.log(reservationFormObj);
-    console.log(pubId);
+const Reservation: React.FC<ReservationProp> = ({
+  reservationForm,
+  pubId,
+  username,
+  onBookSaved,
+}) => {
+  const submitForm = (formToSubmit: ReservationPropObj) => {
+    const bodyObj = {
+      contactInfo: formToSubmit.contactInfo,
+      numberOfPeople: formToSubmit.numberOfPeople,
+      date: formToSubmit.dateTimeOfReservation,
+      pubId: pubId,
+    };
+    console.log(bodyObj);
+    const apiToCall = !reservationForm
+      ? '/createReservation'
+      : '/updateReservation';
+    fetch(UTILS.serverBasePath + apiToCall, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify(bodyObj),
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+        Toast.show({
+          type: jsonRes.error ? 'error' : 'success',
+          text1: jsonRes.error ? 'Error' : 'Success',
+          text2: jsonRes.error
+            ? jsonRes.error
+            : 'Reservation Booked successfully',
+          position: 'bottom',
+        });
+        if (!jsonRes.error) {
+          onBookSaved();
+        }
+      });
+  };
+
+  const handleSave = (formToSubmit: ReservationPropObj) => {
+    formToSubmit.contactInfo.username = username;
+    submitForm(formToSubmit);
   };
 
   return (
@@ -65,6 +119,17 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
   );
 
   const handleSave = () => {
+    const dateObj: DateObj = {
+      dateStr: chosenDate.toISOString(),
+      year: chosenDate.getFullYear().toString(),
+      month: chosenDate.getMonth().toString(),
+      day: chosenDate.getDate().toString(),
+      hour: chosenDate.getHours().toString(),
+      minute: chosenDate.getMinutes().toString(),
+    };
+
+    console.log(dateObj);
+
     const saveObj: ReservationPropObj = {
       contactInfo: {
         phoneNumber: phoneNumber,
@@ -72,7 +137,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
         username: '',
       },
       numberOfPeople: parseInt(numberOfPeopleInput, 10),
-      dateTimeOfReservation: chosenDate,
+      dateTimeOfReservation: dateObj,
     };
     onSave(saveObj);
   };
@@ -157,18 +222,6 @@ const styles = StyleSheet.create({
   },
   comboboxPrefix: {
     flex: 1,
-  },
-  checkBoxesContainer: {
-    justifyContent: 'center',
-  },
-  checkBoxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 3,
-  },
-  checkBox: {
-    alignSelf: 'center',
-    marginRight: 10,
   },
   btnContainer: {
     marginTop: 10,

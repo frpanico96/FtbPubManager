@@ -34,11 +34,17 @@ exports.getReservationByDateAndPub = async (req, res, next) => {
 exports.insertReservation = async (req, res, next) => {
   const {contactInfo, numberOfPeople, date, pubId} = req.body;
   const dateTimeOfReservation = date.dateStr;
-  const limitReservation = new Date();
-  if (new Date(dateTimeOfReservation) < limitReservation) {
+  const validation = formValidation(
+    contactInfo.username,
+    dateTimeOfReservation,
+    contactInfo.phoneNumber,
+    contactInfo.phonePrefix,
+    numberOfPeople,
+  );
+  if (validation?.error) {
     return res.status(400).json({
       message: 'Error',
-      error: 'Reservation can not be in the past',
+      error: validation.error,
     });
   }
   await User.findOne({username: contactInfo.username})
@@ -127,11 +133,17 @@ exports.insertReservation = async (req, res, next) => {
 exports.updateReservation = async (req, res, next) => {
   const {contactInfo, date, numberOfPeople, reservationId} = req.body;
   const dateTimeOfReservation = date.dateStr;
-  const limitReservation = new Date();
-  if (new Date(dateTimeOfReservation) < limitReservation) {
+  const validation = formValidation(
+    contactInfo.username,
+    dateTimeOfReservation,
+    contactInfo.phoneNumber,
+    contactInfo.phonePrefix,
+    numberOfPeople,
+  );
+  if (validation?.error) {
     return res.status(400).json({
       message: 'Error',
-      error: 'Reservation can not be in the past',
+      error: validation.error,
     });
   }
   await Reservation.findById(reservationId)
@@ -243,3 +255,38 @@ exports.updateReservationStatus = async (req, res, next) => {
       }),
     );
 };
+
+function validateDate(dateStr) {
+  const limitReservation = new Date();
+  return !(new Date(dateStr) < limitReservation);
+}
+
+function validatePhoneNumber(phoneNumber) {
+  const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+  return regex.test(phoneNumber);
+}
+
+function formValidation(
+  username,
+  dateStr,
+  phoneNumber,
+  prefix,
+  numberOfPeople,
+) {
+  let result = {};
+  if (!username) {
+    return {...result, error: 'Invalid username'};
+  }
+  if (!validateDate(dateStr)) {
+    return {...result, error: 'Date can not be in the past'};
+  }
+  if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
+    return {...result, error: 'Invalid Phone Number'};
+  }
+  if (!prefix) {
+    return {...result, error: 'Prefix must be indicated'};
+  }
+  if (!Number.isInteger(numberOfPeople) || numberOfPeople < 0) {
+    return {...result, error: 'Invalid Number of people'};
+  }
+}

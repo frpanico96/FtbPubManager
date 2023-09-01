@@ -12,6 +12,7 @@ const UTILS = {
   ],
   menuAction: 'pub-main-menu',
   reservationAction: 'pub-main-resevation',
+  reservationManagerAction: 'pub-main-manage-reservation',
   menuManager: {
     'mm-new-menu': 'New Menu Item',
     'menu-action-name': 'new-menu-item',
