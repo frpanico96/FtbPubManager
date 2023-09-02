@@ -43,7 +43,7 @@ const PubMainManager = ({navigation, route}) => {
 
   const isPubOwner =
     route.params?.userInfo.username === route.params?.pub.owner;
-
+  const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
   console.log('### Is Pub Owner ', isPubOwner);
 
   const handleGoBack = () => {
@@ -68,16 +68,18 @@ const PubMainManager = ({navigation, route}) => {
       />
     ) : route.params?.cmp === UTILS.reservationManagerAction ? (
       <ReservationManager
-        isAtLeastOwner={true}
+        isAtLeastOwner={isAtLeastOwner}
+        isNotGoingBack={route.params?.refreshMenu}
         onSearchReservation={(date: Date) => {
           const navigationObj: navigateToDetailObj = {
             action: 'search',
             name: UTILS.reservationManagerAction,
             pubId: route.params?.pub.id,
-            date: date.toISOString(),
+            date: date?.toISOString(),
           };
           handleNavigateToDetail(navigationObj);
         }}
+        onGoBack={handleGoBack}
       />
     ) : null;
 

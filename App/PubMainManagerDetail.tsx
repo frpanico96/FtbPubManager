@@ -13,26 +13,27 @@ import {
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 import MenuManagerDetail from './MenuManagerDetail';
+import ReservationManagerDetail from './ReservationManagerDetail';
 
 const PubMainManagerDetail = ({navigation, route}) => {
   console.log('### Routing Params: ' + JSON.stringify(route.params));
   const actionName = route.params?.navigationInfo.name;
   const actionType = route.params?.navigationInfo.action;
   const pubId = route.params?.navigationInfo.pubId;
-  const mainItem = route.params?.navigationInfo.menu;
+  const mainItem = route.params?.navigationInfo.mainItem;
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleNavigateToPreviousScreen = () => {
+  const handleNavigateToPreviousScreen = (refresher = true) => {
     navigation.navigate({
       name: 'PubMainManager',
       params: {
         userInfo: route.params?.userInfo,
         pub: route.params?.pub,
         cmp: route.params?.cmp,
-        refreshMenu: true,
+        refreshMenu: refresher,
       },
       merge: true,
     });
@@ -46,6 +47,16 @@ const PubMainManagerDetail = ({navigation, route}) => {
         menu={mainItem}
         onGoBack={handleNavigateToPreviousScreen}
       />
+    ) : actionName === UTILS.reservationManagerAction ? (
+      <>
+        <ReservationManagerDetail
+          username={route.params?.userInfo.username}
+          isAtLeastOwner={false}
+          pubId={route.params?.pub.id}
+          refresher={route.params?.refresher}
+        />
+        <Text>Hello 2</Text>
+      </>
     ) : (
       <Text>Hello</Text>
     );
@@ -58,7 +69,9 @@ const PubMainManagerDetail = ({navigation, route}) => {
         style={styles.backgroundImage}>
         {componentToShow}
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btn} onPress={handleGoBack}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => handleNavigateToPreviousScreen(false)}>
             <Text style={styles.btnText}>{UTILS.goBack}</Text>
           </TouchableOpacity>
         </View>

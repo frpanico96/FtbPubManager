@@ -5,7 +5,9 @@ import LoadingSpinner from './utility/LoadingSpinner';
 
 type ReservationManagerProp = {
   isAtLeastOwner: Boolean;
+  isNotGoingBack: Boolean;
   onSearchReservation: Function;
+  onGoBack: Function;
 };
 
 type ReservationManagerDatePickerProp = {
@@ -14,15 +16,22 @@ type ReservationManagerDatePickerProp = {
 
 const ReservationManager: React.FC<ReservationManagerProp> = ({
   isAtLeastOwner,
+  isNotGoingBack,
   onSearchReservation,
+  onGoBack,
 }) => {
   useEffect(() => {
     if (!isAtLeastOwner) {
+      console.log(isNotGoingBack);
       setTimeout(() => {
-        onSearchReservation(undefined);
+        if (isNotGoingBack === undefined || isNotGoingBack) {
+          onSearchReservation(undefined);
+        } else {
+          onGoBack();
+        }
       }, 1500);
     }
-  }, [isAtLeastOwner, onSearchReservation]);
+  }, [isAtLeastOwner, onSearchReservation, isNotGoingBack, onGoBack]);
 
   return (
     <>

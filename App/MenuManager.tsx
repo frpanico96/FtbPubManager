@@ -64,7 +64,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({
       name: MM_UTILS['menu-action-name'],
       action: action.action,
       pubId: pub.id,
-      mainItem: action.menu,
+      mainItem: action.mainItem,
     };
     onModifyMenu(actionObj);
   };
