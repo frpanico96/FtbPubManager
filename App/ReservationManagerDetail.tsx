@@ -5,6 +5,8 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 
 import UTILS from '../utilities/utils';
+import DropDownPicker from 'react-native-dropdown-picker';
+import CheckBox from '@react-native-community/checkbox';
 
 type DateObj = {
   dateStr: String;
@@ -87,6 +89,12 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   isAtLeastOwner,
   username,
 }) => {
+
+  // /* Status Combobox state */
+  // const [open, setOpen] = useState(false);
+  // const [status, setStatus] = useState(reservation?.status);
+  // const [statusItems, setStatusItems] = useState(UTILS.reservationManager['status-options']);
+
   const renderRightActions = () => {
     return (
       <>
@@ -106,15 +114,25 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
           renderRightActions={renderRightActions}
           containerStyle={styles.tileSwipeable}>
           <View style={styles.reservationContainer}>
-            <View style={styles.userInfoContainer}>
-              <View style={{flexDirection: 'row', padding: 4}}>
+            <View style={styles.userInfoDateContainer}>
+              <View style={styles.userInfoContainer}>
                 <Text>{username}</Text>
                 <Text>{` (${reservation?.contact?.phonePrefix}) ${reservation?.contact?.phoneNumber}`}</Text>
               </View>
-              <Text style={{padding: 4}}>{(new Date(reservation.dateTimeOfReservation)).toUTCString()}</Text>
+              <Text style={styles.dateTxt}>{(new Date(reservation.dateTimeOfReservation)).toUTCString()}</Text>
             </View>
             <View style={styles.reservationStatusContainer}>
-              <Text>{reservation?.status}</Text>
+              <View style={styles.statusCombobox}>
+                <Text>{reservation?.status}</Text>
+              </View>
+              <View style={styles.checkBoxContainer}>
+                <CheckBox
+                  style={styles.checkBox}
+                  disabled={true}
+                  value={reservation?.callBack}
+                />
+                <Text>CallBack</Text>
+              </View>
             </View>
           </View>
         </Swipeable>
@@ -143,20 +161,41 @@ const styles = StyleSheet.create({
   reservationContainer: {
     flexDirection: 'row',
     width: '100%',
-    padding: 10,
+    padding: 20,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  userInfoContainer: {
+  userInfoDateContainer: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+  },
+  userInfoContainer: {
+    flexDirection: 'row',
+    marginBottom: 5,
   },
   userInfoTxt: {
     padding: 3,
   },
+  dateTxt: {
+    padding: 0,
+  },
   reservationStatusContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  statusCombobox: {
+    width: '100%',
+    marginBottom: 5,
+  },
+  checkBoxContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkBox: {
+    height: 10,
+    width: 10,
+    marginRight: 3,
   },
 });
 

@@ -32,6 +32,13 @@ const UTILS = {
   reservation: {
     'prefix-options': [{label: '+39', value: '+39'}],
   },
+  reservationManager: {
+    'status-options': [
+      {label: 'Booked', value: 'booked'},
+      {label: 'Shown', value: 'shown'},
+      {label: 'Not Shown', value: 'not shown'},
+    ],
+  },
   goBack: 'Go Back',
   save: 'Save',
   serverBasePath: 'http://localhost:5001/api/auth',

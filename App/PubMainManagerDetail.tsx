@@ -55,7 +55,6 @@ const PubMainManagerDetail = ({navigation, route}) => {
           pubId={route.params?.pub.id}
           refresher={route.params?.refresher}
         />
-        <Text>Hello 2</Text>
       </>
     ) : (
       <Text>Hello</Text>
