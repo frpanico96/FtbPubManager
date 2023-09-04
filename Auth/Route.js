@@ -12,7 +12,7 @@ const {
   insertReservation,
   updateReservation,
   updateReservationStatus,
-  getUserReservation,
+  getUserReservationByPubId,
 } = require('./ReservationService');
 
 router.route('/register').post(register);
@@ -30,7 +30,7 @@ router.route('/getReservation').post(getReservationByDateAndPub);
 router.route('/createReservation').post(insertReservation);
 router.route('/updateReservation').post(updateReservation);
 router.route('/updateReservationStatus').post(updateReservationStatus);
-router.route('/getUserReservation').post(getUserReservation);
+router.route('/getUserReservation').post(getUserReservationByPubId);
 //router.route('/createFoodCategory').post(insertFoodCategory);
 //router.route('/createFood').post(insertFood);
 module.exports = router;
