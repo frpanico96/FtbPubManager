@@ -31,7 +31,7 @@ exports.getReservationByDateAndPub = async (req, res, next) => {
     });
 };
 
-exports.getUserReservation = async (req, res, next) => {
+exports.getUserReservationByPubId = async (req, res, next) => {
   const {username, pubId} = req.body;
   await User.findOne({username: username})
     .then(user => {
