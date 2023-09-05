@@ -2,16 +2,11 @@ import React, {useState, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {
-  GestureHandlerRootView,
-  RectButton,
-  ScrollView,
-} from 'react-native-gesture-handler';
+import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 
 import UTILS from '../utilities/utils';
-import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
-import {TouchEventType} from 'react-native-gesture-handler/lib/typescript/TouchEventType';
+import ReservationManagerModal from './ReservationManagerModal';
 
 type DateObj = {
   dateStr: String;
@@ -34,6 +29,12 @@ type ReservationTileProp = {
   reservation: Object;
   isAtLeastOwner: Boolean;
   username: String;
+  onTileEvent: Function;
+};
+
+type TileEvent = {
+  reservation: Object;
+  actionType: String;
 };
 
 const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
@@ -44,9 +45,17 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
   refresher,
 }) => {
   const [reservations, setReservations] = useState([]);
+  /* Modal State */
+  const [modalState, setModalState] = useState({
+    showModal: false,
+    actionType: '',
+    modalReservation: {},
+  });
 
-  const fetchReservations = (refresher: Boolean) => {
-    console.log(refresher);
+  const fetchReservations = (stopRefresher: Boolean) => {
+    if (stopRefresher) {
+      return;
+    }
     const apiToCall = isAtLeastOwner
       ? '/getReservation'
       : '/getUserReservation';
@@ -69,12 +78,31 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
 
   useFocusEffect(
     useCallback(() => {
-      fetchReservations(refresher);
-    }, []),
+      fetchReservations(modalState.showModal);
+    }, [modalState.showModal]),
   );
 
   console.log(reservations);
 
+  const handleTileEvent = (tileEvent: TileEvent) => {
+    console.log(tileEvent);
+    setModalState(prev => {
+      const newState = {...prev};
+      newState.actionType = tileEvent.actionType;
+      newState.modalReservation = tileEvent.reservation;
+      newState.showModal = true;
+      return newState;
+    });
+  };
+
+  const handleConfirmAction = (reservation: Object) => {
+    console.log(reservation);
+    setModalState(prev => {
+      const newState = {...prev};
+      newState.showModal = false;
+      return newState;
+    });
+  };
 
   return (
     <>
@@ -88,10 +116,24 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
                   reservation={reservation}
                   username={username}
                   isAtLeastOwner={isAtLeastOwner}
+                  onTileEvent={handleTileEvent}
                 />
               );
             })}
         </ScrollView>
+        <ReservationManagerModal
+          toggleModal={modalState.showModal}
+          onToggleModal={toggle =>
+            setModalState(prev => {
+              const newState = {...prev};
+              newState.showModal = toggle;
+              return newState;
+            })
+          }
+          actionType={modalState.actionType}
+          reservation={modalState.modalReservation}
+          onConfirmAction={handleConfirmAction}
+        />
       </GestureHandlerRootView>
     </>
   );
@@ -101,11 +143,28 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   reservation,
   isAtLeastOwner,
   username,
+  onTileEvent,
 }) => {
   // /* Status Combobox state */
   // const [open, setOpen] = useState(false);
   // const [status, setStatus] = useState(reservation?.status);
   // const [statusItems, setStatusItems] = useState(UTILS.reservationManager['status-options']);
+
+  const handleEditButtonPress = () => {
+    const tileEvent: TileEvent = {
+      reservation: reservation,
+      actionType: 'edit',
+    };
+    onTileEvent(tileEvent);
+  };
+
+  const handleCancelButtonPress = () => {
+    const tileEvent: TileEvent = {
+      reservation: reservation,
+      actionType: 'cancel',
+    };
+    onTileEvent(tileEvent);
+  };
 
   const renderRightActions = (progress, dragX) => {
     const scale = dragX.interpolate({
@@ -116,14 +175,25 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
     return (
       <>
         <TouchableOpacity
-          style={{backgroundColor: 'pink', justifyContent: 'center', transform:[{scale}]}}>
+          style={{
+            backgroundColor: 'pink',
+            justifyContent: 'center',
+            transform: [{scale}],
+          }}
+          onPress={handleEditButtonPress}>
           <Animated.Text style={{fontSize: 12, transform: [{scale}]}}>
             Edit Reservation
           </Animated.Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{flexWrap:'wrap', backgroundColor: 'red', justifyContent: 'center', transform:[{scale}]}}>
-          <Animated.Text style={{fontSize: 12,transform: [{scale}]}}>
+          style={{
+            flexWrap: 'wrap',
+            backgroundColor: 'red',
+            justifyContent: 'center',
+            transform: [{scale}],
+          }}
+          onPress={handleCancelButtonPress}>
+          <Animated.Text style={{fontSize: 12, transform: [{scale}]}}>
             Cancel Reservation
           </Animated.Text>
         </TouchableOpacity>
