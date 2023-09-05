@@ -57,8 +57,6 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   const {username, password} = req.body;
-  console.log(req.body);
-  console.log(username + ' ' + password);
   if (!username || !password) {
     return res.status(400).json({message: 'Username or Password not provided'});
   }
