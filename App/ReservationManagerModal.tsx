@@ -1,10 +1,15 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Reservation from './Reservation';
+import UTILS from '../utilities/utils';
+import ReservationManagerStatus from './ReservationStatus';
 
 type ModalProps = {
   toggleModal: Boolean;
   reservation: Object;
   actionType: String;
+  username: String;
+  pubId: String;
   onToggleModal: Function;
   onConfirmAction: Function;
 };
@@ -13,13 +18,60 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
   toggleModal,
   reservation,
   actionType,
+  username,
+  pubId,
   onToggleModal,
   onConfirmAction,
 }) => {
-
   const handleConfirmAction = () => {
     onConfirmAction(reservation);
-  }
+  };
+
+  const reservationFormObj = {
+    contactInfo: {
+      phoneNumber: reservation?.contact?.phoneNumber,
+      phonePrefix: reservation?.contact?.phonePrefix,
+      username: username,
+    },
+    dateTimeOfReservation: {
+      dateStr: reservation?.dateTimeOfReservation,
+      year: new Date(reservation?.dateTimeOfReservation)
+        ?.getFullYear()
+        ?.toString(),
+      month: new Date(reservation?.dateTimeOfReservation)
+        ?.getMonth()
+        ?.toString(),
+      day: new Date(reservation?.dateTimeOfReservation)?.getDate()?.toString(),
+      hour: new Date(reservation?.dateTimeOfReservation)
+        ?.getHours()
+        ?.toString(),
+      minute: new Date(reservation?.dateTimeOfReservation)
+        ?.getMinutes()
+        ?.toString(),
+    },
+    numberOfPeople: reservation.numberOfPeople,
+  };
+
+  console.log(actionType);
+
+  const componentToShow =
+    actionType === UTILS.reservationManager['action-type-edit'] ? (
+      <Reservation
+        reservationForm={reservationFormObj}
+        username={username}
+        pubId={pubId}
+        reservationId={reservation?._id}
+        onBookSaved={() => onToggleModal(!toggleModal)}
+      />
+    ) : (
+      <ReservationManagerStatus
+        date={reservation?.dateTimeOfReservation}
+        username={username}
+        mode={actionType}
+        reservationId={reservation?._id}
+        onConfirmAction={() => onToggleModal(!toggleModal)}
+      />
+    );
 
   return (
     <>
@@ -30,12 +82,14 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
         onRequestClose={() => onToggleModal(!toggleModal)}>
         <View style={styles.modalBodyContainer}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleConfirmAction}>
-              <Text style={styles.textStyle}>Close</Text>
-            </TouchableOpacity>
+            {componentToShow}
+            <View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleConfirmAction}>
+                <Text style={styles.textStyle}>Close</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -50,6 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
+    flex: 1,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,

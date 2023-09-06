@@ -163,6 +163,7 @@ exports.updateReservation = async (req, res, next) => {
     contactInfo.phoneNumber,
     contactInfo.phonePrefix,
     numberOfPeople,
+    true,
   );
   if (validation?.error) {
     return res.status(400).json({
@@ -196,6 +197,23 @@ exports.updateReservation = async (req, res, next) => {
                       error: error.message,
                     }),
                   );
+              })
+              .catch(error =>
+                res.status(400).json({
+                  message: 'Error',
+                  error: error.message,
+                }),
+              );
+          } else {
+            reservationToUpdate.dateTimeOfReservation = dateTimeOfReservation;
+            reservationToUpdate.numberOfPeople = numberOfPeople;
+            reservationToUpdate
+              .save()
+              .then(newReservation => {
+                return res.status(200).json({
+                  message: 'Success',
+                  newReservation,
+                });
               })
               .catch(error =>
                 res.status(400).json({
@@ -296,12 +314,13 @@ function formValidation(
   phoneNumber,
   prefix,
   numberOfPeople,
+  isUpdate = false,
 ) {
   let result = {};
   if (!username) {
     return {...result, error: 'Invalid username'};
   }
-  if (!validateDate(dateStr)) {
+  if (!validateDate(dateStr) && !isUpdate) {
     return {...result, error: 'Date can not be in the past'};
   }
   if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {

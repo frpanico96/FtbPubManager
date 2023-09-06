@@ -45,6 +45,7 @@ type ReservationProp = {
   reservationForm: ReservationPropObj;
   pubId: String;
   username: String;
+  reservationId: String;
   onBookSaved: Function;
 };
 
@@ -52,6 +53,7 @@ const Reservation: React.FC<ReservationProp> = ({
   reservationForm,
   pubId,
   username,
+  reservationId,
   onBookSaved,
 }) => {
   const submitForm = (formToSubmit: ReservationPropObj) => {
@@ -61,6 +63,9 @@ const Reservation: React.FC<ReservationProp> = ({
       date: formToSubmit.dateTimeOfReservation,
       pubId: pubId,
     };
+    if (reservationId) {
+      bodyObj.reservationId = reservationId;
+    }
     console.log(bodyObj);
     const apiToCall = !reservationForm
       ? '/createReservation'
@@ -102,9 +107,11 @@ const Reservation: React.FC<ReservationProp> = ({
 };
 
 const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
+  console.log(formObj);
   const [chosenDate, setChosenDate] = useState(
-    formObj?.dateTimeOfReservation ? formObj.dateTimeOfReservation : new Date(),
+    formObj?.dateTimeOfReservation ? new Date(formObj.dateTimeOfReservation?.dateStr) : new Date(),
   );
+
   const [numberOfPeopleInput, setNumberOfPeopleInput] = useState(
     formObj?.numberOfPeople?.toString(),
   );
@@ -117,6 +124,8 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
   const [prefixItems, setPrefixItems] = useState(
     UTILS.reservation['prefix-options'],
   );
+
+  const minimumDate = formObj?.dateTimeOfReservation ? new Date(formObj.dateTimeOfReservation?.dateStr) : new Date();
 
   const handleSave = () => {
     const dateObj: DateObj = {
@@ -166,7 +175,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
       <DatePicker
         date={chosenDate}
         onDateChange={setChosenDate}
-        minimumDate={new Date()}
+        minimumDate={minimumDate}
         minuteInterval={15}
       />
       <TextInput
