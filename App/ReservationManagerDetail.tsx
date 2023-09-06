@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -53,6 +53,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
   });
 
   const fetchReservations = (stopRefresher: Boolean) => {
+    console.log(stopRefresher);
     if (stopRefresher) {
       return;
     }
@@ -131,6 +132,8 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
             })
           }
           actionType={modalState.actionType}
+          username={username}
+          pubId={pubId}
           reservation={modalState.modalReservation}
           onConfirmAction={handleConfirmAction}
         />
@@ -150,19 +153,27 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   // const [status, setStatus] = useState(reservation?.status);
   // const [statusItems, setStatusItems] = useState(UTILS.reservationManager['status-options']);
 
+  const swipeableRef = useRef(null);
+
+  const closeSwipeable = () => {
+    swipeableRef.current.close();
+  };
+
   const handleEditButtonPress = () => {
     const tileEvent: TileEvent = {
       reservation: reservation,
-      actionType: 'edit',
+      actionType: UTILS.reservationManager['action-type-edit'],
     };
+    closeSwipeable();
     onTileEvent(tileEvent);
   };
 
   const handleCancelButtonPress = () => {
     const tileEvent: TileEvent = {
       reservation: reservation,
-      actionType: 'cancel',
+      actionType: UTILS.reservationManager['action-type-cancel'],
     };
+    closeSwipeable();
     onTileEvent(tileEvent);
   };
 
@@ -204,6 +215,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
     <>
       <View style={styles.tileViewContainer}>
         <Swipeable
+          ref={swipeableRef}
           renderRightActions={renderRightActions}
           containerStyle={styles.tileSwipeable}
           friction={1}
@@ -217,6 +229,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
               <Text style={styles.dateTxt}>
                 {new Date(reservation.dateTimeOfReservation).toUTCString()}
               </Text>
+              <Text>{reservation?.numberOfPeople} People</Text>
             </View>
             <View style={styles.reservationStatusContainer}>
               <View style={styles.statusCombobox}>
@@ -275,6 +288,7 @@ const styles = StyleSheet.create({
   },
   dateTxt: {
     padding: 0,
+    marginBottom: 5,
   },
   reservationStatusContainer: {
     justifyContent: 'center',
