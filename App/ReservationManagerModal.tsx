@@ -69,6 +69,8 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
         username={username}
         mode={actionType}
         reservationId={reservation?._id}
+        status={reservation?.status}
+        callBack={reservation?.callBack}
         onConfirmAction={() => onToggleModal(!toggleModal)}
       />
     );

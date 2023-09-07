@@ -9,10 +9,11 @@ const User = require('../model/User');
 
 exports.getReservationByDateAndPub = async (req, res, next) => {
   const {date, pubId} = req.body;
+  const startDate = new Date(date);
   console.log(new Date());
-  const startDate = new Date(
-    date.year + '-' + date.month + '-' + date.day + 'T00:00:00.000Z',
-  );
+  startDate.setHours(0);
+  startDate.setMinutes(0);
+  startDate.setSeconds(0);
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 1);
   console.log(startDate);
