@@ -21,7 +21,11 @@ const PubMainManagerDetail = ({navigation, route}) => {
   const actionType = route.params?.navigationInfo.action;
   const pubId = route.params?.navigationInfo.pubId;
   const mainItem = route.params?.navigationInfo.mainItem;
-
+  const dateTimeOfReservation = route.params?.navigationInfo?.date;
+  const isPubOwner =
+    route.params?.userInfo.username === route.params?.pub.owner;
+  const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
+  console.log('### Is Pub Owner ', isAtLeastOwner);
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -51,9 +55,10 @@ const PubMainManagerDetail = ({navigation, route}) => {
       <>
         <ReservationManagerDetail
           username={route.params?.userInfo.username}
-          isAtLeastOwner={false}
+          isAtLeastOwner={isAtLeastOwner}
           pubId={route.params?.pub.id}
           refresher={route.params?.refresher}
+          dateTimeOfReservation={dateTimeOfReservation}
         />
       </>
     ) : (

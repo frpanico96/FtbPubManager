@@ -57,6 +57,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
     if (stopRefresher) {
       return;
     }
+    console.log(isAtLeastOwner);
     const apiToCall = isAtLeastOwner
       ? '/getReservation'
       : '/getUserReservation';
@@ -177,10 +178,21 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
     onTileEvent(tileEvent);
   };
 
+  const handleStatusButtonPress = () => {
+    const tileEvent: TileEvent = {
+      reservation: reservation,
+      actionType: UTILS.reservationManager['action-type-status'],
+    };
+    closeSwipeable();
+    onTileEvent(tileEvent);
+  };
+
   const renderRightActions = (progress, dragX) => {
+    const upperOutput = isAtLeastOwner ? 0.4 : 0.49;
+    const textFontSize = isAtLeastOwner ? 10 : 12;
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
-      outputRange: [0.49, 0],
+      outputRange: [upperOutput, 0],
     });
 
     return (
@@ -192,7 +204,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
             transform: [{scale}],
           }}
           onPress={handleEditButtonPress}>
-          <Animated.Text style={{fontSize: 12, transform: [{scale}]}}>
+          <Animated.Text style={{fontSize: textFontSize, transform: [{scale}]}}>
             Edit Reservation
           </Animated.Text>
         </TouchableOpacity>
@@ -204,10 +216,23 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
             transform: [{scale}],
           }}
           onPress={handleCancelButtonPress}>
-          <Animated.Text style={{fontSize: 12, transform: [{scale}]}}>
+          <Animated.Text style={{fontSize: textFontSize, transform: [{scale}]}}>
             Cancel Reservation
           </Animated.Text>
         </TouchableOpacity>
+        {isAtLeastOwner && (
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#04cc89',
+              justifyContent: 'center',
+              transform: [{scale}],
+            }}
+            onPress={handleStatusButtonPress}>
+            <Animated.Text style={{fontSize: textFontSize, transform: [{scale}]}}>
+              Update Status
+            </Animated.Text>
+          </TouchableOpacity>
+        )}
       </>
     );
   };

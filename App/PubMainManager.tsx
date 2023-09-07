@@ -44,7 +44,7 @@ const PubMainManager = ({navigation, route}) => {
   const isPubOwner =
     route.params?.userInfo.username === route.params?.pub.owner;
   const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
-  console.log('### Is Pub Owner ', isPubOwner);
+  console.log('### Is Pub Owner ', isAtLeastOwner);
 
   const handleGoBack = () => {
     navigation.goBack();
