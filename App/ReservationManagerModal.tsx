@@ -1,3 +1,8 @@
+/**@frpanico
+ * Modal opened when the users modify a reservation
+ * It show the ReservationStatus component based on what the user selected
+ * On the ReservationManagerDetail component
+ */
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Reservation from './Reservation';

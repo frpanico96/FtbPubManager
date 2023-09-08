@@ -1,3 +1,8 @@
+/**@frpanico
+ * Reservation Manager Component
+ * It allows to pick a date to check reservations if the user is the pub owner or admin
+ * Otherwise it shows a loading spinner to move into the detail component
+ */
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import DatePicker from 'react-native-date-picker';

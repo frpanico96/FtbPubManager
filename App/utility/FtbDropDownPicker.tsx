@@ -1,3 +1,7 @@
+/**@frpanico
+ * Generic DropDownPicker
+ * It doesn't work currently
+ */
 import React from 'react';
 import {View} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';

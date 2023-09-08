@@ -1,3 +1,7 @@
+/**@frpanico
+ * detail component of the reservation manager feature
+ * It shows reservation and it is possibile to modify them
+ */
 import React, {useState, useCallback, useRef} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native';
