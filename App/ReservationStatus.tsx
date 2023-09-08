@@ -1,7 +1,13 @@
+/**@frpanico
+ * Component that allows to modify a reservation
+ * It is possible to modify reservation detail
+ * Cancel a reservation
+ * Update the status and callback of a reservation (pub's owner and admin only)
+ */
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+
 import UTILS from '../utilities/utils';
-import FtbDropDownPicker from './utility/FtbDropDownPicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-toast-message';
