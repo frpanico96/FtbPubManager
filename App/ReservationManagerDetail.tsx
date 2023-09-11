@@ -232,7 +232,8 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
               transform: [{scale}],
             }}
             onPress={handleStatusButtonPress}>
-            <Animated.Text style={{fontSize: textFontSize, transform: [{scale}]}}>
+            <Animated.Text
+              style={{fontSize: textFontSize, transform: [{scale}]}}>
               Update Status
             </Animated.Text>
           </TouchableOpacity>
@@ -252,7 +253,11 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
           <View style={styles.reservationContainer}>
             <View style={styles.userInfoDateContainer}>
               <View style={styles.userInfoContainer}>
-                <Text>{username}</Text>
+                <Text style={styles.userInfoTxt}>
+                  {!reservation?.contact?.isGuest
+                    ? reservation?.contact?.user?.username
+                    : 'Guest'}
+                </Text>
                 <Text>{` (${reservation?.contact?.phonePrefix}) ${reservation?.contact?.phoneNumber}`}</Text>
               </View>
               <Text style={styles.dateTxt}>
@@ -313,7 +318,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   userInfoTxt: {
-    padding: 3,
+    fontWeight: '600',
   },
   dateTxt: {
     padding: 0,
