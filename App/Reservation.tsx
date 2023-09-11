@@ -19,6 +19,7 @@ type ContactInfo = {
   phoneNumber: String;
   phonePrefix: String;
   username: String;
+  isGuest: Boolean;
 };
 
 type DateObj = {
@@ -46,6 +47,7 @@ type ReservationProp = {
   pubId: String;
   username: String;
   reservationId: String;
+  isAtLeastOwner: Boolean;
   onBookSaved: Function;
 };
 
@@ -54,9 +56,11 @@ const Reservation: React.FC<ReservationProp> = ({
   pubId,
   username,
   reservationId,
+  isAtLeastOwner,
   onBookSaved,
 }) => {
   const submitForm = (formToSubmit: ReservationPropObj) => {
+    console.log('#IsAtLeastOwner', isAtLeastOwner);
     const bodyObj = {
       contactInfo: formToSubmit.contactInfo,
       numberOfPeople: formToSubmit.numberOfPeople,
@@ -65,6 +69,10 @@ const Reservation: React.FC<ReservationProp> = ({
     };
     if (reservationId) {
       bodyObj.reservationId = reservationId;
+    }
+    if (isAtLeastOwner) {
+      bodyObj.contactInfo.username = '';
+      bodyObj.contactInfo.isGuest = true;
     }
     console.log(bodyObj);
     const apiToCall = !reservationForm
@@ -107,7 +115,7 @@ const Reservation: React.FC<ReservationProp> = ({
 };
 
 const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
-  console.log(formObj);
+  //console.log('form', formObj);
   const [chosenDate, setChosenDate] = useState(
     formObj?.dateTimeOfReservation ? new Date(formObj.dateTimeOfReservation?.dateStr) : new Date(),
   );

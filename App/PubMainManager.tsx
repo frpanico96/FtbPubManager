@@ -64,6 +64,7 @@ const PubMainManager = ({navigation, route}) => {
         reservationForm={undefined}
         pubId={route.params?.pub.id}
         username={route.params?.userInfo?.username}
+        isAtLeastOwner={isAtLeastOwner}
         onBookSaved={handleGoBack}
       />
     ) : route.params?.cmp === UTILS.reservationManagerAction ? (

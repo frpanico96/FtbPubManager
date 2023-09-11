@@ -9,20 +9,25 @@ const User = require('../model/User');
 
 exports.getReservationByDateAndPub = async (req, res, next) => {
   const {date, pubId} = req.body;
+  console.log(date);
   const startDate = new Date(date);
-  console.log(new Date());
-  startDate.setHours(0);
-  startDate.setMinutes(0);
-  startDate.setSeconds(0);
+  //startDate.setHours(0);
+  // startDate.setMinutes(0);
+  // startDate.setSeconds(0);
+  startDate.setHours(0, 0, 0, 0);
+  console.log('StartDate', startDate);
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 1);
-  console.log(startDate);
-  console.log(endDate);
+  console.log('StartDate', startDate);
+  console.log('EndDate', endDate);
   await Reservation.find({
     dateTimeOfReservation: {$gte: startDate, $lt: endDate},
     pub: pubId,
   })
-    .populate('contact')
+    .populate({
+      path: 'contact',
+      populate: [{path: 'user', select: 'username', strictPopulate: false}],
+    })
     .exec()
     .then(reservations => {
       return res.status(200).json({message: 'Success', reservations});
@@ -40,7 +45,11 @@ exports.getUserReservationByPubId = async (req, res, next) => {
         pub: pubId,
         contact: {$in: user.contacts},
       })
-        .populate('contact', ['phoneNumber', 'phonePrefix', 'isGuest'])
+        .populate({
+          path: 'contact',
+          select: 'phoneNumber phonePrefix isGuest',
+          populate: [{path: 'user', select: 'username', strictPopulate: false}],
+        })
         .exec()
         .then(reservations => {
           return res.status(200).json({message: 'Success', reservations});
@@ -72,87 +81,127 @@ exports.insertReservation = async (req, res, next) => {
       error: validation.error,
     });
   }
-  await User.findOne({username: contactInfo.username})
-    .then(user => {
-      Contact.findOne({phoneNumber: contactInfo.phoneNumber})
-        .then(result => {
-          if (!result) {
-            Contact.create({
-              phoneNumber: contactInfo.phoneNumber,
-              phonePrefix: contactInfo.phonePrefix,
-              isGuest: contactInfo.isGuest,
-              user: user._id,
-            })
-              .then(newContact => {
-                user.contacts.push(newContact._id);
-                user
-                  .save()
-                  .then(savedUser => {
-                    Reservation.create({
-                      numberOfPeople,
-                      dateTimeOfReservation,
-                      contact: newContact._id,
-                      pub: pubId,
-                    })
-                      .then(newReservation => {
-                        // Pub.findById(pubId)
-                        // .then(pubToUpdate => {
-                        //   pubToUpdate.reservations.push(newReservation._id);
-                        // })
-                        return res.status(200).json({
-                          message: 'Success',
-                          newReservation,
-                        });
-                      })
-                      .catch(error =>
-                        res.status(400).json({
-                          message: 'Error',
-                          error: error.message,
-                        }),
-                      );
-                  })
-                  .catch(error =>
-                    res.status(400).json({
-                      message: 'Error',
-                      error: error.message,
-                    }),
-                  );
-              })
-              .catch(error =>
-                res.status(400).json({message: 'Error', error: error.message}),
-              );
-          } else {
-            Reservation.create({
-              numberOfPeople,
-              dateTimeOfReservation,
-              contact: result._id,
-              pub: pubId,
-            })
-              .then(newReservation => {
-                // Pub.findById(pubId)
-                // .then(pubToUpdate => {
-                //   pubToUpdate.reservations.push(newReservation._id);
-                // })
-                return res.status(200).json({
-                  message: 'Success',
-                  newReservation,
-                });
-              })
-              .catch(error =>
-                res.status(400).json({
-                  message: 'Error',
-                  error: error.message,
-                }),
-              );
-          }
-        })
-        .catch(error =>
-          res.status(400).json({message: 'Error', error: error.message}),
-        );
+  /* guest reservation */
+  if (!contactInfo.username) {
+    Contact.create({
+      phoneNumber: contactInfo.phoneNumber,
+      phonePrefix: contactInfo.phonePrefix,
+      isGuest: contactInfo.isGuest,
     })
-    .catch(error =>
-      res.status(400).json({message: 'Error', error: error.message}),
-    );
+      .then(newContact => {
+        Reservation.create({
+          numberOfPeople,
+          dateTimeOfReservation,
+          contact: newContact._id,
+          pub: pubId,
+        })
+          .then(newReservation => {
+            // Pub.findById(pubId)
+            // .then(pubToUpdate => {
+            //   pubToUpdate.reservations.push(newReservation._id);
+            // })
+            return res.status(200).json({
+              message: 'Success',
+              newReservation,
+            });
+          })
+          .catch(error =>
+            res.status(400).json({
+              message: 'Error',
+              error: error.message,
+            }),
+          );
+      })
+      .catch(error =>
+        res.status(400).json({message: 'Error', error: error.message}),
+      );
+    /* Logged user reservation */
+  } else {
+    await User.findOne({username: contactInfo.username})
+      .then(user => {
+        Contact.findOne({phoneNumber: contactInfo.phoneNumber})
+          .then(result => {
+            if (!result) {
+              Contact.create({
+                phoneNumber: contactInfo.phoneNumber,
+                phonePrefix: contactInfo.phonePrefix,
+                isGuest: contactInfo.isGuest,
+                user: user._id,
+              })
+                .then(newContact => {
+                  user.contacts.push(newContact._id);
+                  user
+                    .save()
+                    .then(savedUser => {
+                      Reservation.create({
+                        numberOfPeople,
+                        dateTimeOfReservation,
+                        contact: newContact._id,
+                        pub: pubId,
+                      })
+                        .then(newReservation => {
+                          // Pub.findById(pubId)
+                          // .then(pubToUpdate => {
+                          //   pubToUpdate.reservations.push(newReservation._id);
+                          // })
+                          return res.status(200).json({
+                            message: 'Success',
+                            newReservation,
+                          });
+                        })
+                        .catch(error =>
+                          res.status(400).json({
+                            message: 'Error',
+                            error: error.message,
+                          }),
+                        );
+                    })
+                    .catch(error =>
+                      res.status(400).json({
+                        message: 'Error',
+                        error: error.message,
+                      }),
+                    );
+                })
+                .catch(error =>
+                  res.status(400).json({
+                    message: 'Error',
+                    error: error.message,
+                  }),
+                );
+            } else {
+              Reservation.create({
+                numberOfPeople,
+                dateTimeOfReservation,
+                contact: result._id,
+                pub: pubId,
+              })
+                .then(newReservation => {
+                  // Pub.findById(pubId)
+                  // .then(pubToUpdate => {
+                  //   pubToUpdate.reservations.push(newReservation._id);
+                  // })
+                  return res.status(200).json({
+                    message: 'Success',
+                    newReservation,
+                  });
+                })
+                .catch(error =>
+                  res.status(400).json({
+                    message: 'Error',
+                    error: error.message,
+                  }),
+                );
+            }
+          })
+          .catch(error =>
+            res.status(400).json({message: 'Error', error: error.message}),
+          );
+      })
+      .catch(error =>
+        res.status(400).json({message: 'Error', error: error.message}),
+      );
+  }
 };
 
 exports.updateReservation = async (req, res, next) => {
@@ -254,34 +303,43 @@ exports.updateReservationStatus = async (req, res, next) => {
         reservationToUpdate
           .save()
           .then(newReservation => {
-            User.findOne({username: username})
-              .then(userToUpdate => {
-                let score =
-                  status === 'shown' ? 1 : status === 'not shown' ? -2 : 0;
-                console.log(score);
-                score += callback ? -1 : 0;
-                userToUpdate.score = userToUpdate.score + score;
-                userToUpdate
-                  .save()
-                  .then(newUser => {
-                    return res.status(200).json({
-                      message: 'Success',
-                      newReservation,
-                    });
-                  })
-                  .catch(error =>
-                    res.status(400).json({
-                      message: 'Error',
-                      error: error.message,
-                    }),
-                  );
-              })
-              .catch(error =>
-                res.status(400).json({
-                  message: 'Error',
-                  error: error.message,
-                }),
-              );
+            /* Guest Reservation */
+            if (!username) {
+              return res.status(200).json({
+                message: 'Success',
+                newReservation,
+              });
+              /* Logged Reservation */
+            } else {
+              User.findOne({username: username})
+                .then(userToUpdate => {
+                  let score =
+                    status === 'shown' ? 1 : status === 'not shown' ? -2 : 0;
+                  console.log(score);
+                  score += callback ? -1 : 0;
+                  userToUpdate.score = userToUpdate.score + score;
+                  userToUpdate
+                    .save()
+                    .then(newUser => {
+                      return res.status(200).json({
+                        message: 'Success',
+                        newReservation,
+                      });
+                    })
+                    .catch(error =>
+                      res.status(400).json({
+                        message: 'Error',
+                        error: error.message,
+                      }),
+                    );
+                })
+                .catch(error =>
+                  res.status(400).json({
+                    message: 'Error',
+                    error: error.message,
+                  }),
+                );
+            }
           })
           .catch(error =>
             res.status(400).json({
@@ -318,9 +376,10 @@ function formValidation(
   isUpdate = false,
 ) {
   let result = {};
-  if (!username) {
-    return {...result, error: 'Invalid username'};
-  }
+  /* Guest reservation does not have username */
+  // if (!username) {
+  //   return {...result, error: 'Invalid username'};
+  // }
   if (!validateDate(dateStr) && !isUpdate) {
     return {...result, error: 'Date can not be in the past'};
   }
