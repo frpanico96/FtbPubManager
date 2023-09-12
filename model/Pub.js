@@ -8,6 +8,15 @@
  * -- Logo
  * -- ShowOwner (it is used to show or not the owner on the app)
  * -- reservations
+ * -- openTime
+ * -- closeTime
+ * -- daysClosed
+ * -- vacationStart
+ * -- vacationEnd
+ * -- vactionReason
+ * -- address
+ * -- phone
+ * -- email
  */
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
@@ -28,6 +37,36 @@ const PubSchema = new Mongoose.Schema({
     default: true,
   },
   reservations: [{type: Schema.Types.ObjectId, ref: 'reservation'}],
+  openTime: {
+    type: String,
+  },
+  closeTime: {
+    type: String,
+  },
+  daysClosed: {
+    type: Array,
+  },
+  vacationStart: {
+    type: Date,
+  },
+  vacationEnd: {
+    type: Date,
+  },
+  vactionReason: {
+    type: String,
+  },
+  address: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  reservationDelay: {
+    type: Number,
+  },
 });
 
 const Pub = Mongoose.model('pub', PubSchema);

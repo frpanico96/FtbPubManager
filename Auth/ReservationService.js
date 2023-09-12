@@ -9,17 +9,17 @@ const User = require('../model/User');
 
 exports.getReservationByDateAndPub = async (req, res, next) => {
   const {date, pubId} = req.body;
-  console.log(date);
+  //console.log(date);
   const startDate = new Date(date);
   //startDate.setHours(0);
   // startDate.setMinutes(0);
   // startDate.setSeconds(0);
   startDate.setHours(0, 0, 0, 0);
-  console.log('StartDate', startDate);
+  //console.log('StartDate', startDate);
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 1);
-  console.log('StartDate', startDate);
-  console.log('EndDate', endDate);
+  //console.log('StartDate', startDate);
+  //console.log('EndDate', endDate);
   await Reservation.find({
     dateTimeOfReservation: {$gte: startDate, $lt: endDate},
     pub: pubId,
@@ -316,8 +316,10 @@ exports.updateReservationStatus = async (req, res, next) => {
                   let score =
                     status === 'shown' ? 1 : status === 'not shown' ? -2 : 0;
                   console.log(score);
-                  score += callback ? -1 : 0;
+                  score +=
+                    userToUpdate.callback === callback && callback ? -1 : 0;
                   userToUpdate.score = userToUpdate.score + score;
+                  //console.log(userToUpdate.score);
                   userToUpdate
                     .save()
                     .then(newUser => {
