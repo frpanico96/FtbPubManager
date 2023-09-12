@@ -36,7 +36,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
     contactInfo: {
       phoneNumber: reservation?.contact?.phoneNumber,
       phonePrefix: reservation?.contact?.phonePrefix,
-      username: username,
+      username: reservation?.contact?.user?.username,
     },
     dateTimeOfReservation: {
       dateStr: reservation?.dateTimeOfReservation,
@@ -71,7 +71,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
     ) : (
       <ReservationManagerStatus
         date={reservation?.dateTimeOfReservation}
-        username={username}
+        username={reservation?.contact?.user?.username}
         mode={actionType}
         reservationId={reservation?._id}
         status={reservation?.status}
