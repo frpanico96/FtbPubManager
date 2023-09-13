@@ -10,39 +10,82 @@ const User = require('../model/User');
 const Pub = require('../model/Pub');
 
 exports.insertPub = async (req, res, next) => {
-  const {name, owner} = req.body;
-
-  if (name && owner) {
-    await Pub.create({
-      name,
-      owner,
-    })
-      .then(pub => {
-        User.findById(owner)
-          .then(user => {
-            user.pubs.push(pub._id);
-            user
-              .save()
-              .then(newUser => {
-                return res
-                  .status(201)
-                  .json({message: 'Pub successfully created', pub, newUser});
-              })
-              .catch(error =>
-                res.status(401).json({message: 'Error', error: error.message}),
-              );
-          })
-          .catch(error =>
-            res.status(401).json({message: 'Error', error: error.message}),
-          );
+  const {
+    name,
+    owner,
+    showOwner,
+    openTime,
+    closeTime,
+    daysClosed,
+    vacationStart,
+    vacationEnd,
+    vactionReason,
+    address,
+    phonePrefix,
+    phone,
+    email,
+    reservationDelay,
+  } = req.body;
+  const validation = pubValidations(
+    openTime,
+    closeTime,
+    vacationStart,
+    vacationEnd,
+    phone,
+    email,
+  );
+  if (!validation) {
+    if (name && owner) {
+      await Pub.create({
+        name,
+        owner,
+        showOwner,
+        openTime,
+        closeTime,
+        daysClosed,
+        vacationStart: new Date(vacationStart),
+        vacationEnd: new Date(vacationEnd),
+        vactionReason,
+        address,
+        phonePrefix,
+        phone,
+        email: email.toLowerCase(),
+        reservationDelay,
       })
-      .catch(error =>
-        res.status(401).json({message: 'Error', error: error.message}),
-      );
+        .then(pub => {
+          User.findById(owner)
+            .then(user => {
+              user.pubs.push(pub._id);
+              user
+                .save()
+                .then(newUser => {
+                  return res.status(201).json({
+                    message: 'Pub successfully created',
+                    pub,
+                    owner: newUser.username,
+                  });
+                })
+                .catch(error =>
+                  res.status(401).json({
+                    message: 'Error',
+                    error: error.message,
+                  }),
+                );
+            })
+            .catch(error =>
+              res.status(401).json({message: 'Error', error: error.message}),
+            );
+        })
+        .catch(error =>
+          res.status(401).json({message: 'Error', error: error.message}),
+        );
+    } else {
+      return res
+        .status(401)
+        .json({message: 'Error', error: 'Name or Owner not provided'});
+    }
   } else {
-    return res
-      .status(401)
-      .json({message: 'Error', error: 'Name or Owner not provided'});
+    return res.status(401).json({message: 'Error', error: validation});
   }
 };
 
@@ -110,3 +153,30 @@ exports.deletePub = async (req, res, next) => {
       .json({message: 'Error', error: 'An id must be provided'});
   }
 };
+
+function pubValidations(
+  openTime,
+  closeTime,
+  vacationStart,
+  vacationEnd,
+  phone,
+  email,
+) {
+  const regexPhone = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+  const regexEmail =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  // if (openTime >= closeTime) {
+  //   return 'Open Time must be minor than close time';
+  // }
+  if (vacationStart > vacationEnd) {
+    return 'Vacation Start Date must be prior than Vacation End Date';
+  }
+  if (!regexPhone.test(phone)) {
+    return 'Invalid Phone Number';
+  }
+  if (!regexEmail.test(email.toLowerCase())) {
+    return 'Invalid Email';
+  }
+  return '';
+}
