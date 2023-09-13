@@ -15,8 +15,10 @@
  * -- vacationEnd
  * -- vactionReason
  * -- address
+ * -- phonePrefix
  * -- phone
  * -- email
+ * -- reservationDelay
  */
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
@@ -38,10 +40,10 @@ const PubSchema = new Mongoose.Schema({
   },
   reservations: [{type: Schema.Types.ObjectId, ref: 'reservation'}],
   openTime: {
-    type: String,
+    type: Number,
   },
   closeTime: {
-    type: String,
+    type: Number,
   },
   daysClosed: {
     type: Array,
@@ -56,6 +58,9 @@ const PubSchema = new Mongoose.Schema({
     type: String,
   },
   address: {
+    type: String,
+  },
+  phonePrefix: {
     type: String,
   },
   phone: {
