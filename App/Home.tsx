@@ -13,7 +13,11 @@ import {
 } from 'react-native';
 import IMAGES from '../utilities/asset';
 
-const HomePage = ({onNavigate}) => {
+type HomePageProps = {
+  onNavigate: Function;
+};
+
+const HomePage = ({onNavigate}: HomePageProps) => {
   const onPressCustomer = () => {
     onNavigate('Login');
   };

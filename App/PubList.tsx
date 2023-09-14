@@ -12,7 +12,8 @@ import {
   ScrollView,
 } from 'react-native';
 import IMAGES from '../utilities/asset';
-
+import UTILS from '../utilities/utils';
+import {type UserInfo} from './utility/types/types';
 /* Example of pub Object
 const testPub = {
   name: 'Test Pub',
@@ -20,12 +21,19 @@ const testPub = {
   logo: require('../assets/home-guest-btn-img.jpeg'),
 };
 */
+
+type PubListProps = {
+  onPubNavigate: Function;
+  userInfo: UserInfo;
+  onLogOut: Function;
+};
+
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
 
-const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
+const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
   const [pubs, setPubs] = useState([]);
 
-  const onNavigateToPub = pub => {
+  const onNavigateToPub = (pub: Object) => {
     console.log('# navigate to pub: ' + JSON.stringify(pub));
     onPubNavigate(pub);
   };
@@ -35,32 +43,22 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
   };
 
   const fetchData = () => {
-    fetch(URL_SEVER_PATH + '/getPubs', {
+    fetch(UTILS.serverBasePath + '/getPubs', {
       headers: {'Content-Type': 'application/json'},
       method: 'GET',
     })
       .then(res => res.json())
       .then(res => {
-        const rawPubList = res.pubs;
-        const pubList = rawPubList.reduce((accumulator, currentValue) => {
-          const newPub = {
-            id: currentValue._id,
-            name: currentValue.name,
-            owner: currentValue.owner.username,
-            showOwner: currentValue.showOwner,
-            logo: currentValue.logo,
-          };
-          return [...accumulator, newPub];
-        }, []);
+        const pubList = res.pubs;
         console.log(pubList);
         handleSetPubs(pubList);
       });
   };
 
-  const handleSetPubs = pubList => {
+  const handleSetPubs = (pubList: Object[]) => {
     console.log('### Start Handling');
     const pubsToRender = pubList.map(pub => {
-      return <PubTile key={pub.name} pub={pub} onSelectPub={onNavigateToPub} />;
+      return <PubTile key={pub._id} pub={pub} onSelectPub={onNavigateToPub} />;
     });
     setPubs(pubsToRender);
     console.log('# pubs: ' + JSON.stringify(pubs));
@@ -71,9 +69,7 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
   }, []);
 
   return (
-    <ScrollView
-      style={styles.pubListContainer}
-      contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
+    <View style={styles.container}>
       <ImageBackground
         source={IMAGES['home-background']}
         resizeMode="cover"
@@ -82,7 +78,13 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
           Welcome,{' '}
           {userInfo ? userInfo.role + ' ' + userInfo.username : 'Guest'}
         </Text>
-        {pubs}
+        <View style={styles.pubListContainer}>
+          <ScrollView
+            style={styles.pubListContainer}
+            contentContainerStyle={styles.scrollViewContainer}>
+            {pubs}
+          </ScrollView>
+        </View>
         <View style={styles.pubListBtnContainer}>
           {userInfo && userInfo?.role === 'admin' && (
             <TouchableOpacity style={styles.pubListNewPubBtn}>
@@ -98,7 +100,7 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}) => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -116,7 +118,7 @@ const PubTile = ({pub, onSelectPub}) => {
           source={IMAGES[pub.logo]}
           resizeMode="cover">
           <Text style={styles.tilePubName}>{pub.name}</Text>
-          {pub.showOwner && <Text>by: {pub.owner}</Text>}
+          {pub.showOwner && <Text>by: {pub.owner?.username}</Text>}
         </ImageBackground>
       </TouchableOpacity>
     </View>
@@ -124,21 +126,26 @@ const PubTile = ({pub, onSelectPub}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {flex: 1},
   pubListHeader: {
     fontFamily: 'sans-serif',
     fontSize: 40,
     fontWeight: '700',
-    padding: 10,
+    padding: 30,
   },
-  pubListContainer: {flex: 1},
+  pubListContainer: {flex: 2, width: '100%'},
+  scrollViewContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   pubListBackgroundImage: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   pubListBtnContainer: {
     flex: 1,
-    padding: 10,
     justifyContent: 'space-evenly',
     alignItems: 'center',
   },
@@ -151,7 +158,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
   },
   pubListNewPubBtnTxt: {textAlign: 'auto'},
-  tileContainer: {flex: 1, width: '85%', padding: 4},
+  tileContainer: {flex: 1, width: '90%', padding: 8},
   tileBackgroundImage: {
     borderRadius: 6,
     justifyContent: 'center',

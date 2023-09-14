@@ -6,15 +6,16 @@ import React, {useState} from 'react';
 import {TextInput, TouchableOpacity, View, Text} from 'react-native';
 import {ImageBackground, StyleSheet} from 'react-native';
 import Toast from 'react-native-toast-message';
-import IMAGES from '../utilities/asset';
 
-const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
+import IMAGES from '../utilities/asset';
+import UTILS from '../utilities/utils';
+import {type UserInfo} from './utility/types/types';
 
 const Login = ({navigation, route}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigateToPubList = userInfo => {
+  const navigateToPubList = (userInfo: UserInfo) => {
     navigation.navigate({
       name: 'HomePubContainer',
       params: {hasUserOrGuestLoggedIn: true, userInfo},
@@ -27,7 +28,7 @@ const Login = ({navigation, route}) => {
     console.log(username);
     console.log(password);
     console.log({username, password});
-    fetch(URL_SEVER_PATH + '/login', {
+    fetch(UTILS.serverBasePath + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       body: JSON.stringify({username: username, password: password}),
@@ -55,7 +56,7 @@ const Login = ({navigation, route}) => {
 
   const handleSignUp = () => {
     console.log('signed Up');
-    fetch(URL_SEVER_PATH + '/register', {
+    fetch(UTILS.serverBasePath + '/register', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
       body: JSON.stringify({username: username, password: password}),
@@ -88,7 +89,7 @@ const Login = ({navigation, route}) => {
         source={IMAGES['home-background']}
         resizeMode="cover"
         style={styles.backgroundImage}>
-        <View style={{flex: 1}} />
+        <View style={styles.container} />
         <View style={styles.card}>
           <Text style={styles.headerTxt}>Sign In or Register!</Text>
           <TextInput
@@ -114,7 +115,7 @@ const Login = ({navigation, route}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex: 1}} />
+        <View style={styles.container} />
       </ImageBackground>
     </View>
   );
