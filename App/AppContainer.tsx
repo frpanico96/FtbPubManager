@@ -37,9 +37,21 @@ const AppContainer = () => {
             name="Logout"
             component={Logout}
           />
-          <Stack.Screen options={{headerShown: false}} name="PubMain" component={PubMain} />
-          <Stack.Screen options={{headerShown: false}} name="PubMainManager" component={PubMainManager} />
-          <Stack.Screen options={{headerShown: false}} name="PubMainManagerDetail" component={PubMainManagerDetail} />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="PubMain"
+            component={PubMain}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="PubMainManager"
+            component={PubMainManager}
+          />
+          <Stack.Screen
+            options={{headerShown: false}}
+            name="PubMainManagerDetail"
+            component={PubMainManagerDetail}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

@@ -2,7 +2,7 @@
  * Middleware file to logout
  */
 import React, {useEffect} from 'react';
-import LoadingSpinner from './utility/LoadingSpinner';
+import LoadingSpinner from './utility/components/LoadingSpinner';
 
 const Logout = ({navigation, route}) => {
   /* To Do: Effective Logout

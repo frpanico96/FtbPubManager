@@ -31,11 +31,15 @@ const PubMain = ({navigation, route}) => {
   console.log('### Route Params: ' + JSON.stringify(route.params));
   console.log(PUB_UTILS);
 
-  const onPressAction = ({actionName}) => {
+  const onPressAction = (actionName: String) => {
     console.log('### Action pressed: ' + actionName);
     navigation.navigate({
       name: 'PubMainManager',
-      params: {userInfo: route.params?.userInfo, pub: route.params?.pub, cmp: actionName},
+      params: {
+        userInfo: route.params?.userInfo,
+        pub: route.params?.pub,
+        cmp: actionName,
+      },
       merge: true,
     });
   };
@@ -119,7 +123,7 @@ const PubMain = ({navigation, route}) => {
           <Text style={styles.pubNameText}>{route.params.pub.name}</Text>
           {route.params.pub.showOwner && (
             <Text style={styles.pubOwnerText}>
-              by: {route.params.pub.owner}
+              by: {route.params.pub.owner?.username}
             </Text>
           )}
         </View>
@@ -141,7 +145,7 @@ const PubMainTile: React.FC<PubTileProps> = ({
   onSelectAction,
 }) => {
   const onPressTile = () => {
-    onSelectAction({actionName: pubAction.name});
+    onSelectAction(pubAction.name);
   };
 
   return (

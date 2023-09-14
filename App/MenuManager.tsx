@@ -63,7 +63,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({
     const actionObj: ActionType = {
       name: MM_UTILS['menu-action-name'],
       action: action.action,
-      pubId: pub.id,
+      pubId: pub._id,
       mainItem: action.mainItem,
     };
     onModifyMenu(actionObj);
@@ -93,7 +93,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({
     fetch(apiToCall, {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
-      body: JSON.stringify({pubId: pub.id}),
+      body: JSON.stringify({pubId: pub._id}),
     })
       .then(res => res.json())
       .then(jsonRes => {

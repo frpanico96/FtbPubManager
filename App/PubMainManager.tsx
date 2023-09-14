@@ -15,7 +15,6 @@ import {
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 import ReservationManager from './ReservationManager';
-import {NavigationAction} from '@react-navigation/native';
 
 type navigateToDetailObj = {
   action: String;
@@ -42,14 +41,14 @@ const PubMainManager = ({navigation, route}) => {
   };
 
   const isPubOwner =
-    route.params?.userInfo.username === route.params?.pub.owner;
+    route.params?.userInfo.username === route.params?.pub.owner?.username;
   const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
   console.log('### Is Pub Owner ', isAtLeastOwner);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
-
+  console.log(route.params?.cmp);
   const componentToShow =
     route.params?.cmp === UTILS.menuAction ? (
       <MenuManager
@@ -62,7 +61,7 @@ const PubMainManager = ({navigation, route}) => {
     ) : route.params?.cmp === UTILS.reservationAction ? (
       <Reservation
         reservationForm={undefined}
-        pubId={route.params?.pub.id}
+        pubId={route.params?.pub._id}
         username={route.params?.userInfo?.username}
         isAtLeastOwner={isAtLeastOwner}
         onBookSaved={handleGoBack}
@@ -75,7 +74,7 @@ const PubMainManager = ({navigation, route}) => {
           const navigationObj: navigateToDetailObj = {
             action: 'search',
             name: UTILS.reservationManagerAction,
-            pubId: route.params?.pub.id,
+            pubId: route.params?.pub._id,
             date: date?.toISOString(),
           };
           handleNavigateToDetail(navigationObj);

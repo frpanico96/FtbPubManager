@@ -56,7 +56,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
         <ReservationManagerDetail
           username={route.params?.userInfo.username}
           isAtLeastOwner={isAtLeastOwner}
-          pubId={route.params?.pub.id}
+          pubId={route.params?.pub._id}
           refresher={route.params?.refresher}
           dateTimeOfReservation={dateTimeOfReservation}
         />

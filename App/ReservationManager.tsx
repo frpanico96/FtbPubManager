@@ -6,7 +6,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import LoadingSpinner from './utility/LoadingSpinner';
+import LoadingSpinner from './utility/components/LoadingSpinner';
 
 type ReservationManagerProp = {
   isAtLeastOwner: Boolean;
