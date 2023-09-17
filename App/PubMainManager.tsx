@@ -41,7 +41,7 @@ const PubMainManager = ({navigation, route}) => {
   };
 
   const isPubOwner =
-    route.params?.userInfo.username === route.params?.pub.owner?.username;
+    route.params?.userInfo?.username === route.params?.pub.owner?.username;
   const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
   console.log('### Is Pub Owner ', isAtLeastOwner);
 
@@ -61,7 +61,7 @@ const PubMainManager = ({navigation, route}) => {
     ) : route.params?.cmp === UTILS.reservationAction ? (
       <Reservation
         reservationForm={undefined}
-        pubId={route.params?.pub._id}
+        pub={route.params?.pub}
         username={route.params?.userInfo?.username}
         isAtLeastOwner={isAtLeastOwner}
         onBookSaved={handleGoBack}

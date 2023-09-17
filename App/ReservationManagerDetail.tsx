@@ -23,7 +23,7 @@ type DateObj = {
 
 type ReservationManagerDetailProp = {
   username: String;
-  pubId: String;
+  pub: Object;
   dateTimeOfReservation: DateObj;
   isAtLeastOwner: Boolean;
   refresher: Boolean;
@@ -43,7 +43,7 @@ type TileEvent = {
 
 const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
   username,
-  pubId,
+  pub,
   dateTimeOfReservation,
   isAtLeastOwner,
   refresher,
@@ -66,8 +66,8 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
       ? '/getReservation'
       : '/getUserReservation';
     const bodyObj = isAtLeastOwner
-      ? {date: dateTimeOfReservation, pubId}
-      : {username, pubId};
+      ? {date: dateTimeOfReservation, pubId: pub._id}
+      : {username, pubId: pub._id};
     console.log(bodyObj);
     fetch(UTILS.serverBasePath + apiToCall, {
       headers: {'Content-Type': 'application/json'},
@@ -138,7 +138,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
           }
           actionType={modalState.actionType}
           username={username}
-          pubId={pubId}
+          pub={pub}
           reservation={modalState.modalReservation}
           onConfirmAction={handleConfirmAction}
         />
@@ -261,7 +261,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
                 <Text>{` (${reservation?.contact?.phonePrefix}) ${reservation?.contact?.phoneNumber}`}</Text>
               </View>
               <Text style={styles.dateTxt}>
-                {new Date(reservation.dateTimeOfReservation).toUTCString()}
+                {new Date(reservation.dateTimeOfReservation).toLocaleString().replace(/(.*)\D\d+/, '$1')}
               </Text>
               <Text>{reservation?.numberOfPeople} People</Text>
             </View>
