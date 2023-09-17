@@ -8,6 +8,7 @@ import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Reservation from './Reservation';
 import UTILS from '../utilities/utils';
 import ReservationManagerStatus from './ReservationStatus';
+import Toast from 'react-native-toast-message';
 
 type ModalProps = {
   toggleModal: Boolean;
@@ -84,6 +85,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
             </View>
           </View>
         </View>
+        <Toast />
       </Modal>
     </>
   );

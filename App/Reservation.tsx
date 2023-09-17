@@ -43,6 +43,11 @@ type ReservationPropForm = {
   onSave: Function;
 };
 
+type ValidationObj = {
+  success: Boolean;
+  message: String;
+}
+
 type ReservationProp = {
   reservationForm: ReservationPropObj;
   pub: Object;
@@ -148,6 +153,8 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
     ? new Date(formObj.dateTimeOfReservation)
     : calculateMinumDate(pub);
 
+  //const isUpdate = formObj?.dateTimeOfReservation != null;
+
   const handleSave = () => {
     // const dateObj: DateObj = {
     //   dateStr: chosenDate.toISOString(),
@@ -157,7 +164,17 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
     //   hour: chosenDate.getHours().toString(),
     //   minute: chosenDate.getMinutes().toString(),
     // };
-
+    const validation = reservationDateValidation(pub, chosenDate);
+    console.log('Validation', validation);
+    if (!validation.success) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: validation.message,
+        position: 'bottom',
+      });
+      return;
+    }
     const saveObj: ReservationPropObj = {
       contactInfo: {
         phoneNumber: phoneNumber,
@@ -306,6 +323,86 @@ function calculateMinumDate(pub: Object): Date {
   console.log('End', inputDate);
 
   return inputDate;
+}
+
+/* TBD to move checks on client or leave some on server */
+// function reservationValidation(pub: Object, formObject: ReservationPropObj, isUpdate: Boolean): ValidationObj {
+//   const result: ValidationObj = {
+//     success: false,
+//     message: '',
+//   };
+
+//   return result;
+// }
+
+// function isPastDate(dateTimeOfReservation: Date) {
+//   const limitReservation = new Date();
+//   return dateTimeOfReservation < limitReservation;
+// }
+
+// function validatePhoneNumber(phoneNumber) {
+//   const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+//   return regex.test(phoneNumber);
+// }
+
+function reservationDateValidation(pub: Object, dateTimeOfReservation: Date): ValidationObj {
+  const result: ValidationObj = {
+    success: true,
+    message: '',
+  };
+
+  const openCloseTime = {
+    openHours: parseInt(pub.openTime / 100, 10),
+    openMins: parseInt(pub.openTime % 100, 10),
+    closeHours: parseInt(pub.closeTime / 100, 10),
+    closeMins: parseInt(pub.closeTime % 100, 10),
+  };
+
+  console.log(dateTimeOfReservation);
+
+  const openTime = new Date();
+  openTime.setDate(dateTimeOfReservation.getDate());
+  openTime.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
+  const closeTime = new Date();
+  closeTime.setDate(dateTimeOfReservation.getDate());
+  if (openCloseTime.openHours > openCloseTime.closeHours) {
+    closeTime.setDate(closeTime.getDate() + 1);
+  }
+  closeTime.setHours(openCloseTime.closeHours, openCloseTime.closeMins, 0, 0);
+
+  const vacationStart = new Date(pub.vacationStart);
+  const vacationEnd = new Date(pub.vacationEnd);
+
+  console.log('Open', openTime);
+  console.log('Close', closeTime);
+  console.log('DaysClosed', pub.daysClosed);
+  console.log('VacationStart', pub.vacationStart);
+  console.log('VacationEnd', pub.vacationEnd);
+  console.log('Day of  reservation', dateTimeOfReservation.getDay());
+  if (dateTimeOfReservation < openTime) {
+    console.log('Open Time Check');
+    result.success = false;
+    result.message = 'Pub opens at ' + openTime.toLocaleString();
+  } else if (dateTimeOfReservation > closeTime) {
+    console.log('Close Time Check');
+    result.success = false;
+    result.message = 'Pub closes at ' + closeTime.toLocaleString();
+  } else if (pub.daysClosed.indexOf(dateTimeOfReservation.getDay()) > -1) {
+    console.log('Days closed Check');
+    result.success = false;
+    result.message = 'Pub is closed this day';
+  } else if (
+    dateTimeOfReservation >= vacationStart &&
+    dateTimeOfReservation < vacationEnd
+  ) {
+    console.log('Vacation Check');
+    result.success = false;
+    result.message =
+      'Pub is currently on vaction, it will be open from ' +
+      vacationEnd.toLocaleDateString();
+  }
+
+  return result;
 }
 
 function isClosingDay(inputDate: Date, closingDays: Number[]) {
