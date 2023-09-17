@@ -1,7 +1,7 @@
 /**@frpanico
  * Reservation schema file
  * Allows to handle reservation for a Pub
- * It is currentyly defined by three fields
+ * It is currentyly defined by fields
  * -- contact
  * -- numberOfPeople
  * -- dateTimeOfReservation
