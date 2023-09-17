@@ -8,6 +8,7 @@
  * -- Logo
  * -- ShowOwner (it is used to show or not the owner on the app)
  * -- reservations
+ * -- workingdays
  * -- openTime
  * -- closeTime
  * -- daysClosed
@@ -39,6 +40,7 @@ const PubSchema = new Mongoose.Schema({
     default: true,
   },
   reservations: [{type: Schema.Types.ObjectId, ref: 'reservation'}],
+  workingdays: [{type: Schema.Types.ObjectId, ref: 'workingday'}],
   openTime: {
     type: Number,
   },
