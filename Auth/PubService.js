@@ -89,6 +89,19 @@ exports.insertPub = async (req, res, next) => {
   }
 };
 
+exports.getPubById = async (req, res, next) => {
+  const {pubId} = req.body;
+  await Pub.findById(pubId)
+    .populate('owner', 'username')
+    .exec()
+    .then(pub => {
+      return res.status(201).json({message: 'Pub successfully fetched', pub});
+    })
+    .catch(error =>
+      res.status(401).json({message: 'Error', error: error.message}),
+    );
+};
+
 exports.getAllPubs = async (req, res, next) => {
   await Pub.find()
     .populate('owner', 'username')

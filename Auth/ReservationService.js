@@ -66,8 +66,7 @@ exports.getUserReservationByPubId = async (req, res, next) => {
 };
 
 exports.insertReservation = async (req, res, next) => {
-  const {contactInfo, numberOfPeople, date, pubId} = req.body;
-  const dateTimeOfReservation = date.dateStr;
+  const {contactInfo, numberOfPeople, dateTimeOfReservation, pubId} = req.body;
   const validation = formValidation(
     contactInfo.username,
     dateTimeOfReservation,
@@ -75,6 +74,7 @@ exports.insertReservation = async (req, res, next) => {
     contactInfo.phonePrefix,
     numberOfPeople,
   );
+  console.log(dateTimeOfReservation);
   if (validation?.error) {
     return res.status(400).json({
       message: 'Error',
@@ -205,8 +205,7 @@ exports.insertReservation = async (req, res, next) => {
 };
 
 exports.updateReservation = async (req, res, next) => {
-  const {contactInfo, date, numberOfPeople, reservationId} = req.body;
-  const dateTimeOfReservation = date.dateStr;
+  const {contactInfo, dateTimeOfReservation, numberOfPeople, reservationId} = req.body;
   const validation = formValidation(
     contactInfo.username,
     dateTimeOfReservation,

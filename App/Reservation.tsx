@@ -22,29 +22,30 @@ type ContactInfo = {
   isGuest: Boolean;
 };
 
-type DateObj = {
-  dateStr: String;
-  year: String;
-  month: String;
-  day: String;
-  hour: String;
-  minute: String;
-};
+// type DateObj = {
+//   dateStr: String;
+//   year: String;
+//   month: String;
+//   day: String;
+//   hour: String;
+//   minute: String;
+// };
 
 type ReservationPropObj = {
   contactInfo: ContactInfo;
   numberOfPeople: Number;
-  dateTimeOfReservation: DateObj;
+  dateTimeOfReservation: String;
 };
 
 type ReservationPropForm = {
   formObj: ReservationPropObj;
+  pub: Object;
   onSave: Function;
 };
 
 type ReservationProp = {
   reservationForm: ReservationPropObj;
-  pubId: String;
+  pub: Object;
   username: String;
   reservationId: String;
   isAtLeastOwner: Boolean;
@@ -53,7 +54,7 @@ type ReservationProp = {
 
 const Reservation: React.FC<ReservationProp> = ({
   reservationForm,
-  pubId,
+  pub,
   username,
   reservationId,
   isAtLeastOwner,
@@ -64,8 +65,8 @@ const Reservation: React.FC<ReservationProp> = ({
     const bodyObj = {
       contactInfo: formToSubmit.contactInfo,
       numberOfPeople: formToSubmit.numberOfPeople,
-      date: formToSubmit.dateTimeOfReservation,
-      pubId: pubId,
+      dateTimeOfReservation: formToSubmit.dateTimeOfReservation,
+      pubId: pub._id,
     };
     if (reservationId) {
       bodyObj.reservationId = reservationId;
@@ -108,16 +109,26 @@ const Reservation: React.FC<ReservationProp> = ({
   return (
     <>
       <View style={styles.fakeRow} />
-      <ReservationForm formObj={reservationForm} onSave={handleSave} />
+      <ReservationForm
+        formObj={reservationForm}
+        pub={pub}
+        onSave={handleSave}
+      />
       <View style={styles.fakeRow} />
     </>
   );
 };
 
-const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
+const ReservationForm: React.FC<ReservationPropForm> = ({
+  formObj,
+  pub,
+  onSave,
+}) => {
   //console.log('form', formObj);
   const [chosenDate, setChosenDate] = useState(
-    formObj?.dateTimeOfReservation ? new Date(formObj.dateTimeOfReservation?.dateStr) : new Date(),
+    formObj?.dateTimeOfReservation
+      ? new Date(formObj.dateTimeOfReservation)
+      : new Date(),
   );
 
   const [numberOfPeopleInput, setNumberOfPeopleInput] = useState(
@@ -133,19 +144,19 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
     UTILS.reservation['prefix-options'],
   );
 
-  const minimumDate = formObj?.dateTimeOfReservation ? new Date(formObj.dateTimeOfReservation?.dateStr) : new Date();
+  const minimumDate = formObj?.dateTimeOfReservation
+    ? new Date(formObj.dateTimeOfReservation)
+    : calculateMinumDate(pub);
 
   const handleSave = () => {
-    const dateObj: DateObj = {
-      dateStr: chosenDate.toISOString(),
-      year: chosenDate.getFullYear().toString(),
-      month: chosenDate.getMonth().toString(),
-      day: chosenDate.getDate().toString(),
-      hour: chosenDate.getHours().toString(),
-      minute: chosenDate.getMinutes().toString(),
-    };
-
-    console.log(dateObj);
+    // const dateObj: DateObj = {
+    //   dateStr: chosenDate.toISOString(),
+    //   year: chosenDate.getFullYear().toString(),
+    //   month: chosenDate.getMonth().toString(),
+    //   day: chosenDate.getDate().toString(),
+    //   hour: chosenDate.getHours().toString(),
+    //   minute: chosenDate.getMinutes().toString(),
+    // };
 
     const saveObj: ReservationPropObj = {
       contactInfo: {
@@ -154,7 +165,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
         username: '',
       },
       numberOfPeople: parseInt(numberOfPeopleInput, 10),
-      dateTimeOfReservation: dateObj,
+      dateTimeOfReservation: chosenDate.toISOString(),
     };
     onSave(saveObj);
   };
@@ -200,6 +211,110 @@ const ReservationForm: React.FC<ReservationPropForm> = ({formObj, onSave}) => {
     </View>
   );
 };
+
+function calculateMinumDate(pub: Object): Date {
+  const HOUR_CONVERSION = 60 * 60 * 1000;
+
+  const inputDate = new Date();
+
+  console.log('### Calculating Minimum Date');
+  console.log(pub.openTime);
+  console.log(pub.closeTime);
+  console.log(pub.daysClosed);
+  if (pub.openTime == null || pub.closeTime == null || pub.daysClosed == null) {
+    console.log('### Exiting for null inputs');
+    return inputDate;
+  }
+
+  // calculate Open/Close DateTime
+  const openCloseTime = {
+    openHours: parseInt(pub.openTime / 100, 10),
+    openMins: parseInt(pub.openTime % 100, 10),
+    closeHours: parseInt(pub.closeTime / 100, 10),
+    closeMins: parseInt(pub.closeTime % 100, 10),
+  };
+  console.log('OpenCloseObj', openCloseTime);
+  const openTime = new Date();
+  openTime.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
+  const closeTime = new Date();
+
+  if (openCloseTime.openHours > openCloseTime.closeHours) {
+    closeTime.setDate(closeTime.getDate() + 1);
+  }
+  closeTime.setHours(openCloseTime.closeHours, openCloseTime.closeMins, 0, 0);
+
+  console.log('OpenTime', openTime);
+  console.log('CloseTime', closeTime);
+
+  console.log('Start', inputDate);
+  inputDate.setTime(
+    inputDate.getTime() + pub.reservationDelay * HOUR_CONVERSION,
+  );
+
+  console.log(inputDate > closeTime);
+
+  if (inputDate < openTime) {
+    inputDate.setDate(openTime.getDate() + 1);
+    inputDate.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
+  }
+
+  if (inputDate > closeTime) {
+    inputDate.setDate(inputDate.getDate() + 1);
+    inputDate.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
+  }
+
+  console.log(inputDate.getDay());
+
+  const vacationStart = new Date(pub.vacationStart);
+  const vacationEnd = new Date(pub.vacationEnd);
+
+  let minDateChecks = false;
+  let count = 0;
+  do {
+    console.log('### Cycle Start ###');
+    console.log('isClosingDay', isClosingDay(inputDate, pub.daysClosed));
+    console.log(
+      'isVacationDay',
+      isVacation(inputDate, vacationStart, vacationEnd),
+    );
+    if (isClosingDay(inputDate, pub.daysClosed)) {
+      const firstNonClosingDay = pub.daysClosed[pub.daysClosed.length - 1] + 1;
+      console.log('Cycle', count, firstNonClosingDay);
+      inputDate.setDate(
+        inputDate.getDate() + (firstNonClosingDay - inputDate.getDay()),
+      );
+      continue;
+    }
+    if (isVacation(inputDate, vacationStart, vacationEnd)) {
+      console.log('Cycle', count);
+      inputDate.setDate(vacationEnd.getDate());
+      inputDate.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
+      continue;
+    }
+    count++;
+    console.log('Cycle', count);
+    minDateChecks = true;
+  } while (!minDateChecks);
+
+  // if(pub.daysClosed.indexOf(inputDate.getDay()) > -1)
+  // {
+  //   const firstNonClosingDay = pub.daysClosed[pub.daysClosed.length - 1] + 1;
+  //   console.log(firstNonClosingDay);
+  //   inputDate.setDate(inputDate.getDate() + (firstNonClosingDay - inputDate.getDay()))
+  // }
+
+  console.log('End', inputDate);
+
+  return inputDate;
+}
+
+function isClosingDay(inputDate: Date, closingDays: Number[]) {
+  return closingDays.indexOf(inputDate.getDay()) > -1;
+}
+
+function isVacation(inputDate: Date, vacationStart: Date, vacationEnd: Date) {
+  return inputDate >= vacationStart && inputDate < vacationEnd;
+}
 
 const styles = StyleSheet.create({
   fakeRow: {flex: 1},

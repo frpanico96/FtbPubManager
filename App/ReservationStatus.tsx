@@ -104,7 +104,7 @@ const CancelReservation: React.FC<CancelReservationProp> = ({
       <View style={styles.container}>
         <Text style={[styles.txtStyle, styles.infoTxt]}>
           Are you sure you want to <Text style={styles.actionTxt}>Cancel</Text>{' '}
-          the reservation of {new Date(date).toUTCString()} ?
+          the reservation of {new Date(date).toLocaleString().replace(/(.*)\D\d+/, '$1')} ?
         </Text>
         <TouchableOpacity style={styles.btn} onPress={() => onCancel()}>
           <Text style={styles.txtStyle}>Confirm</Text>

@@ -14,7 +14,7 @@ type ModalProps = {
   reservation: Object;
   actionType: String;
   username: String;
-  pubId: String;
+  pub: Object;
   onToggleModal: Function;
   onConfirmAction: Function;
 };
@@ -24,7 +24,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
   reservation,
   actionType,
   username,
-  pubId,
+  pub,
   onToggleModal,
   onConfirmAction,
 }) => {
@@ -38,22 +38,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
       phonePrefix: reservation?.contact?.phonePrefix,
       username: reservation?.contact?.user?.username,
     },
-    dateTimeOfReservation: {
-      dateStr: reservation?.dateTimeOfReservation,
-      year: new Date(reservation?.dateTimeOfReservation)
-        ?.getFullYear()
-        ?.toString(),
-      month: new Date(reservation?.dateTimeOfReservation)
-        ?.getMonth()
-        ?.toString(),
-      day: new Date(reservation?.dateTimeOfReservation)?.getDate()?.toString(),
-      hour: new Date(reservation?.dateTimeOfReservation)
-        ?.getHours()
-        ?.toString(),
-      minute: new Date(reservation?.dateTimeOfReservation)
-        ?.getMinutes()
-        ?.toString(),
-    },
+    dateTimeOfReservation: reservation?.dateTimeOfReservation,
     numberOfPeople: reservation.numberOfPeople,
   };
 
@@ -64,7 +49,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
       <Reservation
         reservationForm={reservationFormObj}
         username={username}
-        pubId={pubId}
+        pub={pub}
         reservationId={reservation?._id}
         onBookSaved={() => onToggleModal(!toggleModal)}
       />

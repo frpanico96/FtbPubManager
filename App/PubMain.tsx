@@ -2,7 +2,8 @@
  * Main page after selecting a Pub
  * It shows list of potential actions a user can take
  */
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -31,13 +32,15 @@ const PubMain = ({navigation, route}) => {
   console.log('### Route Params: ' + JSON.stringify(route.params));
   console.log(PUB_UTILS);
 
+  const [selectedPub, setSelectedPub] = useState({});
+
   const onPressAction = (actionName: String) => {
     console.log('### Action pressed: ' + actionName);
     navigation.navigate({
       name: 'PubMainManager',
       params: {
         userInfo: route.params?.userInfo,
-        pub: route.params?.pub,
+        pub: selectedPub,
         cmp: actionName,
       },
       merge: true,
@@ -47,6 +50,28 @@ const PubMain = ({navigation, route}) => {
   const handleGoBack = () => {
     navigation.goBack();
   };
+
+  const fetchPub = (pubId: String) => {
+    fetch(UTILS.serverBasePath + '/getPub', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify({pubId}),
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log('FetchedPub', jsonRes.pub);
+        setSelectedPub(jsonRes.pub);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPub(route.params?.pub._id);
+    }, [route.params?.pub._id]),
+  );
 
   const pubTilesRaw = PUB_UTILS.map(tile => {
     const manageReservation =
@@ -211,3 +236,4 @@ const styles = StyleSheet.create({
 });
 
 export default PubMain;
+
