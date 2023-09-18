@@ -94,7 +94,15 @@ exports.insertReservation = async (req, res, next) => {
     date: {$gte: startDate, $lt: endDate},
     pub: pubId,
   })
-    .populate('pub')
+    .populate({
+      path: 'reservations',
+      populate: [
+        {
+          path: 'contact',
+          populate: [{path: 'user', select: 'username', strictPopulate: false}],
+        },
+      ],
+    })
     .exec()
     .then(workDay => {
       // If Work Day not found create new WorkDay
@@ -137,9 +145,19 @@ exports.insertReservation = async (req, res, next) => {
                             newReservation,
                           });
                         })
-                        .catch();
+                        .catch(error =>
+                          res.status(400).json({
+                            message: 'Error',
+                            error: error.message,
+                          }),
+                        );
                     })
-                    .catch();
+                    .catch(error =>
+                      res.status(400).json({
+                        message: 'Error',
+                        error: error.message,
+                      }),
+                    );
                   // Non Guest Reservation
                 } else {
                   User.find({username: contactInfo.username})
@@ -192,9 +210,101 @@ exports.insertReservation = async (req, res, next) => {
               error: error.message,
             }),
           );
-      // Work Day Found validation controls
+        // Work Day Found validation controls
       } else {
-
+        if (workDay.stopReservations) {
+          return res.status(400).json({
+            message: 'Error',
+            error: 'It is not possible to book a reservation for today',
+          });
+        }
+        const contact = new Contact({
+          phoneNumber: contactInfo.phoneNumber,
+          phonePrefix: contactInfo.phonePrefix,
+        });
+        const reservation = new Reservation({
+          numberOfPeople,
+          dateTimeOfReservation,
+          pub: pubId,
+        });
+        if (contactInfo.username) {
+          const checkObj = workDay.reservations.reduce(
+            (accumulator, currentValue) => {
+              if (currentValue.contact?.username === contactInfo.username) {
+                return [...accumulator, currentValue];
+              }
+            },
+            [],
+          );
+          if (checkObj.length > 0) {
+            return res.status(400).json({
+              message: 'Error',
+              error: 'You already have a reservation for today',
+            });
+          }
+          User.find({username: contactInfo.username})
+            .then(user => {
+              contact.user = user._id;
+              contact
+                .save()
+                .then(newContact => {
+                  reservation.contact = newContact._id;
+                  reservation
+                    .save()
+                    .then(newReservation => {
+                      return res.status(200).json({
+                        message: 'Success',
+                        newReservation,
+                      });
+                    })
+                    .catch(error =>
+                      res.status(400).json({
+                        message: 'Error',
+                        error: error.message,
+                      }),
+                    );
+                })
+                .catch(error =>
+                  res.status(400).json({
+                    message: 'Error',
+                    error: error.message,
+                  }),
+                );
+            })
+            .catch(error =>
+              res.status(400).json({
+                message: 'Error',
+                error: error.message,
+              }),
+            );
+        } else {
+          contact.isGuest = true;
+          contact
+            .save()
+            .then(newContact => {
+              reservation.contact = newContact._id;
+              reservation
+                .save()
+                .then(newReservation => {
+                  return res.status(200).json({
+                    message: 'Success',
+                    newReservation,
+                  });
+                })
+                .catch(error =>
+                  res.status(400).json({
+                    message: 'Error',
+                    error: error.message,
+                  }),
+                );
+            })
+            .catch(error =>
+              res.status(400).json({
+                message: 'Error',
+                error: error.message,
+              }),
+            );
+        }
       }
     })
     .catch(error =>
