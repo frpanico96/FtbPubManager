@@ -106,7 +106,7 @@ exports.insertReservation = async (req, res, next) => {
     .exec()
     .then(workDay => {
       // If Work Day not found create new WorkDay
-      if (!workDay) {
+      if (workDay.length < 1) {
         WorkingDay.create({
           date: new Date(),
           pub: pubId,
@@ -124,6 +124,7 @@ exports.insertReservation = async (req, res, next) => {
                 const contact = new Contact({
                   phoneNumber: contactInfo.phoneNumber,
                   phonePrefix: contactInfo.phonePrefix,
+                  user: '',
                 });
                 const reservation = new Reservation({
                   numberOfPeople,
@@ -140,17 +141,30 @@ exports.insertReservation = async (req, res, next) => {
                       reservation
                         .save()
                         .then(newReservation => {
-                          return res.status(200).json({
-                            message: 'Success',
-                            newReservation,
-                          });
+                          newWorkDay.reservations.push(newReservation._id);
+                          newWorkDay
+                            .save()
+                            .then(result => {
+                              return res.status(200).json({
+                                message: 'Success',
+                                newReservation,
+                              });
+                            })
+                            .catch(error => {
+                              console.log(error);
+                              return res.status(400).json({
+                                message: 'Error',
+                                error: error.message,
+                            })});
                         })
-                        .catch(error =>
-                          res.status(400).json({
+                        .catch(error =>{
+                          console.log(error)
+                          return res.status(400).json({
                             message: 'Error',
                             error: error.message,
-                          }),
-                        );
+                          })
+                        }
+                      );
                     })
                     .catch(error =>
                       res.status(400).json({
@@ -160,20 +174,50 @@ exports.insertReservation = async (req, res, next) => {
                     );
                   // Non Guest Reservation
                 } else {
-                  User.find({username: contactInfo.username})
-                    .then(user => {
-                      contact.user = user._id;
-                      contact
-                        .save()
+                  User.findOne({username: contactInfo.username})
+                    .then(userName => {
+                      //console.log(userName);
+                      //contact.user = user._id;
+                      //console.log(contact);
+                      //console.log(userName._id);
+                      Contact.create({
+                        phoneNumber: contactInfo.phoneNumber,
+                        phonePrefix: contactInfo.phonePrefix,
+                        user: userName._id,
+                      })
                         .then(newContact => {
+                          //console.log(newContact);
                           reservation.contact = newContact._id;
                           reservation
                             .save()
                             .then(newReservation => {
-                              return res.status(200).json({
-                                message: 'Success',
-                                newReservation,
-                              });
+                              newWorkDay.reservations.push(newReservation._id);
+                              newWorkDay
+                                .save()
+                                .then(result => {
+                                  userName.contacts.push(newContact._id);
+                                  userName
+                                    .save()
+                                    .then(success => {
+                                      return res.status(200).json({
+                                        message: 'Success',
+                                        newReservation,
+                                      });
+                                    })
+                                    .catch(error => {
+                                      console.log(error);
+                                      return res.status(400).json({
+                                        message: 'Error',
+                                        error: error.message,
+                                      });
+                                    });
+                                })
+                                .catch(error => {
+                                  console.log(error);
+                                  return res.status(400).json({
+                                    message: 'Error',
+                                    error: error.message,
+                                })});
                             })
                             .catch(error =>
                               res.status(400).json({
@@ -182,11 +226,12 @@ exports.insertReservation = async (req, res, next) => {
                               }),
                             );
                         })
-                        .catch(error =>
-                          res.status(400).json({
+                        .catch(error =>{
+                          console.log(error);
+                          return res.status(400).json({
                             message: 'Error',
                             error: error.message,
-                          }),
+                          })}
                         );
                     })
                     .catch(error =>
@@ -197,11 +242,13 @@ exports.insertReservation = async (req, res, next) => {
                     );
                 }
               })
-              .catch(error =>
-                res.status(400).json({
+              .catch(error =>{
+                console.log(error) 
+                return res.status(400).json({
                   message: 'Error',
                   error: error.message,
-                }),
+                })
+              }
               );
           })
           .catch(error =>
