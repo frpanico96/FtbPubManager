@@ -259,7 +259,8 @@ exports.insertReservation = async (req, res, next) => {
           );
         // Work Day Found validation controls
       } else {
-        if (workDay.stopReservations) {
+        const todayWorkDay = workDay[0];
+        if (todayWorkDay.stopReservations) {
           return res.status(400).json({
             message: 'Error',
             error: 'It is not possible to book a reservation for today',
@@ -275,21 +276,23 @@ exports.insertReservation = async (req, res, next) => {
           pub: pubId,
         });
         if (contactInfo.username) {
-          const checkObj = workDay.reservations.reduce(
+          console.log(typeof Array.from(todayWorkDay.reservations));
+          const checkObj = todayWorkDay.reservations.reduce(
             (accumulator, currentValue) => {
-              if (currentValue.contact?.username === contactInfo.username) {
+              if (currentValue.contact?.user?.username === contactInfo.username) {
                 return [...accumulator, currentValue];
               }
             },
             [],
           );
-          if (checkObj.length > 0) {
+          console.log(checkObj);
+          if (checkObj && checkObj.length > 0) {
             return res.status(400).json({
               message: 'Error',
               error: 'You already have a reservation for today',
             });
           }
-          User.find({username: contactInfo.username})
+          User.findOne({username: contactInfo.username})
             .then(user => {
               contact.user = user._id;
               contact
@@ -299,10 +302,33 @@ exports.insertReservation = async (req, res, next) => {
                   reservation
                     .save()
                     .then(newReservation => {
-                      return res.status(200).json({
-                        message: 'Success',
-                        newReservation,
-                      });
+                      todayWorkDay.reservations.push(newReservation._id);
+                      todayWorkDay
+                        .save()
+                        .then(result => {
+                          user.contacts.push(newContact._id);
+                          user
+                            .save()
+                            .then(success => {
+                              return res.status(200).json({
+                                message: 'Success',
+                                newReservation,
+                              });
+                            })
+                            .catch(error => {
+                              console.log(error);
+                              return res.status(400).json({
+                                message: 'Error',
+                                error: error.message,
+                              });
+                            });
+                        })
+                        .catch(error => {
+                          console.log(error);
+                          return res.status(400).json({
+                            message: 'Error',
+                            error: error.message,
+                        })});
                     })
                     .catch(error =>
                       res.status(400).json({
@@ -333,10 +359,21 @@ exports.insertReservation = async (req, res, next) => {
               reservation
                 .save()
                 .then(newReservation => {
-                  return res.status(200).json({
-                    message: 'Success',
-                    newReservation,
-                  });
+                  todayWorkDay.reservations.push(newReservation._id);
+                  todayWorkDay
+                    .save()
+                    .then(result => {
+                      return res.status(200).json({
+                        message: 'Success',
+                        newReservation,
+                      });
+                    })
+                    .catch(error => {
+                      console.log(error);
+                      return res.status(400).json({
+                        message: 'Error',
+                        error: error.message,
+                    })});
                 })
                 .catch(error =>
                   res.status(400).json({
