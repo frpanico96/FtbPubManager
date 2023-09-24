@@ -155,16 +155,16 @@ exports.insertReservation = async (req, res, next) => {
                               return res.status(400).json({
                                 message: 'Error',
                                 error: error.message,
-                            })});
+                              });
+                            });
                         })
-                        .catch(error =>{
-                          console.log(error)
+                        .catch(error => {
+                          console.log(error);
                           return res.status(400).json({
                             message: 'Error',
                             error: error.message,
-                          })
-                        }
-                      );
+                          });
+                        });
                     })
                     .catch(error =>
                       res.status(400).json({
@@ -217,7 +217,8 @@ exports.insertReservation = async (req, res, next) => {
                                   return res.status(400).json({
                                     message: 'Error',
                                     error: error.message,
-                                })});
+                                  });
+                                });
                             })
                             .catch(error =>
                               res.status(400).json({
@@ -226,13 +227,13 @@ exports.insertReservation = async (req, res, next) => {
                               }),
                             );
                         })
-                        .catch(error =>{
+                        .catch(error => {
                           console.log(error);
                           return res.status(400).json({
                             message: 'Error',
                             error: error.message,
-                          })}
-                        );
+                          });
+                        });
                     })
                     .catch(error =>
                       res.status(400).json({
@@ -242,14 +243,13 @@ exports.insertReservation = async (req, res, next) => {
                     );
                 }
               })
-              .catch(error =>{
-                console.log(error) 
+              .catch(error => {
+                console.log(error);
                 return res.status(400).json({
                   message: 'Error',
                   error: error.message,
-                })
-              }
-              );
+                });
+              });
           })
           .catch(error =>
             res.status(400).json({
@@ -289,7 +289,11 @@ exports.insertReservation = async (req, res, next) => {
           // }
           // console.log(typeof reservationsToCheck);
           // console.log('### Checking reservations...');
-          const checkObj = reservationsToCheck.filter(el => el.contact?.user?.username === contactInfo.username);
+          const checkObj = reservationsToCheck.filter(
+            el =>
+              el.contact?.user?.username === contactInfo.username &&
+              el.status !== 'cancelled',
+          );
           //   (accumulator, currentValue) => {
           //     if (currentValue.contact?.user?.username === contactInfo.username) {
           //       return [...accumulator, currentValue];
@@ -340,7 +344,8 @@ exports.insertReservation = async (req, res, next) => {
                           return res.status(400).json({
                             message: 'Error',
                             error: error.message,
-                        })});
+                          });
+                        });
                     })
                     .catch(error =>
                       res.status(400).json({
@@ -385,7 +390,8 @@ exports.insertReservation = async (req, res, next) => {
                       return res.status(400).json({
                         message: 'Error',
                         error: error.message,
-                    })});
+                      });
+                    });
                 })
                 .catch(error =>
                   res.status(400).json({
@@ -412,7 +418,8 @@ exports.insertReservation = async (req, res, next) => {
 };
 
 exports.updateReservation = async (req, res, next) => {
-  const {contactInfo, dateTimeOfReservation, numberOfPeople, reservationId} = req.body;
+  const {contactInfo, dateTimeOfReservation, numberOfPeople, reservationId} =
+    req.body;
   const validation = formValidation(
     contactInfo.username,
     dateTimeOfReservation,
@@ -460,7 +467,11 @@ exports.updateReservation = async (req, res, next) => {
         // console.log(el._id.toString());
         // console.log(reservationId);
         // console.log(el._id.toString() === reservationId);
-        return el.contact?.user?.username === contactInfo.username && el._id.toString() !== reservationId
+        return (
+          el.contact?.user?.username === contactInfo.username &&
+          el._id.toString() !== reservationId &&
+          el.status !== 'cancelled'
+        );
       });
       console.log(checkObj);
       if (checkObj && checkObj.length > 0) {
@@ -475,9 +486,9 @@ exports.updateReservation = async (req, res, next) => {
         console.log(el._id.toString() === reservationId);
         return el._id.toString() === reservationId;
       })[0];
-      console.log(reservationToUpdate);
-      console.log(reservationToUpdate.dateTimeOfReservation);
-      console.log(dateTimeOfReservation);
+      // console.log(reservationToUpdate);
+      // console.log(reservationToUpdate.dateTimeOfReservation);
+      // console.log(dateTimeOfReservation);
       reservationToUpdate.dateTimeOfReservation = dateTimeOfReservation;
       reservationToUpdate.numberOfPeople = numberOfPeople;
       reservationToUpdate
@@ -514,71 +525,6 @@ exports.updateReservation = async (req, res, next) => {
         error: error.message,
       });
     });
-  // await Reservation.findById(reservationId)
-  //   .then(reservationToUpdate => {
-  //     Contact.findById(reservationToUpdate.contact)
-  //       .then(contactToUpdate => {
-  //         if (contactToUpdate.phoneNumber !== contactInfo.phoneNumber) {
-  //           contactToUpdate.phoneNumber = contactInfo.phoneNumber;
-  //           contactToUpdate
-  //             .save()
-  //             .then(newContact => {
-  //               reservationToUpdate.dateTimeOfReservation =
-  //                 dateTimeOfReservation;
-  //               reservationToUpdate.numberOfPeople = numberOfPeople;
-  //               reservationToUpdate
-  //                 .save()
-  //                 .then(newReservation => {
-  //                   return res.status(200).json({
-  //                     message: 'Success',
-  //                     newReservation,
-  //                   });
-  //                 })
-  //                 .catch(error =>
-  //                   res.status(400).json({
-  //                     message: 'Error',
-  //                     error: error.message,
-  //                   }),
-  //                 );
-  //             })
-  //             .catch(error =>
-  //               res.status(400).json({
-  //                 message: 'Error',
-  //                 error: error.message,
-  //               }),
-  //             );
-  //         } else {
-  //           reservationToUpdate.dateTimeOfReservation = dateTimeOfReservation;
-  //           reservationToUpdate.numberOfPeople = numberOfPeople;
-  //           reservationToUpdate
-  //             .save()
-  //             .then(newReservation => {
-  //               return res.status(200).json({
-  //                 message: 'Success',
-  //                 newReservation,
-  //               });
-  //             })
-  //             .catch(error =>
-  //               res.status(400).json({
-  //                 message: 'Error',
-  //                 error: error.message,
-  //               }),
-  //             );
-  //         }
-  //       })
-  //       .catch(error =>
-  //         res.status(400).json({
-  //           message: 'Error',
-  //           error: error.message,
-  //         }),
-  //       );
-  //   })
-  //   .catch(error =>
-  //     res.status(400).json({
-  //       message: 'Error',
-  //       error: error.message,
-  //     }),
-  //   );
 };
 
 exports.updateReservationStatus = async (req, res, next) => {
@@ -611,7 +557,8 @@ exports.updateReservationStatus = async (req, res, next) => {
                     status === 'shown' ? 1 : status === 'not shown' ? -2 : 0;
                   console.log('#Status Score', score);
                   console.log(oldCallbackStatus);
-                  const callBackScore = callback !== oldCallbackStatus && callback ? -1 : 0;
+                  const callBackScore =
+                    callback !== oldCallbackStatus && callback ? -1 : 0;
                   // console.log('#CallBack score',callBackScore);
                   score += callBackScore;
                   // console.log('#Score', score);
