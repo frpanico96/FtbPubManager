@@ -626,17 +626,17 @@ function formValidation(
   // if (!username) {
   //   return {...result, error: 'Invalid username'};
   // }
-  if (!validateDate(dateStr) && !isUpdate) {
-    return {...result, error: 'Date can not be in the past'};
-  }
-  if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
-    return {...result, error: 'Invalid Phone Number'};
-  }
-  if (!prefix) {
-    return {...result, error: 'Prefix must be indicated'};
-  }
-  if (!Number.isInteger(numberOfPeople) || numberOfPeople < 0) {
-    return {...result, error: 'Invalid Number of people'};
-  }
+  // if (!validateDate(dateStr) && !isUpdate) {
+  //   return {...result, error: 'Date can not be in the past'};
+  // }
+  // if (!phoneNumber || !validatePhoneNumber(phoneNumber)) {
+  //   return {...result, error: 'Invalid Phone Number'};
+  // }
+  // if (!prefix) {
+  //   return {...result, error: 'Prefix must be indicated'};
+  // }
+  // if (!Number.isInteger(numberOfPeople) || numberOfPeople < 0) {
+  //   return {...result, error: 'Invalid Number of people'};
+  // }
   return result;
 }
