@@ -276,15 +276,27 @@ exports.insertReservation = async (req, res, next) => {
           pub: pubId,
         });
         if (contactInfo.username) {
-          console.log(typeof Array.from(todayWorkDay.reservations));
-          const checkObj = todayWorkDay.reservations.reduce(
-            (accumulator, currentValue) => {
-              if (currentValue.contact?.user?.username === contactInfo.username) {
-                return [...accumulator, currentValue];
-              }
-            },
-            [],
-          );
+          let reservationsToCheck = [];
+          // console.log(typeof reservationsToCheck);
+          if (Array.isArray(todayWorkDay.reservations)) {
+            reservationsToCheck = [...todayWorkDay.reservations];
+            console.log('ReservationToCheck', reservationsToCheck);
+          }
+          // } else if (typeof todayWorkDay.reservations === 'object') {
+          //   for (let key in todayWorkDay.reservations) {
+          //     console.log('reservation', todayWorkDay.reservations[key]);
+          //   }
+          // }
+          // console.log(typeof reservationsToCheck);
+          // console.log('### Checking reservations...');
+          const checkObj = reservationsToCheck.filter(el => el.contact?.user?.username === contactInfo.username);
+          //   (accumulator, currentValue) => {
+          //     if (currentValue.contact?.user?.username === contactInfo.username) {
+          //       return [...accumulator, currentValue];
+          //     }
+          //   },
+          //   [],
+          // );
           console.log(checkObj);
           if (checkObj && checkObj.length > 0) {
             return res.status(400).json({
@@ -397,128 +409,6 @@ exports.insertReservation = async (req, res, next) => {
         error: error.message,
       }),
     );
-
-  // /* guest reservation */
-  // if (!contactInfo.username) {
-  //   Contact.create({
-  //     phoneNumber: contactInfo.phoneNumber,
-  //     phonePrefix: contactInfo.phonePrefix,
-  //     isGuest: contactInfo.isGuest,
-  //   })
-  //     .then(newContact => {
-  //       Reservation.create({
-  //         numberOfPeople,
-  //         dateTimeOfReservation,
-  //         contact: newContact._id,
-  //         pub: pubId,
-  //       })
-  //         .then(newReservation => {
-  //           // Pub.findById(pubId)
-  //           // .then(pubToUpdate => {
-  //           //   pubToUpdate.reservations.push(newReservation._id);
-  //           // })
-  //           return res.status(200).json({
-  //             message: 'Success',
-  //             newReservation,
-  //           });
-  //         })
-  //         .catch(error =>
-  //           res.status(400).json({
-  //             message: 'Error',
-  //             error: error.message,
-  //           }),
-  //         );
-  //     })
-  //     .catch(error =>
-  //       res.status(400).json({message: 'Error', error: error.message}),
-  //     );
-  //   /* Logged user reservation */
-  // } else {
-  //   await User.findOne({username: contactInfo.username})
-  //     .then(user => {
-  //       Contact.findOne({phoneNumber: contactInfo.phoneNumber})
-  //         .then(result => {
-  //           if (!result) {
-  //             Contact.create({
-  //               phoneNumber: contactInfo.phoneNumber,
-  //               phonePrefix: contactInfo.phonePrefix,
-  //               isGuest: contactInfo.isGuest,
-  //               user: user._id,
-  //             })
-  //               .then(newContact => {
-  //                 user.contacts.push(newContact._id);
-  //                 user
-  //                   .save()
-  //                   .then(savedUser => {
-  //                     Reservation.create({
-  //                       numberOfPeople,
-  //                       dateTimeOfReservation,
-  //                       contact: newContact._id,
-  //                       pub: pubId,
-  //                     })
-  //                       .then(newReservation => {
-  //                         // Pub.findById(pubId)
-  //                         // .then(pubToUpdate => {
-  //                         //   pubToUpdate.reservations.push(newReservation._id);
-  //                         // })
-  //                         return res.status(200).json({
-  //                           message: 'Success',
-  //                           newReservation,
-  //                         });
-  //                       })
-  //                       .catch(error =>
-  //                         res.status(400).json({
-  //                           message: 'Error',
-  //                           error: error.message,
-  //                         }),
-  //                       );
-  //                   })
-  //                   .catch(error =>
-  //                     res.status(400).json({
-  //                       message: 'Error',
-  //                       error: error.message,
-  //                     }),
-  //                   );
-  //               })
-  //               .catch(error =>
-  //                 res.status(400).json({
-  //                   message: 'Error',
-  //                   error: error.message,
-  //                 }),
-  //               );
-  //           } else {
-  //             Reservation.create({
-  //               numberOfPeople,
-  //               dateTimeOfReservation,
-  //               contact: result._id,
-  //               pub: pubId,
-  //             })
-  //               .then(newReservation => {
-  //                 // Pub.findById(pubId)
-  //                 // .then(pubToUpdate => {
-  //                 //   pubToUpdate.reservations.push(newReservation._id);
-  //                 // })
-  //                 return res.status(200).json({
-  //                   message: 'Success',
-  //                   newReservation,
-  //                 });
-  //               })
-  //               .catch(error =>
-  //                 res.status(400).json({
-  //                   message: 'Error',
-  //                   error: error.message,
-  //                 }),
-  //               );
-  //           }
-  //         })
-  //         .catch(error =>
-  //           res.status(400).json({message: 'Error', error: error.message}),
-  //         );
-  //     })
-  //     .catch(error =>
-  //       res.status(400).json({message: 'Error', error: error.message}),
-  //     );
-  // }
 };
 
 exports.updateReservation = async (req, res, next) => {
