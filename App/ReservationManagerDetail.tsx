@@ -199,32 +199,40 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
       outputRange: [upperOutput, 0],
     });
 
+    const isReservationActive = reservation?.status === 'booked';
+
     return (
       <>
-        <TouchableOpacity
-          style={{
-            backgroundColor: 'pink',
-            justifyContent: 'center',
-            transform: [{scale}],
-          }}
-          onPress={handleEditButtonPress}>
-          <Animated.Text style={{fontSize: textFontSize, transform: [{scale}]}}>
-            Edit Reservation
-          </Animated.Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            flexWrap: 'wrap',
-            backgroundColor: 'red',
-            justifyContent: 'center',
-            transform: [{scale}],
-          }}
-          onPress={handleCancelButtonPress}>
-          <Animated.Text style={{fontSize: textFontSize, transform: [{scale}]}}>
-            Cancel Reservation
-          </Animated.Text>
-        </TouchableOpacity>
-        {isAtLeastOwner && (
+        {isReservationActive && (
+          <TouchableOpacity
+            style={{
+              backgroundColor: 'pink',
+              justifyContent: 'center',
+              transform: [{scale}],
+            }}
+            onPress={handleEditButtonPress}>
+            <Animated.Text
+              style={{fontSize: textFontSize, transform: [{scale}]}}>
+              Edit Reservation
+            </Animated.Text>
+          </TouchableOpacity>
+        )}
+        {isReservationActive && (
+          <TouchableOpacity
+            style={{
+              flexWrap: 'wrap',
+              backgroundColor: 'red',
+              justifyContent: 'center',
+              transform: [{scale}],
+            }}
+            onPress={handleCancelButtonPress}>
+            <Animated.Text
+              style={{fontSize: textFontSize, transform: [{scale}]}}>
+              Cancel Reservation
+            </Animated.Text>
+          </TouchableOpacity>
+        )}
+        {isReservationActive && isAtLeastOwner && (
           <TouchableOpacity
             style={{
               backgroundColor: '#04cc89',
@@ -261,7 +269,9 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
                 <Text>{` (${reservation?.contact?.phonePrefix}) ${reservation?.contact?.phoneNumber}`}</Text>
               </View>
               <Text style={styles.dateTxt}>
-                {new Date(reservation.dateTimeOfReservation).toLocaleString().replace(/(.*)\D\d+/, '$1')}
+                {new Date(reservation.dateTimeOfReservation)
+                  .toLocaleString()
+                  .replace(/(.*)\D\d+/, '$1')}
               </Text>
               <Text>{reservation?.numberOfPeople} People</Text>
             </View>

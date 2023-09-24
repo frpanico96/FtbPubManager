@@ -46,7 +46,7 @@ type ReservationPropForm = {
 type ValidationObj = {
   success: Boolean;
   message: String;
-}
+};
 
 type ReservationProp = {
   reservationForm: ReservationPropObj;
@@ -153,7 +153,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
     ? new Date(formObj.dateTimeOfReservation)
     : calculateMinumDate(pub);
 
-  //const isUpdate = formObj?.dateTimeOfReservation != null;
+  const isUpdate = formObj?.dateTimeOfReservation != null;
 
   const handleSave = () => {
     // const dateObj: DateObj = {
@@ -164,7 +164,16 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
     //   hour: chosenDate.getHours().toString(),
     //   minute: chosenDate.getMinutes().toString(),
     // };
-    const validation = reservationDateValidation(pub, chosenDate);
+    const saveObj: ReservationPropObj = {
+      contactInfo: {
+        phoneNumber: phoneNumber,
+        phonePrefix: prefix,
+        username: '',
+      },
+      numberOfPeople: parseInt(numberOfPeopleInput, 10),
+      dateTimeOfReservation: chosenDate.toISOString(),
+    };
+    const validation = reservationValidation(pub, saveObj, isUpdate);
     console.log('Validation', validation);
     if (!validation.success) {
       Toast.show({
@@ -175,15 +184,6 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
       });
       return;
     }
-    const saveObj: ReservationPropObj = {
-      contactInfo: {
-        phoneNumber: phoneNumber,
-        phonePrefix: prefix,
-        username: '',
-      },
-      numberOfPeople: parseInt(numberOfPeopleInput, 10),
-      dateTimeOfReservation: chosenDate.toISOString(),
-    };
     onSave(saveObj);
   };
 
@@ -286,7 +286,7 @@ function calculateMinumDate(pub: Object): Date {
   const vacationEnd = new Date(pub.vacationEnd);
 
   let minDateChecks = false;
-  let count = 0;
+  //let count = 0;
   do {
     console.log('### Cycle Start ###');
     console.log('isClosingDay', isClosingDay(inputDate, pub.daysClosed));
@@ -296,20 +296,20 @@ function calculateMinumDate(pub: Object): Date {
     );
     if (isClosingDay(inputDate, pub.daysClosed)) {
       const firstNonClosingDay = pub.daysClosed[pub.daysClosed.length - 1] + 1;
-      console.log('Cycle', count, firstNonClosingDay);
+      // console.log('Cycle', count, firstNonClosingDay);
       inputDate.setDate(
         inputDate.getDate() + (firstNonClosingDay - inputDate.getDay()),
       );
       continue;
     }
     if (isVacation(inputDate, vacationStart, vacationEnd)) {
-      console.log('Cycle', count);
+      // console.log('Cycle', count);
       inputDate.setDate(vacationEnd.getDate());
       inputDate.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
       continue;
     }
-    count++;
-    console.log('Cycle', count);
+    // count++;
+    // console.log('Cycle', count);
     minDateChecks = true;
   } while (!minDateChecks);
 
@@ -326,26 +326,73 @@ function calculateMinumDate(pub: Object): Date {
 }
 
 /* TBD to move checks on client or leave some on server */
-// function reservationValidation(pub: Object, formObject: ReservationPropObj, isUpdate: Boolean): ValidationObj {
-//   const result: ValidationObj = {
-//     success: false,
-//     message: '',
-//   };
+function reservationValidation(
+  pub: Object,
+  formObject: ReservationPropObj,
+  isUpdate: Boolean,
+): ValidationObj {
+  let result: ValidationObj = {
+    success: true,
+    message: '',
+  };
 
-//   return result;
-// }
+  result = isPastDate(new Date(formObject.dateTimeOfReservation), isUpdate);
 
-// function isPastDate(dateTimeOfReservation: Date) {
-//   const limitReservation = new Date();
-//   return dateTimeOfReservation < limitReservation;
-// }
+  if (result.success) {
+    result = validatePhoneNumber(
+      formObject.contactInfo.phoneNumber,
+      formObject.contactInfo.phonePrefix,
+    );
+    if (result.success) {
+      result = reservationDateValidation(
+        pub,
+        new Date(formObject.dateTimeOfReservation),
+      );
+    }
+  }
 
-// function validatePhoneNumber(phoneNumber) {
-//   const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-//   return regex.test(phoneNumber);
-// }
+  return result;
+}
 
-function reservationDateValidation(pub: Object, dateTimeOfReservation: Date): ValidationObj {
+function isPastDate(
+  dateTimeOfReservation: Date,
+  isUpdate: Boolean,
+): ValidationObj {
+  const limitReservation = new Date();
+  const result: ValidationObj = {
+    success: true,
+    message: '',
+  };
+  if (dateTimeOfReservation < limitReservation && !isUpdate) {
+    result.success = false;
+    result.message = 'Date can not be in the past';
+  }
+  return result;
+}
+
+function validatePhoneNumber(
+  phoneNumber: String,
+  phonePrefix: String,
+): ValidationObj {
+  const result: ValidationObj = {
+    success: true,
+    message: '',
+  };
+  const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+  if (!regex.test(phoneNumber)) {
+    result.success = false;
+    result.message = 'Invalid phone number';
+  } else if (!phonePrefix) {
+    result.success = false;
+    result.message = 'Phone Prefix must be indicated';
+  }
+  return result;
+}
+
+function reservationDateValidation(
+  pub: Object,
+  dateTimeOfReservation: Date,
+): ValidationObj {
   const result: ValidationObj = {
     success: true,
     message: '',
