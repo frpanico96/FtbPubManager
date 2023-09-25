@@ -124,7 +124,6 @@ exports.insertReservation = async (req, res, next) => {
                 const contact = new Contact({
                   phoneNumber: contactInfo.phoneNumber,
                   phonePrefix: contactInfo.phonePrefix,
-                  user: '',
                 });
                 const reservation = new Reservation({
                   numberOfPeople,
@@ -531,7 +530,7 @@ exports.updateReservationStatus = async (req, res, next) => {
   const {status, callback, username, reservationId} = req.body;
   await Reservation.findById(reservationId)
     .then(reservationToUpdate => {
-      if (reservationToUpdate.status === 'booked') {
+      if (reservationToUpdate.status !== 'booked') {
         return res.status(401).json({
           message: 'Error',
           error: 'It is not possible to modify a closed reservation',

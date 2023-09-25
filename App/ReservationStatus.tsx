@@ -49,6 +49,7 @@ const ReservationManagerStatus: React.FC<ReservationManagerStatusProp> = ({
       username,
       reservationId,
     };
+    console.log(bodyObj);
     const apiToCall = '/updateReservationStatus';
     fetch(UTILS.serverBasePath + apiToCall, {
       headers: {'Content-Type': 'application/json'},
@@ -128,6 +129,7 @@ const ReservationStatus: React.FC<ReservationStatusProp> = ({
   );
 
   const handlePressSave = () => {
+    console.log(value, callBack);
     onUpdate(value, callBack);
   };
 

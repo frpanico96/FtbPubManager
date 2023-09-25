@@ -133,7 +133,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
   const [chosenDate, setChosenDate] = useState(
     formObj?.dateTimeOfReservation
       ? new Date(formObj.dateTimeOfReservation)
-      : new Date(),
+      : calculateMinumDate(pub),
   );
 
   const [numberOfPeopleInput, setNumberOfPeopleInput] = useState(
@@ -336,6 +336,8 @@ function reservationValidation(
     message: '',
   };
 
+  console.log(formObject.dateTimeOfReservation);
+
   result = isPastDate(new Date(formObject.dateTimeOfReservation), isUpdate);
 
   if (result.success) {
@@ -348,6 +350,9 @@ function reservationValidation(
         pub,
         new Date(formObject.dateTimeOfReservation),
       );
+      if(result.success){
+        result = numberOfPeopleValidation(formObject.numberOfPeople)
+      }
     }
   }
 
@@ -358,6 +363,7 @@ function isPastDate(
   dateTimeOfReservation: Date,
   isUpdate: Boolean,
 ): ValidationObj {
+  console.log(dateTimeOfReservation);
   const limitReservation = new Date();
   const result: ValidationObj = {
     success: true,
@@ -389,6 +395,18 @@ function validatePhoneNumber(
   return result;
 }
 
+function numberOfPeopleValidation(numberOfPeople: Number): ValidationObj{
+  const result: ValidationObj = {
+    success: true,
+    message: '',
+  };
+  if (!Number.isInteger(numberOfPeople) || numberOfPeople < 0) {
+    result.success = false;
+    result.message = 'Invalid number of people';
+  }
+  return result;
+}
+
 function reservationDateValidation(
   pub: Object,
   dateTimeOfReservation: Date,
@@ -408,10 +426,10 @@ function reservationDateValidation(
   console.log(dateTimeOfReservation);
 
   const openTime = new Date();
-  openTime.setDate(dateTimeOfReservation.getDate());
+  openTime.setFullYear(dateTimeOfReservation.getFullYear(), dateTimeOfReservation.getMonth(), dateTimeOfReservation.getDate());
   openTime.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
   const closeTime = new Date();
-  closeTime.setDate(dateTimeOfReservation.getDate());
+  closeTime.setFullYear(dateTimeOfReservation.getFullYear(), dateTimeOfReservation.getMonth(), dateTimeOfReservation.getDate());
   if (openCloseTime.openHours > openCloseTime.closeHours) {
     closeTime.setDate(closeTime.getDate() + 1);
   }
