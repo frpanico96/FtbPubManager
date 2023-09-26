@@ -19,19 +19,22 @@ exports.getReservationByDateAndPub = async (req, res, next) => {
   //console.log('StartDate', startDate);
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 1);
-  //console.log('StartDate', startDate);
-  //console.log('EndDate', endDate);
-  await Reservation.find({
-    dateTimeOfReservation: {$gte: startDate, $lt: endDate},
+  console.log('StartDate', startDate);
+  console.log('EndDate', endDate);
+  await WorkingDay.findOne({
+    date: {$gte: startDate, $lt: endDate},
     pub: pubId,
   })
-    .populate({
-      path: 'contact',
-      populate: [{path: 'user', select: 'username', strictPopulate: false}],
-    })
+    .populate(
+      {
+        path: 'reservations',
+        populate: [{path: 'contact', populate:[{path: 'user', select: 'username', strictPopulate: false}]}]
+      }
+    )
     .exec()
-    .then(reservations => {
-      return res.status(200).json({message: 'Success', reservations});
+    .then(workday => {
+      console.log(workday);
+      return res.status(200).json({message: 'Success', workday});
     })
     .catch(error => {
       return res.status(400).json({message: 'Error', error: error.message});
@@ -105,13 +108,16 @@ exports.insertReservation = async (req, res, next) => {
     })
     .exec()
     .then(workDay => {
+      console.log(workDay);
       // If Work Day not found create new WorkDay
       if (workDay.length < 1) {
+        console.log('### Create Workday');
         WorkingDay.create({
-          date: new Date(),
+          date: dateTimeOfReservation,
           pub: pubId,
         })
           .then(newWorkDay => {
+            console.log(newWorkDay);
             Pub.updateOne(
               {_id: pubId},
               {
@@ -259,10 +265,11 @@ exports.insertReservation = async (req, res, next) => {
         // Work Day Found validation controls
       } else {
         const todayWorkDay = workDay[0];
+        console.log(todayWorkDay);
         if (todayWorkDay.stopReservations) {
           return res.status(400).json({
             message: 'Error',
-            error: 'It is not possible to book a reservation for today',
+            error: 'It is not possible to book a reservation for this day',
           });
         }
         const contact = new Contact({
@@ -304,7 +311,7 @@ exports.insertReservation = async (req, res, next) => {
           if (checkObj && checkObj.length > 0) {
             return res.status(400).json({
               message: 'Error',
-              error: 'You already have a reservation for today',
+              error: 'You already have a reservation for this day',
             });
           }
           User.findOne({username: contactInfo.username})
@@ -593,6 +600,40 @@ exports.updateReservationStatus = async (req, res, next) => {
             }),
           );
       }
+    })
+    .catch(error =>
+      res.status(400).json({
+        message: 'Error',
+        error: error.message,
+      }),
+    );
+};
+
+exports.stopReservations = async (req, res, next) => {
+  const {workdayId, stopReservations} = req.body;
+  await WorkingDay.findById(workdayId)
+    .populate({
+      path: 'reservations',
+      populate: [
+        {
+          path: 'contact',
+          populate: [{path: 'user', select: 'username', strictPopulate: false}],
+        },
+      ],
+    })
+    .then(oldWorkDay => {
+      oldWorkDay.stopReservations = stopReservations;
+      oldWorkDay
+        .save()
+        .then(workday => {
+          return res.status(200).json({message: 'Success', workday});
+        })
+        .catch(error =>
+          res.status(400).json({
+            message: 'Error',
+            error: error.message,
+          }),
+        );
     })
     .catch(error =>
       res.status(400).json({

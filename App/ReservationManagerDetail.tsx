@@ -48,7 +48,9 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
   isAtLeastOwner,
   refresher,
 }) => {
-  const [reservations, setReservations] = useState([]);
+  const [workDay, setWorkday] = useState({});
+  // const [reservations, setReservations] = useState([]);
+  // const [stopReservations, setStopReservations] = useState(false);
   /* Modal State */
   const [modalState, setModalState] = useState({
     showModal: false,
@@ -77,7 +79,32 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
       .then(res => res.json())
       .then(jsonRes => {
         console.log(jsonRes);
-        setReservations(jsonRes.reservations);
+        let todayWorkDay;
+        if (!jsonRes.workday) {
+          todayWorkDay = {reservations: jsonRes.reservations};
+        } else {
+          todayWorkDay = jsonRes.workday;
+        }
+        setWorkday(todayWorkDay);
+      })
+      .catch(error => console.log(error));
+  };
+
+  const handleStopReservations = () => {
+    const apiToCall = '/stopReservations';
+    const bodyObj = {
+      workdayId: workDay._id,
+      stopReservations: !workDay.stopReservations,
+    };
+    fetch(UTILS.serverBasePath + apiToCall, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify(bodyObj),
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+        setWorkday(jsonRes.workday);
       })
       .catch(error => console.log(error));
   };
@@ -88,7 +115,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
     }, [modalState.showModal]),
   );
 
-  console.log(reservations);
+  console.log(workDay?.reservations);
 
   const handleTileEvent = (tileEvent: TileEvent) => {
     console.log(tileEvent);
@@ -114,8 +141,8 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
     <>
       <GestureHandlerRootView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollView}>
-          {reservations.length > 0 &&
-            reservations.map(reservation => {
+          {workDay?.reservations?.length > 0 &&
+            workDay.reservations.map(reservation => {
               return (
                 <ReservationTile
                   key={reservation._id}
@@ -127,6 +154,13 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
               );
             })}
         </ScrollView>
+        {isAtLeastOwner && (
+          <View style={styles.btnContainer}>
+            <TouchableOpacity style={styles.btn} onPress={handleStopReservations}>
+              <Text style={styles.btnTxt}>{workDay?.stopReservations ? 'Enable Reservations' : 'Stop Reservations'}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <ReservationManagerModal
           toggleModal={modalState.showModal}
           onToggleModal={toggle =>
@@ -352,6 +386,20 @@ const styles = StyleSheet.create({
     width: 10,
     marginRight: 3,
   },
+  btnContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 4,
+  },
+  btn: {
+    backgroundColor: 'pink',
+    padding: 10,
+    borderRadius: 6,
+    borderColor: 'black',
+    borderWidth: 1,
+  },
+  btnTxt: {fontSize: 16},
 });
 
 export default ReservationManagerDetail;
