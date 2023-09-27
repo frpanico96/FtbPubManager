@@ -13,6 +13,7 @@ const UTILS = {
   menuAction: 'pub-main-menu',
   reservationAction: 'pub-main-resevation',
   reservationManagerAction: 'pub-main-manage-reservation',
+  contactUsAction: 'pub-main-contact-us',
   menuManager: {
     'mm-new-menu': 'New Menu Item',
     'menu-action-name': 'new-menu-item',
@@ -42,9 +43,31 @@ const UTILS = {
     'action-type-cancel': 'cancel',
     'action-type-status': 'status',
   },
+  contactUsManager: {
+    infos: [
+      {label: 'Address', field: 'address'},
+      {label: 'Phone', field: 'phone'},
+      {label: 'Email', field: 'email'},
+      {label: 'Opens at', field: 'openTime'},
+      {label: 'Closes at', field: 'closeTime'},
+      {label: 'Closing Days', field: 'daysClosed'},
+      {label: 'Vacation Start', field: 'vacationStart'},
+      {label: 'Vacation End', field: 'vacationEnd'},
+      {label: 'Vacation Reason', field: 'vactionReason'},
+    ],
+  },
   goBack: 'Go Back',
   save: 'Save',
   serverBasePath: 'http://localhost:5001/api/auth',
+  dayOfWeek: [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ],
 };
 
 export default UTILS;

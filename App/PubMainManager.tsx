@@ -15,6 +15,7 @@ import {
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 import ReservationManager from './ReservationManager';
+import ContactUsManager from './ContactUsManager';
 
 type navigateToDetailObj = {
   action: String;
@@ -42,7 +43,7 @@ const PubMainManager = ({navigation, route}) => {
 
   const isPubOwner =
     route.params?.userInfo?.username === route.params?.pub.owner?.username;
-  const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
+  const isAtLeastOwner = isPubOwner || route.params?.userInfo?.role === 'admin';
   console.log('### Is Pub Owner ', isAtLeastOwner);
 
   const handleGoBack = () => {
@@ -81,6 +82,8 @@ const PubMainManager = ({navigation, route}) => {
         }}
         onGoBack={handleGoBack}
       />
+    ) : route.params?.cmp === UTILS.contactUsAction ? (
+      <ContactUsManager pub={route.params?.pub} isAtLeastOwner={isAtLeastOwner}/>
     ) : null;
 
   return (
