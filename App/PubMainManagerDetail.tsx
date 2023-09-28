@@ -14,6 +14,7 @@ import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 import MenuManagerDetail from './MenuManagerDetail';
 import ReservationManagerDetail from './ReservationManagerDetail';
+import ContactUsManagerDetail from './ContactUsManagerDetail';
 
 const PubMainManagerDetail = ({navigation, route}) => {
   console.log('### Routing Params: ' + JSON.stringify(route.params));
@@ -61,6 +62,8 @@ const PubMainManagerDetail = ({navigation, route}) => {
           dateTimeOfReservation={dateTimeOfReservation}
         />
       </>
+    ) : actionName === UTILS.contactUsManager['contact-us-action'] ? (
+      <ContactUsManagerDetail pub={route.params?.pub} />
     ) : (
       <Text>Hello</Text>
     );

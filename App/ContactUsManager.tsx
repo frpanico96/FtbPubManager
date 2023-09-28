@@ -6,6 +6,7 @@ import UTILS from '../utilities/utils';
 type ContactUsManagerProp = {
   pub: Object;
   isAtLeastOwner: Boolean;
+  onEditInformation: Function;
 };
 
 const ContactUsManager = (props: ContactUsManagerProp) => {
@@ -16,7 +17,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
     if (!props?.pub[el.field]) {
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}:</Text>;
+          <Text style={styles.infoLabel}>{el.label}:</Text>
         </View>
       );
     }
@@ -77,7 +78,6 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
     }
   });
 
-  console.log(infos);
 
   return (
     <>
@@ -96,7 +96,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
         </View>
         {props.isAtLeastOwner && (
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity style={styles.btn} onPress={() => props.onEditInformation()}>
               <Text style={styles.btnTxt}>Edit Information</Text>
             </TouchableOpacity>
           </View>

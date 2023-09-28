@@ -83,7 +83,15 @@ const PubMainManager = ({navigation, route}) => {
         onGoBack={handleGoBack}
       />
     ) : route.params?.cmp === UTILS.contactUsAction ? (
-      <ContactUsManager pub={route.params?.pub} isAtLeastOwner={isAtLeastOwner}/>
+      <ContactUsManager pub={route.params?.pub} isAtLeastOwner={isAtLeastOwner} onEditInformation={() => {
+        const navigationObj: navigateToDetailObj = {
+            action: '',
+            name: UTILS.contactUsManager['contact-us-action'],
+            pubId: route.params?.pub?._id,
+            date: '',
+          };
+          handleNavigateToDetail(navigationObj);
+      }}/>
     ) : null;
 
   return (
