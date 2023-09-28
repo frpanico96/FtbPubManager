@@ -31,7 +31,10 @@ const UTILS = {
     ],
   },
   reservation: {
-    'prefix-options': [{label: '+39', value: '+39'}],
+    'prefix-options': [
+      {label: '+39', value: '+39'},
+      {label: '+01', value: '+01'},
+    ],
   },
   reservationManager: {
     'status-options': [
@@ -55,6 +58,19 @@ const UTILS = {
       {label: 'Vacation End', field: 'vacationEnd'},
       {label: 'Vacation Reason', field: 'vactionReason'},
     ],
+    'contact-us-action': 'contact-us-detail',
+    actions: [
+      {label: 'Contact Data', name: 'contact-data'},
+      {label: 'Address', name: 'address'},
+      {label: 'Opening/Closing', name: 'opening-closing'},
+      {label: 'Vacation', name: 'vacation'},
+      {label: 'Reservation Info', name: 'reservation-info'},
+    ],
+    'contact-data-name': 'contact-data',
+    'address-name': 'address',
+    'opening-closing-name': 'opening-closing',
+    'vacation-name': 'vacation',
+    'reservation-info-name': 'reservation-info',
   },
   goBack: 'Go Back',
   save: 'Save',
