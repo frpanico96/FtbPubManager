@@ -62,7 +62,7 @@ const UTILS = {
     actions: [
       {label: 'Contact Data', name: 'contact-data'},
       {label: 'Address', name: 'address'},
-      {label: 'Opening/Closing', name: 'opening-closing'},
+      {label: 'Opening/Closing Time', name: 'opening-closing'},
       {label: 'Vacation', name: 'vacation'},
       {label: 'Reservation Info', name: 'reservation-info'},
     ],
@@ -83,6 +83,15 @@ const UTILS = {
     'Thursday',
     'Friday',
     'Saturday',
+  ],
+  dayOfWeekOptions: [
+    {label: 'Sunday', value: 0},
+    {label: 'Monday', value: 1},
+    {label: 'Tuesday', value: 2},
+    {label: 'Wednesday', value: 3},
+    {label: 'Thursday', value: 4},
+    {label: 'Friday', value: 5},
+    {label: 'Saturday', value: 6},
   ],
 };
 

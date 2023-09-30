@@ -24,6 +24,12 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
     });
   };
 
+  const onConfirmAction = (body: Object) => {
+    console.log('### Contact Detail');
+    body.pubId = props.pub._id;
+    console.log(body, modal.actionName);
+  };
+
   const btns = UTILS.contactUsManager.actions.map(el => {
     return (
       <View key={el.name} style={styles.btnContainer}>
@@ -54,7 +60,7 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
         }
         pub={props.pub}
         actionName={modal.actionName}
-        onConfirmAction={() => console.log('Confirm')}
+        onConfirmAction={onConfirmAction}
       />
     </>
   );
