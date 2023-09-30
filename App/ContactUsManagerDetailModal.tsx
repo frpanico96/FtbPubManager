@@ -7,6 +7,7 @@ import UTILS from '../utilities/utils';
 import Toast from 'react-native-toast-message';
 import AddressData from './utility/components/AddressData';
 import OpenCloseData from './utility/components/OpenCloseData';
+import VacationData from './utility/components/VacationData';
 
 type ContactUsManagerDetailModalProps = {
   toggleModal: Boolean;
@@ -41,6 +42,9 @@ const ContactUsManagerDetailModal = (
         closeTime={props.pub?.closeTime}
         onSave={handleConfirm}
       />
+    ) : props.actionName === UTILS.contactUsManager['vacation-name'] ? (
+      <VacationData vacationStartDate={props.pub?.vacationStart} vacationEndDate={props.pub?.vacationEnd} 
+      vacationReason={props.pub?.vacationReason} onSave={handleConfirm}/>
     ) : (
       <Text>No Action Available</Text>
     );
