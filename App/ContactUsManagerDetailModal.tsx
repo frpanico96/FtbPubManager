@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import AddressData from './utility/components/AddressData';
 import OpenCloseData from './utility/components/OpenCloseData';
 import VacationData from './utility/components/VacationData';
+import ReservationInfoData from './utility/components/ReservationInfoData';
 
 type ContactUsManagerDetailModalProps = {
   toggleModal: Boolean;
@@ -20,7 +21,7 @@ type ContactUsManagerDetailModalProps = {
 const ContactUsManagerDetailModal = (
   props: ContactUsManagerDetailModalProps,
 ) => {
-  console.log('### Modal', props.pub);
+  //console.log('### Modal', props.pub);
 
   const handleConfirm = (body: Object) => {
     console.log('### Contact Modal');
@@ -43,8 +44,19 @@ const ContactUsManagerDetailModal = (
         onSave={handleConfirm}
       />
     ) : props.actionName === UTILS.contactUsManager['vacation-name'] ? (
-      <VacationData vacationStartDate={props.pub?.vacationStart} vacationEndDate={props.pub?.vacationEnd} 
-      vacationReason={props.pub?.vacationReason} onSave={handleConfirm}/>
+      <VacationData
+        vacationStartDate={props.pub?.vacationStart}
+        vacationEndDate={props.pub?.vacationEnd}
+        vacationReason={props.pub?.vacationReason}
+        onSave={handleConfirm}
+      />
+    ) : props.actionName === UTILS.contactUsManager['reservation-info-name'] ? (
+      <ReservationInfoData
+        reservationDelay={props.pub?.reservationDelay}
+        showOwner={props.pub?.showOwner}
+        daysClosed={props.pub?.daysClosed}
+        onSave={handleConfirm}
+      />
     ) : (
       <Text>No Action Available</Text>
     );
