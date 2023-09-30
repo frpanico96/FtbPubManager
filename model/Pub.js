@@ -56,7 +56,7 @@ const PubSchema = new Mongoose.Schema({
   vacationEnd: {
     type: Date,
   },
-  vactionReason: {
+  vacationReason: {
     type: String,
   },
   address: {
