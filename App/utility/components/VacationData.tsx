@@ -1,3 +1,6 @@
+/**@frpanico
+ * Contact Us - Vacation Info Component
+ */
 import React, {useState} from 'react';
 import {
   StyleSheet,

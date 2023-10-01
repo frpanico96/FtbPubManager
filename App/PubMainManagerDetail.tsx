@@ -26,6 +26,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
   const isPubOwner =
     route.params?.userInfo?.username === route.params?.pub.owner.username;
   const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
+  const pub = route.params?.navigationInfo?.pub;
   console.log('### Is Pub Owner ', isAtLeastOwner);
   const handleGoBack = () => {
     navigation.goBack();
@@ -63,7 +64,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
         />
       </>
     ) : actionName === UTILS.contactUsManager['contact-us-action'] ? (
-      <ContactUsManagerDetail pub={route.params?.pub} />
+      <ContactUsManagerDetail pub={pub} />
     ) : (
       <Text>Hello</Text>
     );

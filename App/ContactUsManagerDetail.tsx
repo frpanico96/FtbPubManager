@@ -1,8 +1,12 @@
+/**@frpanico
+ * Contact Us - Detail Component
+ */
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 import UTILS from '../utilities/utils';
 import ContactUsManagerDetailModal from './ContactUsManagerDetailModal';
+import Toast from 'react-native-toast-message';
 
 type ContactUsManagerDetailsProps = {
   pub: Object;
@@ -12,6 +16,7 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
   const [modal, setModal] = useState({
     showModal: false,
     actionName: '',
+    pub: props.pub,
   });
 
   const onPressAction = (actionName: String) => {
@@ -28,6 +33,59 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
     console.log('### Contact Detail');
     body.pubId = props.pub._id;
     console.log(body, modal.actionName);
+    const apiToCall =
+      modal.actionName === UTILS.contactUsManager['contact-data-name']
+        ? '/updateContactInfo'
+        : modal.actionName === UTILS.contactUsManager['address-name']
+        ? '/updateAddressInfo'
+        : modal.actionName === UTILS.contactUsManager['opening-closing-name']
+        ? '/updateOpenCloseInfo'
+        : modal.actionName === UTILS.contactUsManager['vacation-name']
+        ? '/updateVacationInfo'
+        : modal.actionName === UTILS.contactUsManager['reservation-info-name']
+        ? '/updateReservationInfo'
+        : 'no-api';
+    fetch(UTILS.serverBasePath + apiToCall, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify(body),
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+        if (jsonRes.error) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: jsonRes.error,
+            position: 'bottom',
+          });
+          return;
+        }
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: jsonRes.message,
+          position: 'bottom',
+        });
+        setTimeout(() => {
+          setModal(prev => {
+            const newState = {...prev};
+            newState.showModal = false;
+            newState.pub = jsonRes.newPub;
+            return newState;
+          });
+        }, 1000);
+      })
+      .catch(error => {
+        console.log(error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: error,
+          position: 'bottom',
+        });
+      });
   };
 
   const btns = UTILS.contactUsManager.actions.map(el => {
@@ -58,7 +116,7 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
             return newState;
           })
         }
-        pub={props.pub}
+        pub={modal.pub}
         actionName={modal.actionName}
         onConfirmAction={onConfirmAction}
       />

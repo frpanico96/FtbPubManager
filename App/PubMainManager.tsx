@@ -22,6 +22,7 @@ type navigateToDetailObj = {
   name: String;
   pubId: String;
   date: String;
+  pub: Object;
 };
 
 const PubMainManager = ({navigation, route}) => {
@@ -83,12 +84,13 @@ const PubMainManager = ({navigation, route}) => {
         onGoBack={handleGoBack}
       />
     ) : route.params?.cmp === UTILS.contactUsAction ? (
-      <ContactUsManager pub={route.params?.pub} isAtLeastOwner={isAtLeastOwner} onEditInformation={() => {
+      <ContactUsManager pub={route.params?.pub} isAtLeastOwner={isAtLeastOwner} onEditInformation={(pub) => {
         const navigationObj: navigateToDetailObj = {
             action: '',
             name: UTILS.contactUsManager['contact-us-action'],
             pubId: route.params?.pub?._id,
             date: '',
+            pub: pub,
           };
           handleNavigateToDetail(navigationObj);
       }}/>

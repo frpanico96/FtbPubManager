@@ -1,3 +1,7 @@
+/**@frpanico
+ * style js container
+ * NOT USED
+ */
 const STYLES = {
   container: {flex: 1},
   backgroundImage: {flex: 1},

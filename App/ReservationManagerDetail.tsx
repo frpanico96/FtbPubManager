@@ -156,8 +156,14 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
         </ScrollView>
         {isAtLeastOwner && (
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} onPress={handleStopReservations}>
-              <Text style={styles.btnTxt}>{workDay?.stopReservations ? 'Enable Reservations' : 'Stop Reservations'}</Text>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={handleStopReservations}>
+              <Text style={styles.btnTxt}>
+                {workDay?.stopReservations
+                  ? 'Enable Reservations'
+                  : 'Stop Reservations'}
+              </Text>
             </TouchableOpacity>
           </View>
         )}
@@ -313,14 +319,16 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
               <View style={styles.statusCombobox}>
                 <Text>{reservation?.status}</Text>
               </View>
-              <View style={styles.checkBoxContainer}>
-                <CheckBox
-                  style={styles.checkBox}
-                  disabled={true}
-                  value={reservation?.callBack}
-                />
-                <Text>CallBack</Text>
-              </View>
+              {isAtLeastOwner && (
+                <View style={styles.checkBoxContainer}>
+                  <CheckBox
+                    style={styles.checkBox}
+                    disabled={true}
+                    value={reservation?.callBack}
+                  />
+                  <Text>CallBack</Text>
+                </View>
+              )}
             </View>
           </View>
         </Swipeable>

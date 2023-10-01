@@ -1,3 +1,6 @@
+/**@frpanico
+ * Contact Us - Reservation Info Component
+ */
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -66,7 +69,10 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
       });
       return;
     }
-    const daysClosedBody = daysClosed.map(el => el.value);
+    const daysClosedBodyNotSorted = daysClosed.map(el => el.value);
+    const daysClosedBody = daysClosedBodyNotSorted.sort((a, b) => a - b);
+
+    console.log(daysClosedBody);
 
     const body = {
       reservationDelay,
@@ -83,7 +89,7 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
         <TextInput
           style={styles.txtInput}
           placeholder="Reservation Delay"
-          value={props.reservationDelay}
+          value={reservationInfo.reservationDelay}
           onChangeText={newText => {
             setReservationInfo(prev => {
               const newState = {...prev};

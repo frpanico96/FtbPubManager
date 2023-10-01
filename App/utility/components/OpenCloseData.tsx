@@ -1,3 +1,6 @@
+/**@frpanico
+ * Contact Us - Open/Close Component
+ */
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
