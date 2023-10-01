@@ -19,8 +19,15 @@ const {
   updateReservation,
   updateReservationStatus,
   getUserReservationByPubId,
-  stopReservations
+  stopReservations,
 } = require('./ReservationService');
+const {
+  updateContactInfo,
+  updateAddressInfo,
+  updateOpenCloseInfo,
+  updateVacationInfo,
+  updateReservationInfo,
+} = require('./ContacUsService');
 
 router.route('/register').post(register);
 router.route('/login').post(login);
@@ -40,6 +47,11 @@ router.route('/updateReservation').post(updateReservation);
 router.route('/updateReservationStatus').post(updateReservationStatus);
 router.route('/getUserReservation').post(getUserReservationByPubId);
 router.route('/stopReservations').post(stopReservations);
+router.route('/updateContactInfo').post(updateContactInfo);
+router.route('/updateAddressInfo').post(updateAddressInfo);
+router.route('/updateOpenCloseInfo').post(updateOpenCloseInfo);
+router.route('/updateVacationInfo').post(updateVacationInfo);
+router.route('/updateReservationInfo').post(updateReservationInfo);
 //router.route('/createFoodCategory').post(insertFoodCategory);
 //router.route('/createFood').post(insertFood);
 module.exports = router;

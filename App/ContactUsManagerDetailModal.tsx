@@ -1,3 +1,6 @@
+/**@frpanico
+ * Contact Us - Modal Component
+ */
 import React from 'react';
 import {View, Modal, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
@@ -21,7 +24,7 @@ type ContactUsManagerDetailModalProps = {
 const ContactUsManagerDetailModal = (
   props: ContactUsManagerDetailModalProps,
 ) => {
-  //console.log('### Modal', props.pub);
+  console.log('### Modal', props.pub);
 
   const handleConfirm = (body: Object) => {
     console.log('### Contact Modal');
@@ -33,6 +36,7 @@ const ContactUsManagerDetailModal = (
       <ContactData
         phoneNumber={props.pub?.phone}
         phonePrefix={props.pub?.phonePrefix}
+        email={props.pub?.email}
         onSave={handleConfirm}
       />
     ) : props.actionName === UTILS.contactUsManager['address-name'] ? (

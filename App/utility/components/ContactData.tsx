@@ -1,3 +1,6 @@
+/**@frpanico
+ * Contact Us - Contact Component
+ */
 import React, {useState} from 'react';
 import {
   View,
@@ -9,10 +12,12 @@ import {
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import UTILS from '../../../utilities/utils';
+import Toast from 'react-native-toast-message';
 
 type ContactDataProps = {
   phoneNumber: String;
   phonePrefix: String;
+  email: String;
   onSave: Function;
 };
 
@@ -23,11 +28,40 @@ const ContactData = (props: ContactDataProps) => {
     UTILS.reservation['prefix-options'],
   );
   const [phoneNumber, setPhoneNumber] = useState(props?.phoneNumber);
+  const [email, setEmail] = useState(props?.email);
 
   const handleSave: Object = () => {
     console.log(phoneNumber);
     console.log(phonePrefix);
-    const obj = {phoneNumber, phonePrefix};
+
+    const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+    if (!regex.test(phoneNumber)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Invalid phone number',
+        position: 'bottom',
+      });
+      return;
+    } else if (!phonePrefix) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Populate Phone Prefix',
+        position: 'bottom',
+      });
+      return;
+    } else if (!email) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Populate Email',
+        position: 'bottom',
+      });
+      return;
+    }
+
+    const obj = {phoneNumber, phonePrefix, email};
     props.onSave(obj);
   };
 
@@ -52,6 +86,14 @@ const ContactData = (props: ContactDataProps) => {
           onChangeText={setPhoneNumber}
         />
       </View>
+      <View style={styles.emailContainer}>
+        <TextInput
+          style={[styles.txtInput]}
+          placeholder="Enter email"
+          value={email}
+          onChangeText={setEmail}
+        />
+      </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
           <Text style={styles.btnTxt}>Save</Text>
@@ -65,7 +107,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 3,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
     padding: 10,
     width: '100%',
   },
@@ -73,6 +115,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     zIndex: 1000,
+  },
+  emailContainer: {
+    flex: 1,
+    width: '100%',
+    marginTop: 10,
   },
   comboboxPrefix: {
     flex: 1,

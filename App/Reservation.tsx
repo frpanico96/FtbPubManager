@@ -213,6 +213,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
         onDateChange={setChosenDate}
         minimumDate={minimumDate}
         minuteInterval={15}
+        mode={isUpdate ? 'time' : 'datetime'}
       />
       <TextInput
         style={styles.inputTxt}
@@ -288,6 +289,8 @@ function calculateMinumDate(pub: Object): Date {
   let minDateChecks = false;
   //let count = 0;
   do {
+    // count++
+    // if(count === 4) minDateChecks = true;
     console.log('### Cycle Start ###');
     console.log('isClosingDay', isClosingDay(inputDate, pub.daysClosed));
     console.log(

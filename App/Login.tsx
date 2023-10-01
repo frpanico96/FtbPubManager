@@ -25,9 +25,6 @@ const Login = ({navigation, route}) => {
 
   const handleSignIn = () => {
     console.log('signed In');
-    console.log(username);
-    console.log(password);
-    console.log({username, password});
     fetch(UTILS.serverBasePath + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
@@ -35,6 +32,7 @@ const Login = ({navigation, route}) => {
     })
       .then(res => res.json())
       .then(jsonRes => {
+        console.log(jsonRes);
         Toast.show({
           type: jsonRes.error ? 'error' : 'success',
           text1: jsonRes.error ? jsonRes.error : 'Success',

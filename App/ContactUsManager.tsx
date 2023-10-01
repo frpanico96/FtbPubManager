@@ -1,7 +1,12 @@
-import React from 'react';
+/**@frpanico
+ * Contact Us - Main Component
+ */
+import React, { useCallback, useState } from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 import UTILS from '../utilities/utils';
+import { useFocus } from 'native-base/lib/typescript/components/primitives';
+import { useFocusEffect } from '@react-navigation/native';
 
 type ContactUsManagerProp = {
   pub: Object;
@@ -13,8 +18,38 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
   console.log('### Contact Us Manager');
   console.log(props);
 
+  const [contactUsState, setContactUsState] = useState({
+    pub: props.pub,
+  });
+
+  const fetchPub = (pubId: String) => {
+    fetch(UTILS.serverBasePath + '/getPub', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify({pubId}),
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log('FetchedPub', jsonRes.pub);
+        setContactUsState(prev => {
+          const newState = {...prev};
+          newState.pub = jsonRes.pub;
+          return newState;
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPub(props.pub?._id);
+    }, [props.pub?._id]),
+  );
+
   const infos = UTILS.contactUsManager.infos.map(el => {
-    if (!props?.pub[el.field]) {
+    if (!contactUsState.pub[el.field]) {
       return (
         <View key={el.field} style={styles.infoChildContainer}>
           <Text style={styles.infoLabel}>{el.label}:</Text>
@@ -26,16 +61,16 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
         <View key={el.field} style={styles.infoChildContainer}>
           <Text style={styles.infoLabel}>{el.label}</Text>
           <Text style={styles.infoValue}>
-            : ({props?.pub?.phonePrefix}){props?.pub[el.field]}
+            : ({contactUsState.pub?.phonePrefix}){contactUsState?.pub[el.field]}
           </Text>
         </View>
       );
     } else if (el.field === 'openTime' || el.field === 'closeTime') {
-      const hours = parseInt(props?.pub[el.field] / 100, 10);
+      const hours = parseInt(contactUsState.pub[el.field] / 100, 10);
       const mins =
-        parseInt(props?.pub[el.field] % 100, 10) === 0
+        parseInt(contactUsState.pub[el.field] % 100, 10) === 0
           ? '00'
-          : parseInt(props?.pub[el.field] % 100, 10);
+          : parseInt(contactUsState.pub[el.field] % 100, 10);
       const time = `${hours}:${mins}`;
       return (
         <View key={el.field} style={styles.infoChildContainer}>
@@ -44,7 +79,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
         </View>
       );
     } else if (el.field === 'vacationStart' || el.field === 'vacationEnd') {
-      const date = new Date(props?.pub[el.field]);
+      const date = new Date(contactUsState.pub[el.field]);
       return (
         <View key={el.field} style={styles.infoChildContainer}>
           <Text style={styles.infoLabel}>{el.label}: </Text>
@@ -53,10 +88,10 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
       );
     } else if (el.field === 'daysClosed') {
       let daysClosed = '';
-      for (let i = 0; i <= props?.pub[el.field].length - 1; ++i) {
-        const dayOfTheWeek = UTILS.dayOfWeek[props?.pub[el.field][i]];
+      for (let i = 0; i <= contactUsState.pub[el.field].length - 1; ++i) {
+        const dayOfTheWeek = UTILS.dayOfWeek[contactUsState.pub[el.field][i]];
         console.log(dayOfTheWeek);
-        if (i === props?.pub[el.field].length - 1) {
+        if (i === contactUsState.pub[el.field].length - 1) {
           daysClosed += dayOfTheWeek;
         } else {
           daysClosed += dayOfTheWeek + ', ';
@@ -72,7 +107,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
       return (
         <View key={el.field} style={styles.infoChildContainer}>
           <Text style={styles.infoLabel}>{el.label}: </Text>
-          <Text style={styles.infoValue}>{props?.pub[el.field]}</Text>
+          <Text style={styles.infoValue}>{contactUsState.pub[el.field]}</Text>
         </View>
       );
     }
@@ -85,10 +120,10 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
         <View style={{flex: 1}} />
         <View style={styles.card}>
           <View style={styles.headerContainer}>
-            <Text style={styles.headerTxt}>{props?.pub?.name}</Text>
-            {props?.pub?.showOwner && (
+            <Text style={styles.headerTxt}>{contactUsState.pub?.name}</Text>
+            {contactUsState.pub?.showOwner && (
               <Text style={styles.headerSubTxt}>
-                by {props?.pub?.owner?.username}
+                by {contactUsState.pub?.owner?.username}
               </Text>
             )}
           </View>
@@ -96,7 +131,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
         </View>
         {props.isAtLeastOwner && (
           <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} onPress={() => props.onEditInformation()}>
+            <TouchableOpacity style={styles.btn} onPress={() => props.onEditInformation(contactUsState.pub)}>
               <Text style={styles.btnTxt}>Edit Information</Text>
             </TouchableOpacity>
           </View>

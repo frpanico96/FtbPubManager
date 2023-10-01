@@ -79,7 +79,10 @@ exports.login = async (req, res, next) => {
           });
           res.status(201).json({message: 'Login Succesfull', user});
         } else {
-          res.status(400).json({message: 'Login not successful'});
+          res.status(400).json({
+            message: 'Error',
+            error: 'Invalid username or password',
+          });
         }
       });
     }
