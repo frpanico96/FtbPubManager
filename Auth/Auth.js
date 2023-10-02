@@ -7,6 +7,8 @@
  * -- Delete user
  */
 const User = require('../model/User');
+const Log = require('../model/Log');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtSecret =
@@ -38,7 +40,20 @@ exports.register = async (req, res, next) => {
             },
           );
           res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
-          res.status(201).json({message: 'User succesfully created', user});
+          Log.create({
+            user: user._id,
+            method: 'REGISTER',
+            timeStamp: new Date(),
+          })
+            .then(log => {
+              res.status(201).json({message: 'User succesfully created', user});
+            })
+            .catch(error => {
+              return res.status(400).json({
+                message: 'Error',
+                error: error.message,
+              });
+            });
         })
         .catch(error =>
           res.status(400).json({
@@ -77,7 +92,20 @@ exports.login = async (req, res, next) => {
             httpOnly: true,
             maxAge: maxAge * 1000,
           });
-          res.status(201).json({message: 'Login Succesfull', user});
+          Log.create({
+            user: user._id,
+            method: 'LOGIN',
+            timeStamp: new Date(),
+          })
+            .then(log => {
+              res.status(201).json({message: 'Login Succesfull', user});
+            })
+            .catch(error => {
+              return res.status(400).json({
+                message: 'Error',
+                error: error.message,
+              });
+            });
         } else {
           res.status(400).json({
             message: 'Error',
@@ -140,4 +168,21 @@ exports.deleteUser = async (req, res, next) => {
     .catch(error =>
       res.status(400).json({message: 'An error occured', error: error.message}),
     );
+};
+
+exports.guestLogin = async (req, res, next) => {
+  await Log.create({
+    isGuest: true,
+    method: 'GUEST_LOGIN',
+    timeStamp: new Date(),
+  })
+    .then(log => {
+      res.status(200).json({message: 'Success'});
+    })
+    .catch(error => {
+      return res.status(400).json({
+        message: 'Error',
+        error: error.message,
+      });
+    });
 };
