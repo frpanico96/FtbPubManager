@@ -10,7 +10,10 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Platform,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
 import {type UserInfo} from './utility/types/types';
@@ -31,7 +34,13 @@ type PubListProps = {
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
 
 const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
-  const [pubs, setPubs] = useState([]);
+  const [pubs, setPubs] = useState({
+    pubs: [],
+    showMyPubs: false,
+    allPubs: [],
+  });
+  // const [pubs, setPubs] = useState([]);
+  // const [filter, setFilter] = useState(false);
 
   const onNavigateToPub = (pub: Object) => {
     console.log('# navigate to pub: ' + JSON.stringify(pub));
@@ -51,17 +60,34 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
       .then(res => {
         const pubList = res.pubs;
         console.log(pubList);
-        handleSetPubs(pubList);
+        setPubs(prev => {
+          const newState = {...prev};
+          newState.pubs = pubList;
+          newState.allPubs = pubList;
+          newState.showMyPubs = false;
+          return newState;
+        });
       });
   };
 
-  const handleSetPubs = (pubList: Object[]) => {
-    console.log('### Start Handling');
-    const pubsToRender = pubList.map(pub => {
-      return <PubTile key={pub._id} pub={pub} onSelectPub={onNavigateToPub} />;
+  const showMyPubs = () => {
+    let myPubsOnly = [];
+    if (!pubs?.showMyPubs) {
+      myPubsOnly = pubs.pubs.filter(pub => {
+        console.log(pub);
+        console.log(pub?.owner?.username);
+        console.log(userInfo.username);
+        return pub?.owner?.username === userInfo.username;
+      });
+    }
+
+    setPubs(prev => {
+      const newState = {...prev};
+      newState.pubs = !prev.showMyPubs ? myPubsOnly : prev.allPubs;
+      newState.showMyPubs = !prev.showMyPubs;
+      return newState;
     });
-    setPubs(pubsToRender);
-    console.log('# pubs: ' + JSON.stringify(pubs));
+
   };
 
   useEffect(() => {
@@ -74,15 +100,40 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
         source={IMAGES['home-background']}
         resizeMode="cover"
         style={styles.pubListBackgroundImage}>
-        <Text style={styles.pubListHeader}>
-          Welcome,{' '}
-          {userInfo ? userInfo.role + ' ' + userInfo.username : 'Guest'}
-        </Text>
+        <View style={styles.headerContainer}>
+          {Platform.OS === 'ios' && userInfo && (
+            <View style={styles.iconContainer}>
+              <TouchableOpacity>
+                <Icon name="menu-open" size={50} color="#900" />
+              </TouchableOpacity>
+              {userInfo.role === 'owner' && (
+                <TouchableOpacity onPress={showMyPubs}>
+                  <Icon
+                    name={pubs?.showMyPubs ? 'filter-off' : 'filter'}
+                    size={35}
+                    color="#900"
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+          <Text style={styles.pubListHeader}>
+            Welcome,{' '}
+            {userInfo ? userInfo.role + ' ' + userInfo.username : 'Guest'}
+          </Text>
+        </View>
         <View style={styles.pubListContainer}>
           <ScrollView
             style={styles.pubListContainer}
             contentContainerStyle={styles.scrollViewContainer}>
-            {pubs}
+            {pubs && pubs?.pubs?.length > 0 &&
+              pubs.pubs.map(pub => (
+                <PubTile
+                  key={pub._id}
+                  pub={pub}
+                  onSelectPub={onNavigateToPub}
+                />
+              ))}
           </ScrollView>
         </View>
         <View style={styles.pubListBtnContainer}>
@@ -127,9 +178,20 @@ const PubTile = ({pub, onSelectPub}) => {
 
 const styles = StyleSheet.create({
   container: {flex: 1},
+  headerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'space-between',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   pubListHeader: {
     fontFamily: 'sans-serif',
-    fontSize: 40,
+    fontSize: 30,
     fontWeight: '700',
     padding: 30,
   },
