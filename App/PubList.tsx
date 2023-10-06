@@ -13,6 +13,7 @@ import {
   Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+//import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
@@ -32,6 +33,7 @@ type PubListProps = {
 };
 
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
+//const Drawer = createDrawerNavigator();
 
 const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
   const [pubs, setPubs] = useState({
@@ -175,6 +177,29 @@ const PubTile = ({pub, onSelectPub}) => {
     </View>
   );
 };
+
+// const TestComponent = () => {
+//   return <Text>Finally</Text>;
+// }
+
+// const SideMenu = () => {
+//   return (
+//     <Drawer.Navigator>
+//       <Drawer.Screen name="SideBar" component={TestComponent} />
+//     </Drawer.Navigator>
+//   );
+// }
+
+
+// const SideBar = () => {
+//   const menu = <Text>Hello</Text>;
+//   return (
+//     <SideMenu menu={menu}>
+//       <Text>Hello</Text>
+//     </SideMenu>
+//   );
+// }
+
 
 const styles = StyleSheet.create({
   container: {flex: 1},

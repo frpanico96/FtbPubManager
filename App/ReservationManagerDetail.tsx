@@ -66,7 +66,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
     console.log(isAtLeastOwner);
     const apiToCall = isAtLeastOwner
       ? '/getReservation'
-      : '/getUserReservation';
+      : '/getUserPubReservation';
     const bodyObj = isAtLeastOwner
       ? {date: dateTimeOfReservation, pubId: pub._id}
       : {username, pubId: pub._id};
