@@ -69,6 +69,35 @@ exports.getUserReservationByPubId = async (req, res, next) => {
     });
 };
 
+exports.getUserReservation = async (req, res, next) => {
+  const {username} = req.body;
+  console.log(username);
+  await User.findOne({username})
+    .then(user => {
+      console.log(user);
+      Reservation.find({
+        contact: {$in: user.contacts},
+      })
+        .populate({
+          path: 'contact pub',
+          select: 'phoneNumber phonePrefix isGuest name',
+          populate: [{path: 'user', select: 'username', strictPopulate: false}],
+        })
+        .exec()
+        .then(reservations => {
+          return res.status(200).json({message: 'success', reservations});
+        })
+        .catch(error => {
+          console.log(error);
+          return res.status(400).json({message: 'Error', error: error.message});
+        });
+    })
+    .catch(error => {
+      console.log(error);
+      return res.status(400).json({message: 'Error', error: error.message});
+    });
+};
+
 exports.insertReservation = async (req, res, next) => {
   const {contactInfo, numberOfPeople, dateTimeOfReservation, pubId} = req.body;
   const validation = formValidation(

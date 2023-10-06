@@ -20,6 +20,7 @@ const {
   updateReservationStatus,
   getUserReservationByPubId,
   stopReservations,
+  getUserReservation,
 } = require('./ReservationService');
 const {
   updateContactInfo,
@@ -46,8 +47,9 @@ router.route('/getReservation').post(getReservationByDateAndPub);
 router.route('/createReservation').post(insertReservation);
 router.route('/updateReservation').post(updateReservation);
 router.route('/updateReservationStatus').post(updateReservationStatus);
-router.route('/getUserReservation').post(getUserReservationByPubId);
+router.route('/getUserPubReservation').post(getUserReservationByPubId);
 router.route('/stopReservations').post(stopReservations);
+router.route('/getUserReservation').post(getUserReservation);
 router.route('/updateContactInfo').post(updateContactInfo);
 router.route('/updateAddressInfo').post(updateAddressInfo);
 router.route('/updateOpenCloseInfo').post(updateOpenCloseInfo);
