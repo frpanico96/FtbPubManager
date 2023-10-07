@@ -6,6 +6,7 @@
 import React from 'react';
 import HomePage from '../App/Home';
 import PubList from '../App/PubList';
+import UTILS from '../utilities/utils';
 
 const HomePubContainer = ({navigation, route}) => {
   const handleNavigate = (cmp: String) => {
@@ -21,6 +22,18 @@ const HomePubContainer = ({navigation, route}) => {
     });
   };
 
+  const handleUserReservationNavigation = () => {
+    const navigationInfo = {
+      name: UTILS.reservationManagerAction,
+      action: UTILS.reservationManager['action-name-user-reservation'],
+    };
+    navigation.navigate({
+      name: 'PubMainManagerDetail',
+      params: {userInfo: route.params?.userInfo, navigationInfo},
+      merge: true,
+    });
+  };
+
   return (
     <>
       {!route.params?.hasUserOrGuestLoggedIn ? (
@@ -30,6 +43,7 @@ const HomePubContainer = ({navigation, route}) => {
           onPubNavigate={handlePubNavigation}
           userInfo={route.params?.userInfo}
           onLogOut={handleNavigate}
+          onUserReservationNavigate={handleUserReservationNavigation}
         />
       )}
     </>
