@@ -27,6 +27,7 @@ type ReservationManagerDetailProp = {
   dateTimeOfReservation: DateObj;
   isAtLeastOwner: Boolean;
   refresher: Boolean;
+  actionType: String;
 };
 
 type ReservationTileProp = {
@@ -34,6 +35,7 @@ type ReservationTileProp = {
   isAtLeastOwner: Boolean;
   username: String;
   onTileEvent: Function;
+  allUserReservationMode: Boolean;
 };
 
 type TileEvent = {
@@ -47,6 +49,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
   dateTimeOfReservation,
   isAtLeastOwner,
   refresher,
+  actionType,
 }) => {
   const [workDay, setWorkday] = useState({});
   // const [reservations, setReservations] = useState([]);
@@ -64,12 +67,18 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
       return;
     }
     console.log(isAtLeastOwner);
-    const apiToCall = isAtLeastOwner
-      ? '/getReservation'
-      : '/getUserPubReservation';
-    const bodyObj = isAtLeastOwner
-      ? {date: dateTimeOfReservation, pubId: pub._id}
-      : {username, pubId: pub._id};
+    const apiToCall =
+      actionType === UTILS.reservationManager['action-name-user-reservation']
+        ? '/getUserReservation'
+        : isAtLeastOwner
+        ? '/getReservation'
+        : '/getUserPubReservation';
+    const bodyObj =
+      actionType === UTILS.reservationManager['action-name-user-reservation']
+        ? {username}
+        : isAtLeastOwner
+        ? {date: dateTimeOfReservation, pubId: pub._id}
+        : {username, pubId: pub._id};
     console.log(bodyObj);
     fetch(UTILS.serverBasePath + apiToCall, {
       headers: {'Content-Type': 'application/json'},
@@ -150,6 +159,10 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
                   username={username}
                   isAtLeastOwner={isAtLeastOwner}
                   onTileEvent={handleTileEvent}
+                  allUserReservationMode={
+                    actionType ===
+                    UTILS.reservationManager['action-name-user-reservation']
+                  }
                 />
               );
             })}
@@ -192,6 +205,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   isAtLeastOwner,
   username,
   onTileEvent,
+  allUserReservationMode,
 }) => {
   // /* Status Combobox state */
   // const [open, setOpen] = useState(false);
@@ -239,7 +253,8 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
       outputRange: [upperOutput, 0],
     });
 
-    const isReservationActive = reservation?.status === 'booked';
+    const isReservationActive =
+      reservation?.status === 'booked' && !allUserReservationMode;
 
     return (
       <>
@@ -300,6 +315,11 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
           onSwipeableWillOpen={left => console.log('swiping')}>
           <View style={styles.reservationContainer}>
             <View style={styles.userInfoDateContainer}>
+              {reservation?.pub?.name && (
+                <Text style={styles.userInfoTxt}>
+                  {reservation?.pub?.name?.toUpperCase()}
+                </Text>
+              )}
               <View style={styles.userInfoContainer}>
                 <Text style={styles.userInfoTxt}>
                   {!reservation?.contact?.isGuest

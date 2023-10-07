@@ -45,6 +45,7 @@ const UTILS = {
     'action-type-edit': 'edit',
     'action-type-cancel': 'cancel',
     'action-type-status': 'status',
+    'action-name-user-reservation': 'user-reservation',
   },
   contactUsManager: {
     infos: [

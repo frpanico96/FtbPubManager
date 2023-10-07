@@ -30,12 +30,13 @@ type PubListProps = {
   onPubNavigate: Function;
   userInfo: UserInfo;
   onLogOut: Function;
+  onUserReservationNavigate: Function;
 };
 
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
 //const Drawer = createDrawerNavigator();
 
-const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
+const PubList = ({onPubNavigate, userInfo, onLogOut, onUserReservationNavigate}: PubListProps) => {
   const [pubs, setPubs] = useState({
     pubs: [],
     showMyPubs: false,
@@ -47,6 +48,11 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
   const onNavigateToPub = (pub: Object) => {
     console.log('# navigate to pub: ' + JSON.stringify(pub));
     onPubNavigate(pub);
+  };
+
+  const handleUserReservationBtn = () => {
+    console.log('# navigating to user reservations');
+    onUserReservationNavigate();
   };
 
   const onPressLogOut = () => {
@@ -105,7 +111,7 @@ const PubList = ({onPubNavigate, userInfo, onLogOut}: PubListProps) => {
         <View style={styles.headerContainer}>
           {Platform.OS === 'ios' && userInfo && (
             <View style={styles.iconContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleUserReservationBtn}>
                 <Icon name="menu-open" size={50} color="#900" />
               </TouchableOpacity>
               {userInfo.role === 'owner' && (

@@ -24,7 +24,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
   const mainItem = route.params?.navigationInfo.mainItem;
   const dateTimeOfReservation = route.params?.navigationInfo?.date;
   const isPubOwner =
-    route.params?.userInfo?.username === route.params?.pub.owner.username;
+    route.params?.userInfo?.username === route.params?.pub?.owner?.username;
   const isAtLeastOwner = isPubOwner || route.params?.userInfo.role === 'admin';
   const pub = route.params?.navigationInfo?.pub;
   console.log('### Is Pub Owner ', isAtLeastOwner);
@@ -33,16 +33,22 @@ const PubMainManagerDetail = ({navigation, route}) => {
   };
 
   const handleNavigateToPreviousScreen = (refresher = true) => {
-    navigation.navigate({
-      name: 'PubMainManager',
-      params: {
-        userInfo: route.params?.userInfo,
-        pub: route.params?.pub,
-        cmp: route.params?.cmp,
-        refreshMenu: refresher,
-      },
-      merge: true,
-    });
+    if (
+      actionType === UTILS.reservationManager['action-name-user-reservation']
+    ) {
+      handleGoBack();
+    } else {
+      navigation.navigate({
+        name: 'PubMainManager',
+        params: {
+          userInfo: route.params?.userInfo,
+          pub: route.params?.pub,
+          cmp: route.params?.cmp,
+          refreshMenu: refresher,
+        },
+        merge: true,
+      });
+    }
   };
 
   const componentToShow =
@@ -61,6 +67,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
           pub={route.params?.pub}
           refresher={route.params?.refresher}
           dateTimeOfReservation={dateTimeOfReservation}
+          actionType={actionType}
         />
       </>
     ) : actionName === UTILS.contactUsManager['contact-us-action'] ? (
