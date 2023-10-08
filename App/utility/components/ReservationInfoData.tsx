@@ -18,6 +18,7 @@ import Toast from 'react-native-toast-message';
 type ReservationInfoDataProps = {
   reservationDelay: Number;
   showOwner: Boolean;
+  phoneNumberRequired: Boolean;
   daysClosed: Array<Number>;
   onSave: Function;
 };
@@ -37,6 +38,7 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
   const [reservationInfo, setReservationInfo] = useState({
     reservationDelay: props?.reservationDelay?.toString(),
     showOwner: props.showOwner,
+    phoneNumberRequired: props.phoneNumberRequired,
   });
 
   //console.log(daysClosedArr);
@@ -78,6 +80,7 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
       reservationDelay,
       showOwner: reservationInfo.showOwner,
       daysClosed: daysClosedBody,
+      phoneNumberRequired: reservationInfo.phoneNumberRequired,
     };
     props.onSave(body);
   };
@@ -134,6 +137,20 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
             }}
           />
           <Text>Show Owner</Text>
+        </View>
+        <View style={styles.checkBoxContainer}>
+          <CheckBox
+            style={styles.checkBox}
+            value={reservationInfo.phoneNumberRequired}
+            onValueChange={newValue => {
+              setReservationInfo(prev => {
+                const newState = {...prev};
+                newState.phoneNumberRequired = newValue;
+                return newState;
+              });
+            }}
+          />
+          <Text>Phone Number Required</Text>
         </View>
         {/* <NativeBaseProvider>
           <Box alignItems="center">

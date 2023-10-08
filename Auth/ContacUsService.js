@@ -92,13 +92,15 @@ exports.updateVacationInfo = async (req, res, next) => {
 };
 
 exports.updateReservationInfo = async (req, res, next) => {
-  const {reservationDelay, showOwner, daysClosed, pubId} = req.body;
+  const {reservationDelay, showOwner, daysClosed, phoneNumberRequired, pubId} =
+    req.body;
 
   await Pub.findById(pubId)
     .then(pubToUpdate => {
       pubToUpdate.reservationDelay = reservationDelay;
       pubToUpdate.showOwner = showOwner;
       pubToUpdate.daysClosed = daysClosed;
+      pubToUpdate.phoneNumberRequired = phoneNumberRequired;
       pubToUpdate
         .save()
         .then(newPub => {
