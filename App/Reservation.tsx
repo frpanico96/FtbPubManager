@@ -347,6 +347,7 @@ function reservationValidation(
     result = validatePhoneNumber(
       formObject.contactInfo.phoneNumber,
       formObject.contactInfo.phonePrefix,
+      pub?.phoneNumberRequired,
     );
     if (result.success) {
       result = reservationDateValidation(
@@ -382,11 +383,15 @@ function isPastDate(
 function validatePhoneNumber(
   phoneNumber: String,
   phonePrefix: String,
+  phoneNumberRequired: Boolean,
 ): ValidationObj {
   const result: ValidationObj = {
     success: true,
     message: '',
   };
+  if (!phoneNumberRequired) {
+    return result;
+  }
   const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
   if (!regex.test(phoneNumber)) {
     result.success = false;

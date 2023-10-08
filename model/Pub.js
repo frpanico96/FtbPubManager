@@ -20,6 +20,7 @@
  * -- phone
  * -- email
  * -- reservationDelay
+ * -- phoneNumber required
  */
 const Mongoose = require('mongoose');
 const Schema = Mongoose.Schema;
@@ -73,6 +74,10 @@ const PubSchema = new Mongoose.Schema({
   },
   reservationDelay: {
     type: Number,
+  },
+  phoneNumberRequired: {
+    type: Boolean,
+    default: false,
   },
 });
 
