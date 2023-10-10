@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
 import {type UserInfo} from './utility/types/types';
 /* Example of pub Object
 const testPub = {
@@ -36,7 +37,12 @@ type PubListProps = {
 const URL_SEVER_PATH = 'http://localhost:5001/api/auth/';
 //const Drawer = createDrawerNavigator();
 
-const PubList = ({onPubNavigate, userInfo, onLogOut, onUserReservationNavigate}: PubListProps) => {
+const PubList = ({
+  onPubNavigate,
+  userInfo,
+  onLogOut,
+  onUserReservationNavigate,
+}: PubListProps) => {
   const [pubs, setPubs] = useState({
     pubs: [],
     showMyPubs: false,
@@ -95,7 +101,6 @@ const PubList = ({onPubNavigate, userInfo, onLogOut, onUserReservationNavigate}:
       newState.showMyPubs = !prev.showMyPubs;
       return newState;
     });
-
   };
 
   useEffect(() => {
@@ -126,15 +131,16 @@ const PubList = ({onPubNavigate, userInfo, onLogOut, onUserReservationNavigate}:
             </View>
           )}
           <Text style={styles.pubListHeader}>
-            Welcome,{' '}
-            {userInfo ? userInfo.role + ' ' + userInfo.username : 'Guest'}
+            {TRANSLATIONS['publist-welcome']} {','}{' '}
+            {userInfo ? userInfo.username : 'Guest'}
           </Text>
         </View>
         <View style={styles.pubListContainer}>
           <ScrollView
             style={styles.pubListContainer}
             contentContainerStyle={styles.scrollViewContainer}>
-            {pubs && pubs?.pubs?.length > 0 &&
+            {pubs &&
+              pubs?.pubs?.length > 0 &&
               pubs.pubs.map(pub => (
                 <PubTile
                   key={pub._id}
@@ -154,7 +160,9 @@ const PubList = ({onPubNavigate, userInfo, onLogOut, onUserReservationNavigate}:
             style={styles.pubListNewPubBtn}
             onPress={onPressLogOut}>
             <Text style={styles.pubListNewPubBtnTxt}>
-              {userInfo ? 'Log Out' : 'Home Page'}
+              {userInfo
+                ? TRANSLATIONS['publist-logout']
+                : TRANSLATIONS['publist-home-btn']}
             </Text>
           </TouchableOpacity>
         </View>
@@ -177,7 +185,11 @@ const PubTile = ({pub, onSelectPub}) => {
           source={IMAGES[pub.logo]}
           resizeMode="cover">
           <Text style={styles.tilePubName}>{pub.name}</Text>
-          {pub.showOwner && <Text>by: {pub.owner?.username}</Text>}
+          {pub.showOwner && (
+            <Text>
+              {TRANSLATIONS['publist-by']}: {pub.owner?.username}
+            </Text>
+          )}
         </ImageBackground>
       </TouchableOpacity>
     </View>
@@ -196,7 +208,6 @@ const PubTile = ({pub, onSelectPub}) => {
 //   );
 // }
 
-
 // const SideBar = () => {
 //   const menu = <Text>Hello</Text>;
 //   return (
@@ -205,7 +216,6 @@ const PubTile = ({pub, onSelectPub}) => {
 //     </SideMenu>
 //   );
 // }
-
 
 const styles = StyleSheet.create({
   container: {flex: 1},

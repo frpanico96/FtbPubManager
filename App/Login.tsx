@@ -9,6 +9,7 @@ import Toast from 'react-native-toast-message';
 
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
 import {type UserInfo} from './utility/types/types';
 
 const Login = ({navigation, route}) => {
@@ -35,10 +36,14 @@ const Login = ({navigation, route}) => {
         console.log(jsonRes);
         Toast.show({
           type: jsonRes.error ? 'error' : 'success',
-          text1: jsonRes.error ? jsonRes.error : 'Success',
+          text1: jsonRes.error
+            ? TRANSLATIONS[jsonRes.error]
+              ? TRANSLATIONS[jsonRes.error]
+              : jsonRes.error
+            : TRANSLATIONS['generic-success'],
           text2: jsonRes.error
-            ? 'Check username and password or Register now!'
-            : 'Login Successfully',
+            ? TRANSLATIONS['login-generic-error']
+            : TRANSLATIONS['login-login-success'],
           position: 'bottom',
         });
         if (!jsonRes.error) {
@@ -64,10 +69,16 @@ const Login = ({navigation, route}) => {
         console.log(jsonRes);
         Toast.show({
           type: jsonRes.error ? 'error' : 'success',
-          text1: jsonRes.error ? jsonRes.error : 'Success',
-          text2: jsonRes.error
-            ? 'Try registering again'
-            : 'Registration was Successfull',
+          text1: jsonRes.error
+            ? TRANSLATIONS[jsonRes.error]
+              ? TRANSLATIONS[jsonRes.error]
+              : jsonRes.error
+            : TRANSLATIONS['generic-success'],
+          text2: jsonRes.message
+            ? TRANSLATIONS[jsonRes.message]
+              ? TRANSLATIONS[jsonRes.message]
+              : jsonRes.message
+            : TRANSLATIONS['generic-success'],
           position: 'bottom',
         });
         if (!jsonRes.error) {
@@ -89,7 +100,7 @@ const Login = ({navigation, route}) => {
         style={styles.backgroundImage}>
         <View style={styles.container} />
         <View style={styles.card}>
-          <Text style={styles.headerTxt}>Sign In or Register!</Text>
+          <Text style={styles.headerTxt}>{TRANSLATIONS['login-header']}</Text>
           <TextInput
             style={styles.inputTxt}
             placeholder="Username"
@@ -106,10 +117,14 @@ const Login = ({navigation, route}) => {
           />
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={handleSignIn}>
-              <Text style={styles.btnTxt}>Sign In</Text>
+              <Text style={styles.btnTxt}>
+                {TRANSLATIONS['login-sing-in-btn']}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={handleSignUp}>
-              <Text style={styles.btnTxt}>Sign Up</Text>
+              <Text style={styles.btnTxt}>
+                {TRANSLATIONS['login-sign-up-btn']}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
