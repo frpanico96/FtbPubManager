@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import IMAGES from '../utilities/asset';
 
+import TRANSLATIONS from '../translations/tranlastions';
+
 type HomePageProps = {
   onNavigate: Function;
 };
@@ -24,7 +26,7 @@ const HomePage = ({onNavigate}: HomePageProps) => {
   const onPressGuest = () => {
     onNavigate('Guest');
   };
-
+  // {I18n.t('home-guest-btn')}
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -41,10 +43,14 @@ const HomePage = ({onNavigate}: HomePageProps) => {
               style={styles.backgroundImgBtn}
               resizeMode="cover"
               source={IMAGES['home-guest-btn']}>
-              <Text style={styles.guestBtnTxt}>I am a Guest</Text>
+              <Text style={styles.guestBtnTxt}>
+                {TRANSLATIONS['home-guest-btn']}
+              </Text>
             </ImageBackground>
           </TouchableOpacity>
-          <Text onPress={onPressCustomer}>Login as Customer</Text>
+          <Text onPress={onPressCustomer}>
+            {TRANSLATIONS['home-login-btn']}
+          </Text>
         </View>
       </ImageBackground>
     </View>

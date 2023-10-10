@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type PubActionObj = {
   name: string;
@@ -91,7 +92,7 @@ const PubMain = ({navigation, route}) => {
           <PubMainTile
             key={tile.name}
             disabled={true}
-            additionalText="Feature is available only for logged users"
+            additionalText="pub-main-reservation-additional"
             pubAction={tile}
             onSelectAction={onPressAction}
           />
@@ -148,14 +149,14 @@ const PubMain = ({navigation, route}) => {
           <Text style={styles.pubNameText}>{route.params.pub.name}</Text>
           {route.params.pub.showOwner && (
             <Text style={styles.pubOwnerText}>
-              by: {route.params.pub.owner?.username}
+              {TRANSLATIONS['publist-by']}: {route.params.pub.owner?.username}
             </Text>
           )}
         </View>
         {pubTiles}
         <View style={styles.goBackBtnContainer}>
           <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
-            <Text style={styles.goBackBtnTxt}>Go Back</Text>
+            <Text style={styles.goBackBtnTxt}>{TRANSLATIONS['go-back-btn']}</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -184,9 +185,9 @@ const PubMainTile: React.FC<PubTileProps> = ({
           resizeMode="cover"
           style={styles.btnBackgroundImage}
           imageStyle={styles.btnBackgroundInsideImage}>
-          <Text style={styles.btnText}>{pubAction.label}</Text>
+          <Text style={styles.btnText}>{TRANSLATIONS[pubAction.name]}</Text>
           {additionalText && (
-            <Text style={styles.btnAdditionalText}>{additionalText}</Text>
+            <Text style={styles.btnAdditionalText}>{TRANSLATIONS[additionalText]}</Text>
           )}
         </ImageBackground>
       </TouchableOpacity>

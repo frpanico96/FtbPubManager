@@ -19,8 +19,8 @@ exports.register = async (req, res, next) => {
 
   if (password.length < 6) {
     return res.status(400).json({
-      message: 'Password must be at least 6 characters long',
-      error: 'Password must be at least 6 characters long',
+      message: 'login-register-pass-length',
+      error: 'login-register-pass-length',
     });
   }
   try {
@@ -46,7 +46,7 @@ exports.register = async (req, res, next) => {
             timeStamp: new Date(),
           })
             .then(log => {
-              res.status(201).json({message: 'User succesfully created', user});
+              res.status(201).json({message: 'login-register-success', user});
             })
             .catch(error => {
               return res.status(400).json({
@@ -57,14 +57,14 @@ exports.register = async (req, res, next) => {
         })
         .catch(error =>
           res.status(400).json({
-            message: 'User not successfully created',
+            message: 'login-register-failure',
             error: error.message,
           }),
         );
     });
   } catch (err) {
     res.status(401).json({
-      message: 'User not successfully created',
+      message: 'login-register-failure',
       error: err.message,
     });
   }
@@ -73,12 +73,18 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   const {username, password} = req.body;
   if (!username || !password) {
-    return res.status(400).json({message: 'Username or Password not provided'});
+    return res.status(400).json({
+      message: 'login-login-nouserpass',
+      error: 'login-login-nouserpass',
+    });
   }
   try {
     const user = await User.findOne({username});
     if (!user) {
-      res.status(401).json({message: 'Login Failed', error: 'User not found'});
+      res.status(401).json({
+        message: 'login-login-failure',
+        error: 'login-login-usernotfound',
+      });
     } else {
       bcrypt.compare(password, user.password).then(result => {
         if (result) {
@@ -98,7 +104,7 @@ exports.login = async (req, res, next) => {
             timeStamp: new Date(),
           })
             .then(log => {
-              res.status(201).json({message: 'Login Succesfull', user});
+              res.status(201).json({message: 'login-login-success', user});
             })
             .catch(error => {
               return res.status(400).json({
@@ -108,8 +114,8 @@ exports.login = async (req, res, next) => {
             });
         } else {
           res.status(400).json({
-            message: 'Error',
-            error: 'Invalid username or password',
+            message: 'login-login-invalid',
+            error: 'login-login-invalid',
           });
         }
       });
