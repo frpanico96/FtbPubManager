@@ -26,12 +26,12 @@ const UTILS = {
       {label: 'Others', value: 'others'},
     ],
     'menu-food-categories-order': {
-      appetizers: 0,
-      'first course': 1,
-      'second course': 2,
-      dessert: 3,
-      drinks: 4,
-      others: 5,
+      appetizers: 10,
+      'first course': 20,
+      'second course': 30,
+      dessert: 40,
+      drinks: 50,
+      others: 60,
     },
     'menu-item-currency': [
       {label: 'EUR', value: 'EUR'},
