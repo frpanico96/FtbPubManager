@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
 import ReservationManager from './ReservationManager';
 import ContactUsManager from './ContactUsManager';
 
@@ -105,7 +106,7 @@ const PubMainManager = ({navigation, route}) => {
         {componentToShow}
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn} onPress={handleGoBack}>
-            <Text style={styles.btnText}>{UTILS.goBack}</Text>
+            <Text style={styles.btnText}>{TRANSLATIONS['go-back-btn']}</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

@@ -27,4 +27,17 @@ export default {
   'pub-main-contact-us': 'Contattaci',
   'pub-main-manage-reservation': 'Gestisci Prenotazioni',
   'pub-main-close-pub': 'Chiudi Pub',
+  'pub-service-fetch-successful': 'Pub recuperato con successo', //Pub Service start
+  'pub-service-vacation-error':
+    'La data di inizio ferie deve essere minore della data fine ferie',
+  'invalid-phone-number': 'Numero di telefono non valido',
+  'invalid-email': 'Email non valida',
+  appetizers: 'Antipasti', //Menu start
+  'first course': 'Primi Piatti',
+  'second course': 'Secondi Piatti',
+  dessert: 'Dessert',
+  drinks: 'Bevande',
+  others: 'Vari',
+  'vegan-ok': 'Vegano OK',
+  'vegetarian-ok': 'Vegetariano OK',
 };

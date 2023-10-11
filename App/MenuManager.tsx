@@ -16,6 +16,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import CheckBox from '@react-native-community/checkbox';
 import UTILS from '../utilities/utils';
 import IMAGES from '../utilities/asset';
+import TRANSLATIONS from '../translations/tranlastions';
 
 const MM_UTILS = UTILS.menuManager;
 
@@ -83,7 +84,12 @@ const MenuManager: React.FC<MenuManagerProps> = ({
       accumulator[foodCategoryIndex].content.push(currentValue);
       return [...accumulator];
     }, []);
-
+    result.sort((a: Object, b: Object) => {
+      return (
+        UTILS.menuManager['menu-food-categories-order'][a.title] -
+        UTILS.menuManager['menu-food-categories-order'][b.title]
+      );
+    });
     return result;
   };
 
@@ -136,7 +142,7 @@ const MenuManager: React.FC<MenuManagerProps> = ({
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Menu</Text>
       </View>
-      {menuSection && (
+      {menuSection && menuSection.length > 0 && (
         <MenuAccordion
           menuSection={menuSection}
           activeSection={activeSection}
@@ -177,22 +183,16 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
   };
 
   const _renderHeader = section => {
-    const titleSplit = section.title.split(' ');
-    let title = '';
-    for (let i = 0; i < titleSplit.length; ++i) {
-      title += titleSplit[i].charAt(0).toUpperCase() + titleSplit[i].slice(1);
-      if (i < titleSplit.length - 1) {
-        title += ' ';
-      }
-    }
     return (
-      <View key={title} style={styles.menuHeader}>
+      <View key={section.title} style={styles.menuHeader}>
         <ImageBackground
           style={styles.backgroundImage}
           imageStyle={styles.backgroundInsideImage}
           source={IMAGES['menu-btn-background']}
           resizeMode="cover">
-          <Text style={styles.accordionSectionTitle}>{title}</Text>
+          <Text style={styles.accordionSectionTitle}>
+            {TRANSLATIONS[section.title]}
+          </Text>
         </ImageBackground>
       </View>
     );
@@ -224,7 +224,7 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
                           disabled={true}
                           value={true}
                         />
-                        <Text>Vegan OK</Text>
+                        <Text>{TRANSLATIONS['vegan-ok']}</Text>
                       </View>
                     )}
                     {el.isVegetarianOk && (
@@ -234,7 +234,7 @@ const MenuAccordion: React.FC<MenuAccordionProps> = ({
                           disabled={true}
                           value={true}
                         />
-                        <Text>Vegetarian OK</Text>
+                        <Text>{TRANSLATIONS['vegetarian-ok']}</Text>
                       </View>
                     )}
                   </View>
