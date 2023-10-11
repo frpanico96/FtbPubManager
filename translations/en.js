@@ -27,4 +27,17 @@ export default {
   'pub-main-contact-us': 'Contact Us',
   'pub-main-manage-reservation': 'Manage Reservation',
   'pub-main-close-pub': 'Close Pub',
+  'pub-service-fetch-successful': 'Pub successfully fetched', //Pub Service start
+  'pub-service-vacation-error':
+    'Vacation Start Date must be prior than Vacation End Date',
+  'invalid-phone-number': 'Invalid Phone Number',
+  'invalid-email': 'Invalid Email',
+  appetizers: 'Appetizers', //Menu start
+  'first course': 'First Course',
+  'second course': 'Second Course',
+  dessert: 'Dessert',
+  drinks: 'Drinks',
+  others: 'Others',
+  'vegan-ok': 'Vegan OK',
+  'vegetarian-ok': 'Vegetarian OK',
 };

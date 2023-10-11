@@ -25,6 +25,14 @@ const UTILS = {
       {label: 'Drinks', value: 'drinks'},
       {label: 'Others', value: 'others'},
     ],
+    'menu-food-categories-order': {
+      appetizers: 10,
+      'first course': 20,
+      'second course': 30,
+      dessert: 40,
+      drinks: 50,
+      others: 60,
+    },
     'menu-item-currency': [
       {label: 'EUR', value: 'EUR'},
       {label: 'USD', value: 'USD'},
