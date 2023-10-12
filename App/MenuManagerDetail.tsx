@@ -13,7 +13,9 @@ import {
 import Toast from 'react-native-toast-message';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
+
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type MenuManagerDetailProps = {
   pubId: String;
@@ -63,14 +65,18 @@ const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
         console.log(jsonRes);
         Toast.show({
           type: jsonRes.error ? 'error' : 'success',
-          text1: jsonRes.error ? jsonRes.error : 'Success',
+          text1: jsonRes.error ? TRANSLATIONS['generic-error'] : TRANSLATIONS['generic-success'],
           text2: jsonRes.error
-            ? `Menu Item not correctly ${
-                actionType === 'new' ? 'created' : 'updated'
+            ? `${TRANSLATIONS['menu-item-failure']} ${
+                actionType === 'new'
+                  ? TRANSLATIONS['menu-created']
+                  : TRANSLATIONS['menu-updated']
               }`
-            : `Menu Item ${
-                actionType === 'new' ? 'created' : 'updated'
-              } correctly'`,
+            : `${TRANSLATIONS['menu-item-success']} ${
+                actionType === 'new'
+                  ? TRANSLATIONS['menu-created']
+                  : TRANSLATIONS['menu-updated']
+              } `,
           position: 'bottom',
         });
         onGoBack();
@@ -148,13 +154,13 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
     <>
       <TextInput
         style={styles.inputTxt}
-        placeholder="Food Name"
+        placeholder={TRANSLATIONS['menu-item-food-placeholder']}
         value={foodInput}
         onChangeText={setFoodInput}
       />
       <TextInput
         style={styles.inputTxt}
-        placeholder="Garlic, Onion, ..."
+        placeholder={TRANSLATIONS['menu-item-description-placeholder']}
         value={ingredientsInput}
         onChangeText={setIngredientsInput}
       />
@@ -166,6 +172,7 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
           setOpen={setOpen}
           setValue={setFoodCategoryInput}
           setItems={setItems}
+          placeholder={TRANSLATIONS['menu-item-category-placeholder']}
         />
       </View>
       <View style={styles.priceContainer}>
@@ -206,7 +213,7 @@ const MenuItemForm: React.FC<MenuItemProps> = ({
         </View>
       </View>
       <TouchableOpacity style={styles.btn} onPress={onPressSave}>
-        <Text style={styles.btnText}>Save</Text>
+        <Text style={styles.btnText}>{TRANSLATIONS['generic-save']}</Text>
       </TouchableOpacity>
     </>
   );

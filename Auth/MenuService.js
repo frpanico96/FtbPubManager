@@ -12,9 +12,9 @@ const Pub = require('../model/Pub');
 exports.getMenu = async (req, res, next) => {
   const {pubId} = req.body;
   await Menu.find({pub: pubId})
-    .then(menu => res.status(200).json({message: 'Success', menu}))
+    .then(menu => res.status(200).json({message: 'generic-success', menu}))
     .catch(error =>
-      res.status(400).json({message: 'Error', error: error.message}),
+      res.status(400).json({message: 'generic-error', error: error.message}),
     );
 };
 
@@ -48,12 +48,12 @@ exports.insertMenuItem = async (req, res, next) => {
             pubToUpdate.save().then(newPub => {
               return res
                 .status(200)
-                .json({message: 'Success', newPub, menuItem});
+                .json({message: 'generic-success', newPub, menuItem});
             });
           })
           .catch(error =>
             res.status(400).json({
-              message: 'Error!',
+              message: 'generic-error',
               error: error.message,
             }),
           );
@@ -61,14 +61,14 @@ exports.insertMenuItem = async (req, res, next) => {
       .catch(error => {
         console.log(error);
         return res.status(400).json({
-          message: 'Error!',
+          message: 'generic-error',
           error: error.message,
         });
       });
   } else {
     return res.status(400).json({
-      message: 'Error!',
-      error: 'Missing Required Fields!',
+      message: 'generic-error',
+      error: 'menu-item-missing-required-fields',
     });
   }
 };
@@ -106,25 +106,25 @@ exports.updateMenu = async (req, res, next) => {
         oldMenu
           .save()
           .then(newMenu => {
-            return res.status(200).json({message: 'Success', newMenu});
+            return res.status(200).json({message: 'generic-success', newMenu});
           })
           .catch(error => {
             return res.status(400).json({
-              message: 'Error!',
+              message: 'generic-error',
               error: error.message,
             });
           });
       })
       .catch(error => {
         return res.status(400).json({
-          message: 'Error!',
+          message: 'generic-error',
           error: error.message,
         });
       });
   } else {
     return res.status(400).json({
-      message: 'Error!',
-      error: 'Missing Required Fields!',
+      message: 'generic-error',
+      error: 'menu-item-missing-required-fields',
     });
   }
 };
