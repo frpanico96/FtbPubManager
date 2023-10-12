@@ -101,7 +101,7 @@ exports.getPubById = async (req, res, next) => {
       });
     })
     .catch(error =>
-      res.status(401).json({message: 'Error', error: error.message}),
+      res.status(401).json({message: 'generic-error', error: error.message}),
     );
 };
 
@@ -116,7 +116,7 @@ exports.getAllPubs = async (req, res, next) => {
       });
     })
     .catch(error =>
-      res.status(401).json({message: 'Error', error: error.message}),
+      res.status(401).json({message: 'generic-error', error: error.message}),
     );
 };
 

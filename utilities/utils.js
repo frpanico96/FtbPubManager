@@ -2,6 +2,8 @@
  * Utils file to store all static strings
  * In order to not hardCode them in the component files
  */
+import TRANSLATIONS from '../translations/tranlastions';
+
 const UTILS = {
   pubMain: [
     {name: 'pub-main-menu', label: 'Menu'},
@@ -18,12 +20,12 @@ const UTILS = {
     'mm-new-menu': 'New Menu Item',
     'menu-action-name': 'new-menu-item',
     'menu-food-categories': [
-      {label: 'Appetizers', value: 'appetizers'},
-      {label: 'First Course', value: 'first course'},
-      {label: 'Second Course', value: 'second course'},
-      {label: 'Desserts', value: 'dessert'},
-      {label: 'Drinks', value: 'drinks'},
-      {label: 'Others', value: 'others'},
+      {label: TRANSLATIONS.appetizers, value: 'appetizers'},
+      {label: TRANSLATIONS['first course'], value: 'first course'},
+      {label: TRANSLATIONS['second course'], value: 'second course'},
+      {label: TRANSLATIONS.dessert, value: 'dessert'},
+      {label: TRANSLATIONS.drinks, value: 'drinks'},
+      {label: TRANSLATIONS.others, value: 'others'},
     ],
     'menu-food-categories-order': {
       appetizers: 10,

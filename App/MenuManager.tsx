@@ -165,7 +165,7 @@ const ManagerBtn: React.FC<MenuManagerBtnProps> = ({onPressAction}) => {
   return (
     <View style={styles.btnContainer}>
       <TouchableOpacity style={styles.btn} onPress={handleNewMenuItem}>
-        <Text style={styles.btnText}>{MM_UTILS['mm-new-menu']}</Text>
+        <Text style={styles.btnText}>{TRANSLATIONS['menu-new-item']}</Text>
       </TouchableOpacity>
     </View>
   );
