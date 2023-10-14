@@ -11,6 +11,7 @@ import UTILS from '../utilities/utils';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-toast-message';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ReservationManagerStatusProp = {
   date: String;
@@ -61,10 +62,10 @@ const ReservationManagerStatus: React.FC<ReservationManagerStatusProp> = ({
         console.log(jsonRes);
         Toast.show({
           type: jsonRes.error ? 'error' : 'success',
-          text1: jsonRes.error ? 'Error' : 'Success',
+          text1: TRANSLATIONS[jsonRes.message],
           text2: jsonRes.error
-            ? jsonRes.error
-            : 'Reservation Booked successfully',
+            ? TRANSLATIONS[jsonRes.error] ? TRANSLATIONS[jsonRes.error] : jsonRes.error
+            : TRANSLATIONS['reservation-booked-sucessfully'],
           position: 'bottom',
         });
         onConfirmAction();
@@ -104,11 +105,15 @@ const CancelReservation: React.FC<CancelReservationProp> = ({
     <>
       <View style={styles.container}>
         <Text style={[styles.txtStyle, styles.infoTxt]}>
-          Are you sure you want to <Text style={styles.actionTxt}>Cancel</Text>{' '}
-          the reservation of {new Date(date).toLocaleString().replace(/(.*)\D\d+/, '$1')} ?
+          {TRANSLATIONS['reservation-modal-cancel-first-part']}{' '}
+          <Text style={styles.actionTxt}>
+            {TRANSLATIONS['reservation-modal-cancel-stressed']}
+          </Text>{' '}
+          {TRANSLATIONS['reservation-modal-cancel-second-part']}{' '}
+          {new Date(date).toLocaleString().replace(/(.*)\D\d+/, '$1')} ?
         </Text>
         <TouchableOpacity style={styles.btn} onPress={() => onCancel()}>
-          <Text style={styles.txtStyle}>Confirm</Text>
+          <Text style={styles.txtStyle}>{TRANSLATIONS['reservation-modal-cancel-btn']}</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -152,11 +157,11 @@ const ReservationStatus: React.FC<ReservationStatusProp> = ({
           value={callBack}
           onValueChange={newValue => setCallBack(newValue)}
         />
-        <Text>CallBack</Text>
+        <Text>{TRANSLATIONS['reservation-callback']}</Text>
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handlePressSave}>
-          <Text style={styles.txtStyle}>Save</Text>
+          <Text style={styles.txtStyle}>{TRANSLATIONS['reservation-modal-cancel-btn']}</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -15,6 +15,7 @@ import UTILS from '../utilities/utils';
 import MenuManagerDetail from './MenuManagerDetail';
 import ReservationManagerDetail from './ReservationManagerDetail';
 import ContactUsManagerDetail from './ContactUsManagerDetail';
+import TRANSLATIONS from '../translations/tranlastions';
 
 const PubMainManagerDetail = ({navigation, route}) => {
   console.log('### Routing Params: ' + JSON.stringify(route.params));
@@ -87,7 +88,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
           <TouchableOpacity
             style={styles.btn}
             onPress={() => handleNavigateToPreviousScreen(false)}>
-            <Text style={styles.btnText}>{UTILS.goBack}</Text>
+            <Text style={styles.btnText}>{TRANSLATIONS['go-back-btn']}</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

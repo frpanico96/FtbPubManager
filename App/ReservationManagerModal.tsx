@@ -9,6 +9,7 @@ import Reservation from './Reservation';
 import UTILS from '../utilities/utils';
 import ReservationManagerStatus from './ReservationStatus';
 import Toast from 'react-native-toast-message';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ModalProps = {
   toggleModal: Boolean;
@@ -80,7 +81,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
               <TouchableOpacity
                 style={styles.button}
                 onPress={handleConfirmAction}>
-                <Text style={styles.textStyle}>Close</Text>
+                <Text style={styles.textStyle}>{TRANSLATIONS['reservation-modal-btn']}</Text>
               </TouchableOpacity>
             </View>
           </View>

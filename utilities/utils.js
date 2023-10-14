@@ -48,9 +48,9 @@ const UTILS = {
   },
   reservationManager: {
     'status-options': [
-      {label: 'Booked', value: 'booked'},
-      {label: 'Shown', value: 'shown'},
-      {label: 'Not Shown', value: 'not shown'},
+      {label: TRANSLATIONS.booked, value: 'booked'},
+      {label: TRANSLATIONS.shown, value: 'shown'},
+      {label: TRANSLATIONS['not shown'], value: 'not shown'},
     ],
     'action-type-edit': 'edit',
     'action-type-cancel': 'cancel',

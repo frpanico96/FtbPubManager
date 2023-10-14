@@ -14,6 +14,7 @@ import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from 'react-native-toast-message';
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ContactInfo = {
   phoneNumber: String;
@@ -94,10 +95,12 @@ const Reservation: React.FC<ReservationProp> = ({
         console.log(jsonRes);
         Toast.show({
           type: jsonRes.error ? 'error' : 'success',
-          text1: jsonRes.error ? 'Error' : 'Success',
+          text1: TRANSLATIONS[jsonRes.message],
           text2: jsonRes.error
-            ? jsonRes.error
-            : 'Reservation Booked successfully',
+            ? TRANSLATIONS[jsonRes.error]
+              ? TRANSLATIONS[jsonRes.error]
+              : jsonRes.error
+            : TRANSLATIONS['reservation-booked-sucessfully'],
           position: 'bottom',
         });
         if (!jsonRes.error) {
@@ -178,7 +181,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
     if (!validation.success) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
+        text1: TRANSLATIONS['generic-error'],
         text2: validation.message,
         position: 'bottom',
       });
@@ -205,7 +208,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
           style={styles.inputTxtPhone}
           value={phoneNumber}
           onChangeText={setPhoneNumber}
-          placeholder="Insert Phone Number"
+          placeholder={TRANSLATIONS['reservation-phone-placeholder']}
         />
       </View>
       <DatePicker
@@ -219,11 +222,11 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
         style={styles.inputTxt}
         value={numberOfPeopleInput}
         onChangeText={setNumberOfPeopleInput}
-        placeholder="Number Of People"
+        placeholder={TRANSLATIONS['reservation-numberofpeople-placeholder']}
       />
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
-          <Text style={styles.btnText}>Book</Text>
+          <Text style={styles.btnText}>{TRANSLATIONS['reservation-book-btn']}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -354,8 +357,8 @@ function reservationValidation(
         pub,
         new Date(formObject.dateTimeOfReservation),
       );
-      if(result.success){
-        result = numberOfPeopleValidation(formObject.numberOfPeople)
+      if (result.success) {
+        result = numberOfPeopleValidation(formObject.numberOfPeople);
       }
     }
   }
@@ -375,7 +378,7 @@ function isPastDate(
   };
   if (dateTimeOfReservation < limitReservation && !isUpdate) {
     result.success = false;
-    result.message = 'Date can not be in the past';
+    result.message = TRANSLATIONS['reservation-validation-past-date'];
   }
   return result;
 }
@@ -395,22 +398,22 @@ function validatePhoneNumber(
   const regex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
   if (!regex.test(phoneNumber)) {
     result.success = false;
-    result.message = 'Invalid phone number';
+    result.message = TRANSLATIONS['invalid-phone-number'];
   } else if (!phonePrefix) {
     result.success = false;
-    result.message = 'Phone Prefix must be indicated';
+    result.message = TRANSLATIONS['invalid-phone-prefix'];
   }
   return result;
 }
 
-function numberOfPeopleValidation(numberOfPeople: Number): ValidationObj{
+function numberOfPeopleValidation(numberOfPeople: Number): ValidationObj {
   const result: ValidationObj = {
     success: true,
     message: '',
   };
   if (!Number.isInteger(numberOfPeople) || numberOfPeople < 0) {
     result.success = false;
-    result.message = 'Invalid number of people';
+    result.message = TRANSLATIONS['reservation-validation-number-of-people'];
   }
   return result;
 }
@@ -434,10 +437,18 @@ function reservationDateValidation(
   console.log(dateTimeOfReservation);
 
   const openTime = new Date();
-  openTime.setFullYear(dateTimeOfReservation.getFullYear(), dateTimeOfReservation.getMonth(), dateTimeOfReservation.getDate());
+  openTime.setFullYear(
+    dateTimeOfReservation.getFullYear(),
+    dateTimeOfReservation.getMonth(),
+    dateTimeOfReservation.getDate(),
+  );
   openTime.setHours(openCloseTime.openHours, openCloseTime.openMins, 0, 0);
   const closeTime = new Date();
-  closeTime.setFullYear(dateTimeOfReservation.getFullYear(), dateTimeOfReservation.getMonth(), dateTimeOfReservation.getDate());
+  closeTime.setFullYear(
+    dateTimeOfReservation.getFullYear(),
+    dateTimeOfReservation.getMonth(),
+    dateTimeOfReservation.getDate(),
+  );
   if (openCloseTime.openHours > openCloseTime.closeHours) {
     closeTime.setDate(closeTime.getDate() + 1);
   }
@@ -455,15 +466,15 @@ function reservationDateValidation(
   if (dateTimeOfReservation < openTime) {
     console.log('Open Time Check');
     result.success = false;
-    result.message = 'Pub opens at ' + openTime.toLocaleString();
+    result.message = TRANSLATIONS['reservation-validation-pub-opens-at']+ ' ' + openTime.toLocaleString();
   } else if (dateTimeOfReservation > closeTime) {
     console.log('Close Time Check');
     result.success = false;
-    result.message = 'Pub closes at ' + closeTime.toLocaleString();
+    result.message = TRANSLATIONS['reservation-validation-pub-closes-at'] + ' ' + closeTime.toLocaleString();
   } else if (pub.daysClosed.indexOf(dateTimeOfReservation.getDay()) > -1) {
     console.log('Days closed Check');
     result.success = false;
-    result.message = 'Pub is closed this day';
+    result.message = TRANSLATIONS['reservation-validation-pub-closed'];
   } else if (
     dateTimeOfReservation >= vacationStart &&
     dateTimeOfReservation < vacationEnd
@@ -471,7 +482,7 @@ function reservationDateValidation(
     console.log('Vacation Check');
     result.success = false;
     result.message =
-      'Pub is currently on vaction, it will be open from ' +
+      TRANSLATIONS['reservation-validation-pub-vacation'] + ' ' +
       vacationEnd.toLocaleDateString();
   }
 

@@ -7,6 +7,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import LoadingSpinner from './utility/components/LoadingSpinner';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ReservationManagerProp = {
   isAtLeastOwner: Boolean;
@@ -72,7 +73,7 @@ const ReservationManagerDatePicker: React.FC<
         />
         <View style={styles.btnContainer}>
           <TouchableOpacity style={styles.btn} onPress={handlePressSearch}>
-            <Text style={styles.btnText}>Search</Text>
+            <Text style={styles.btnText}>{TRANSLATIONS['reservation-search-btn']}</Text>
           </TouchableOpacity>
         </View>
       </View>
