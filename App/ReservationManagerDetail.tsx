@@ -11,6 +11,7 @@ import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 import UTILS from '../utilities/utils';
 import CheckBox from '@react-native-community/checkbox';
 import ReservationManagerModal from './ReservationManagerModal';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type DateObj = {
   dateStr: String;
@@ -174,8 +175,8 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
               onPress={handleStopReservations}>
               <Text style={styles.btnTxt}>
                 {workDay?.stopReservations
-                  ? 'Enable Reservations'
-                  : 'Stop Reservations'}
+                  ? TRANSLATIONS['reservation-enable-reservation']
+                  : TRANSLATIONS['reservation-disable-reservation']}
               </Text>
             </TouchableOpacity>
           </View>
@@ -246,7 +247,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   };
 
   const renderRightActions = (progress, dragX) => {
-    const upperOutput = isAtLeastOwner ? 0.4 : 0.49;
+    const upperOutput = isAtLeastOwner ? 0.61 : 0.96;
     const textFontSize = isAtLeastOwner ? 10 : 12;
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
@@ -268,7 +269,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
             onPress={handleEditButtonPress}>
             <Animated.Text
               style={{fontSize: textFontSize, transform: [{scale}]}}>
-              Edit Reservation
+              {TRANSLATIONS['reservation-edit-swipe']}
             </Animated.Text>
           </TouchableOpacity>
         )}
@@ -283,7 +284,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
             onPress={handleCancelButtonPress}>
             <Animated.Text
               style={{fontSize: textFontSize, transform: [{scale}]}}>
-              Cancel Reservation
+              {TRANSLATIONS['reservation-cancel-swipe']}
             </Animated.Text>
           </TouchableOpacity>
         )}
@@ -297,7 +298,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
             onPress={handleStatusButtonPress}>
             <Animated.Text
               style={{fontSize: textFontSize, transform: [{scale}]}}>
-              Update Status
+              {TRANSLATIONS['reservation-status-swipe']}
             </Animated.Text>
           </TouchableOpacity>
         )}
@@ -324,20 +325,26 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
                 <Text style={styles.userInfoTxt}>
                   {!reservation?.contact?.isGuest
                     ? reservation?.contact?.user?.username
-                    : 'Guest'}
+                    : TRANSLATIONS['reservation-guest']}
                 </Text>
-                <Text>{` (${reservation?.contact?.phonePrefix}) ${reservation?.contact?.phoneNumber}`}</Text>
+                <Text>{reservation?.contact?.phonePrefix}</Text>
+                <Text style={styles.userInfoPhoneTxt}>
+                  {reservation?.contact?.phoneNumber}
+                </Text>
               </View>
               <Text style={styles.dateTxt}>
                 {new Date(reservation.dateTimeOfReservation)
                   .toLocaleString()
                   .replace(/(.*)\D\d+/, '$1')}
               </Text>
-              <Text>{reservation?.numberOfPeople} People</Text>
+              <Text>
+                {reservation?.numberOfPeople}{' '}
+                {TRANSLATIONS['reservation-people']}
+              </Text>
             </View>
             <View style={styles.reservationStatusContainer}>
               <View style={styles.statusCombobox}>
-                <Text>{reservation?.status}</Text>
+                <Text>{TRANSLATIONS[reservation?.status]}</Text>
               </View>
               {isAtLeastOwner && (
                 <View style={styles.checkBoxContainer}>
@@ -346,7 +353,7 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
                     disabled={true}
                     value={reservation?.callBack}
                   />
-                  <Text>CallBack</Text>
+                  <Text>{TRANSLATIONS['reservation-callback']}</Text>
                 </View>
               )}
             </View>
@@ -391,6 +398,10 @@ const styles = StyleSheet.create({
   },
   userInfoTxt: {
     fontWeight: '600',
+    marginRight: 5,
+  },
+  userInfoPhoneTxt: {
+    marginLeft: 2,
   },
   dateTxt: {
     padding: 0,

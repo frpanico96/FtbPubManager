@@ -34,10 +34,10 @@ exports.getReservationByDateAndPub = async (req, res, next) => {
     .exec()
     .then(workday => {
       console.log(workday);
-      return res.status(200).json({message: 'Success', workday});
+      return res.status(200).json({message: 'generic-success', workday});
     })
     .catch(error => {
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -56,16 +56,16 @@ exports.getUserReservationByPubId = async (req, res, next) => {
         })
         .exec()
         .then(reservations => {
-          return res.status(200).json({message: 'Success', reservations});
+          return res.status(200).json({message: 'generic-success', reservations});
         })
         .catch(error => {
           console.log(error);
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
       console.log(error);
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -85,16 +85,16 @@ exports.getUserReservation = async (req, res, next) => {
         })
         .exec()
         .then(reservations => {
-          return res.status(200).json({message: 'success', reservations});
+          return res.status(200).json({message: 'generic-success', reservations});
         })
         .catch(error => {
           console.log(error);
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
       console.log(error);
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -110,7 +110,7 @@ exports.insertReservation = async (req, res, next) => {
   console.log(dateTimeOfReservation);
   if (validation?.error) {
     return res.status(400).json({
-      message: 'Error',
+      message: 'generic-error',
       error: validation.error,
     });
   }
@@ -180,14 +180,14 @@ exports.insertReservation = async (req, res, next) => {
                             .save()
                             .then(result => {
                               return res.status(200).json({
-                                message: 'Success',
+                                message: 'generic-success',
                                 newReservation,
                               });
                             })
                             .catch(error => {
                               console.log(error);
                               return res.status(400).json({
-                                message: 'Error',
+                                message: 'generic-error',
                                 error: error.message,
                               });
                             });
@@ -195,14 +195,14 @@ exports.insertReservation = async (req, res, next) => {
                         .catch(error => {
                           console.log(error);
                           return res.status(400).json({
-                            message: 'Error',
+                            message: 'generic-error',
                             error: error.message,
                           });
                         });
                     })
                     .catch(error =>
                       res.status(400).json({
-                        message: 'Error',
+                        message: 'generic-error',
                         error: error.message,
                       }),
                     );
@@ -234,14 +234,14 @@ exports.insertReservation = async (req, res, next) => {
                                     .save()
                                     .then(success => {
                                       return res.status(200).json({
-                                        message: 'Success',
+                                        message: 'generic-success',
                                         newReservation,
                                       });
                                     })
                                     .catch(error => {
                                       console.log(error);
                                       return res.status(400).json({
-                                        message: 'Error',
+                                        message: 'generic-error',
                                         error: error.message,
                                       });
                                     });
@@ -249,14 +249,14 @@ exports.insertReservation = async (req, res, next) => {
                                 .catch(error => {
                                   console.log(error);
                                   return res.status(400).json({
-                                    message: 'Error',
+                                    message: 'generic-error',
                                     error: error.message,
                                   });
                                 });
                             })
                             .catch(error =>
                               res.status(400).json({
-                                message: 'Error',
+                                message: 'generic-error',
                                 error: error.message,
                               }),
                             );
@@ -264,14 +264,14 @@ exports.insertReservation = async (req, res, next) => {
                         .catch(error => {
                           console.log(error);
                           return res.status(400).json({
-                            message: 'Error',
+                            message: 'generic-error',
                             error: error.message,
                           });
                         });
                     })
                     .catch(error =>
                       res.status(400).json({
-                        message: 'Error',
+                        message: 'generic-error',
                         error: error.message,
                       }),
                     );
@@ -280,14 +280,14 @@ exports.insertReservation = async (req, res, next) => {
               .catch(error => {
                 console.log(error);
                 return res.status(400).json({
-                  message: 'Error',
+                  message: 'generic-error',
                   error: error.message,
                 });
               });
           })
           .catch(error =>
             res.status(400).json({
-              message: 'Error',
+              message: 'generic-error',
               error: error.message,
             }),
           );
@@ -297,8 +297,8 @@ exports.insertReservation = async (req, res, next) => {
         console.log(todayWorkDay);
         if (todayWorkDay.stopReservations) {
           return res.status(400).json({
-            message: 'Error',
-            error: 'It is not possible to book a reservation for this day',
+            message: 'generic-error',
+            error: 'reservation-error-generic',
           });
         }
         const contact = new Contact({
@@ -339,8 +339,8 @@ exports.insertReservation = async (req, res, next) => {
           console.log(checkObj);
           if (checkObj && checkObj.length > 0) {
             return res.status(400).json({
-              message: 'Error',
-              error: 'You already have a reservation for this day',
+              message: 'generic-error',
+              error: 'reservation-error-existing-reservation',
             });
           }
           User.findOne({username: contactInfo.username})
@@ -362,14 +362,14 @@ exports.insertReservation = async (req, res, next) => {
                             .save()
                             .then(success => {
                               return res.status(200).json({
-                                message: 'Success',
+                                message: 'generic-success',
                                 newReservation,
                               });
                             })
                             .catch(error => {
                               console.log(error);
                               return res.status(400).json({
-                                message: 'Error',
+                                message: 'generic-error',
                                 error: error.message,
                               });
                             });
@@ -377,28 +377,28 @@ exports.insertReservation = async (req, res, next) => {
                         .catch(error => {
                           console.log(error);
                           return res.status(400).json({
-                            message: 'Error',
+                            message: 'generic-error',
                             error: error.message,
                           });
                         });
                     })
                     .catch(error =>
                       res.status(400).json({
-                        message: 'Error',
+                        message: 'generic-error',
                         error: error.message,
                       }),
                     );
                 })
                 .catch(error =>
                   res.status(400).json({
-                    message: 'Error',
+                    message: 'generic-error',
                     error: error.message,
                   }),
                 );
             })
             .catch(error =>
               res.status(400).json({
-                message: 'Error',
+                message: 'generic-error',
                 error: error.message,
               }),
             );
@@ -416,28 +416,28 @@ exports.insertReservation = async (req, res, next) => {
                     .save()
                     .then(result => {
                       return res.status(200).json({
-                        message: 'Success',
+                        message: 'generic-success',
                         newReservation,
                       });
                     })
                     .catch(error => {
                       console.log(error);
                       return res.status(400).json({
-                        message: 'Error',
+                        message: 'generic-error',
                         error: error.message,
                       });
                     });
                 })
                 .catch(error =>
                   res.status(400).json({
-                    message: 'Error',
+                    message: 'generic-error',
                     error: error.message,
                   }),
                 );
             })
             .catch(error =>
               res.status(400).json({
-                message: 'Error',
+                message: 'generic-error',
                 error: error.message,
               }),
             );
@@ -446,7 +446,7 @@ exports.insertReservation = async (req, res, next) => {
     })
     .catch(error =>
       res.status(400).json({
-        message: 'Error',
+        message: 'generic-error',
         error: error.message,
       }),
     );
@@ -465,7 +465,7 @@ exports.updateReservation = async (req, res, next) => {
   );
   if (validation?.error) {
     return res.status(400).json({
-      message: 'Error',
+      message: 'generic-error',
       error: validation.error,
     });
   }
@@ -485,15 +485,15 @@ exports.updateReservation = async (req, res, next) => {
     .then(workdays => {
       if (!workdays || workdays.length < 1) {
         return res.status(400).json({
-          message: 'Error',
-          error: 'No reservation present',
+          message: 'generic-error',
+          error: 'reservation-error-no-reservations',
         });
       }
       const workday = workdays[0];
       if (workday.stopReservations) {
         return res.status(400).json({
-          message: 'Error',
-          error: 'It is not possible to book a reservation for this day',
+          message: 'generic-error',
+          error: 'reservation-error-generic',
         });
       }
       const checkObj = workday.reservations.filter(el => {
@@ -511,8 +511,8 @@ exports.updateReservation = async (req, res, next) => {
       console.log(checkObj);
       if (checkObj && checkObj.length > 0) {
         return res.status(400).json({
-          message: 'Error',
-          error: 'You already have a reservation for this day',
+          message: 'generic-error',
+          error: 'reservation-error-existing-reservation',
         });
       }
       const reservationToUpdate = workday.reservations.filter(el => {
@@ -536,27 +536,27 @@ exports.updateReservation = async (req, res, next) => {
             .save()
             .then(newContact => {
               return res.status(200).json({
-                message: 'Success',
+                message: 'generic-success',
                 newReservation,
               });
             })
             .catch(error => {
               return res.status(400).json({
-                message: 'Error',
+                message: 'generic-error',
                 error: error.message,
               });
             });
         })
         .catch(error => {
           return res.status(400).json({
-            message: 'Error',
+            message: 'generic-error',
             error: error.message,
           });
         });
     })
     .catch(error => {
       return res.status(400).json({
-        message: 'Error',
+        message: 'generic-error',
         error: error.message,
       });
     });
@@ -568,8 +568,8 @@ exports.updateReservationStatus = async (req, res, next) => {
     .then(reservationToUpdate => {
       if (reservationToUpdate.status !== 'booked') {
         return res.status(401).json({
-          message: 'Error',
-          error: 'It is not possible to modify a closed reservation',
+          message: 'generic-error',
+          error: 'reservation-error-closed-reservation',
         });
       } else {
         reservationToUpdate.status = status;
@@ -581,7 +581,7 @@ exports.updateReservationStatus = async (req, res, next) => {
             /* Guest Reservation */
             if (!username) {
               return res.status(200).json({
-                message: 'Success',
+                message: 'generic-success',
                 newReservation,
               });
               /* Logged Reservation */
@@ -603,20 +603,20 @@ exports.updateReservationStatus = async (req, res, next) => {
                     .save()
                     .then(newUser => {
                       return res.status(200).json({
-                        message: 'Success',
+                        message: 'generic-success',
                         newReservation,
                       });
                     })
                     .catch(error =>
                       res.status(400).json({
-                        message: 'Error',
+                        message: 'generic-error',
                         error: error.message,
                       }),
                     );
                 })
                 .catch(error =>
                   res.status(400).json({
-                    message: 'Error',
+                    message: 'generic-error',
                     error: error.message,
                   }),
                 );
@@ -624,7 +624,7 @@ exports.updateReservationStatus = async (req, res, next) => {
           })
           .catch(error =>
             res.status(400).json({
-              message: 'Error',
+              message: 'generic-error',
               error: error.message,
             }),
           );
@@ -632,7 +632,7 @@ exports.updateReservationStatus = async (req, res, next) => {
     })
     .catch(error =>
       res.status(400).json({
-        message: 'Error',
+        message: 'generic-error',
         error: error.message,
       }),
     );
@@ -655,18 +655,18 @@ exports.stopReservations = async (req, res, next) => {
       oldWorkDay
         .save()
         .then(workday => {
-          return res.status(200).json({message: 'Success', workday});
+          return res.status(200).json({message: 'generic-success', workday});
         })
         .catch(error =>
           res.status(400).json({
-            message: 'Error',
+            message: 'generic-error',
             error: error.message,
           }),
         );
     })
     .catch(error =>
       res.status(400).json({
-        message: 'Error',
+        message: 'generic-error',
         error: error.message,
       }),
     );
