@@ -19,6 +19,7 @@ export default {
   'publist-home-btn': 'Home',
   'publist-logout': 'Logout',
   'publist-by': 'by',
+  'publist-guest': 'Guest',
   'go-back-btn': 'Go Back',
   'pub-main-menu': 'Menu',
   'pub-main-resevation': 'Reserve a Table',

@@ -19,6 +19,7 @@ export default {
   'publist-home-btn': 'Home',
   'publist-logout': 'Esci',
   'publist-by': 'di',
+  'publist-guest': 'Ospite',
   'go-back-btn': 'Torna Indietro',
   'pub-main-menu': 'Menu',
   'pub-main-resevation': 'Prenota un Tavolo',
