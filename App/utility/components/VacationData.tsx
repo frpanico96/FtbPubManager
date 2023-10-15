@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Toast from 'react-native-toast-message';
+import TRANSLATIONS from '../../../translations/tranlastions';
 
 type VacationDataProps = {
   vacationStartDate: Date;
@@ -35,7 +36,7 @@ const VacationData = (props: VacationDataProps) => {
     if (vacation.vacationStart > vacation.vacationEnd) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
+        text1: TRANSLATIONS['generic-error'],
         text2: 'Vacation Start can not happen after Vacation End',
         position: 'bottom',
       });
@@ -44,7 +45,7 @@ const VacationData = (props: VacationDataProps) => {
     if (!vacation.vacationReason.trim()) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
+        text1: TRANSLATIONS['generic-error'],
         text2: 'Populate Vacation Reason',
         position: 'bottom',
       });
@@ -62,11 +63,11 @@ const VacationData = (props: VacationDataProps) => {
   return (
     <View style={styles.card}>
       <Text style={styles.headerTxt}>
-        Attention! Any changes will not be applied to existing reservation.
+        {TRANSLATIONS['contact-us-no-retroactivity']}
       </Text>
       <View style={styles.container}>
         <View style={styles.dateContainer}>
-          <Text style={styles.dateTxt}>Vacation Start</Text>
+          <Text style={styles.dateTxt}>{TRANSLATIONS['contact-us-vacation-end-label']}</Text>
           <DatePicker
             mode="date"
             date={vacation.vacationStart}
@@ -80,7 +81,7 @@ const VacationData = (props: VacationDataProps) => {
           />
         </View>
         <View style={styles.dateContainer}>
-          <Text style={styles.dateTxt}>Vacation End</Text>
+          <Text style={styles.dateTxt}>{TRANSLATIONS['contact-us-vacation-end-label']}</Text>
           <DatePicker
             mode="date"
             date={vacation.vacationEnd}
@@ -97,7 +98,7 @@ const VacationData = (props: VacationDataProps) => {
           <TextInput
             style={styles.txtInput}
             value={vacation.vacationReason}
-            placeholder='Vacation Reason'
+            placeholder={TRANSLATIONS['contact-us-vacation-reason-placeholder']}
             onChangeText={newText => {
               setVacation(prev => {
                 const newState = {...prev};
@@ -110,7 +111,7 @@ const VacationData = (props: VacationDataProps) => {
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
-          <Text style={styles.btnTxt}>Save</Text>
+          <Text style={styles.btnTxt}>{TRANSLATIONS['generic-save']}</Text>
         </TouchableOpacity>
       </View>
     </View>

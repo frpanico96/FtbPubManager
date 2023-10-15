@@ -14,6 +14,7 @@ import SelectMultiple from 'react-native-select-multiple';
 import UTILS from '../../../utilities/utils';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-toast-message';
+import TRANSLATIONS from '../../../translations/tranlastions';
 
 type ReservationInfoDataProps = {
   reservationDelay: Number;
@@ -65,8 +66,8 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
     if (!Number.isInteger(reservationDelay) || reservationDelay < 0) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Invalid reservation delay',
+        text1: TRANSLATIONS['generic-error'],
+        text2: TRANSLATIONS['contact-us-invalid-delay'],
         position: 'bottom',
       });
       return;
@@ -88,7 +89,9 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
   return (
     <View style={[styles.container, styles.card]}>
       <View style={styles.container}>
-        <Text style={styles.txtLabel}>Reservation Delay</Text>
+        <Text style={styles.txtLabel}>
+          {TRANSLATIONS['contact-us-delay-placeholder']}
+        </Text>
         <TextInput
           style={styles.txtInput}
           placeholder="Reservation Delay"
@@ -103,7 +106,9 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
         />
       </View>
       <View style={styles.groupContainer}>
-        <Text style={styles.txtLabel}>Days Closed</Text>
+        <Text style={styles.txtLabel}>
+          {TRANSLATIONS['contact-us-days-closed-label']}
+        </Text>
         <SelectMultiple
           items={UTILS.dayOfWeekOptions}
           selectedItems={daysClosed}
@@ -136,7 +141,7 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
               });
             }}
           />
-          <Text>Show Owner</Text>
+          <Text>{TRANSLATIONS['contact-us-show-owner-label']}</Text>
         </View>
         <View style={styles.checkBoxContainer}>
           <CheckBox
@@ -150,7 +155,7 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
               });
             }}
           />
-          <Text>Phone Number Required</Text>
+          <Text>{TRANSLATIONS['contact-us-phone-required-label']}</Text>
         </View>
         {/* <NativeBaseProvider>
           <Box alignItems="center">
@@ -162,7 +167,7 @@ const ReservationInfoData = (props: ReservationInfoDataProps) => {
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
-          <Text style={styles.btnTxt}>Save</Text>
+          <Text style={styles.btnTxt}>{TRANSLATIONS['generic-save']}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -224,6 +229,7 @@ const styles = StyleSheet.create({
   checkBoxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 3,
   },
   checkBox: {
     alignSelf: 'center',

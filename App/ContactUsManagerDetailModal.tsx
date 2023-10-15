@@ -12,6 +12,7 @@ import AddressData from './utility/components/AddressData';
 import OpenCloseData from './utility/components/OpenCloseData';
 import VacationData from './utility/components/VacationData';
 import ReservationInfoData from './utility/components/ReservationInfoData';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ContactUsManagerDetailModalProps = {
   toggleModal: Boolean;
@@ -62,7 +63,7 @@ const ContactUsManagerDetailModal = (
         onSave={handleConfirm}
       />
     ) : (
-      <Text>No Action Available</Text>
+      <Text>{TRANSLATIONS['contact-us-no-action-available']}</Text>
     );
 
   return (
@@ -80,7 +81,7 @@ const ContactUsManagerDetailModal = (
               onPress={() => {
                 props.onToggleModal(!props.toggleModal);
               }}>
-              <Text>Close</Text>
+              <Text>{TRANSLATIONS['reservation-modal-btn']}</Text>
             </TouchableOpacity>
           </View>
         </View>

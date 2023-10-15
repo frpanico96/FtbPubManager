@@ -7,6 +7,7 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import UTILS from '../utilities/utils';
 import { useFocus } from 'native-base/lib/typescript/components/primitives';
 import { useFocusEffect } from '@react-navigation/native';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ContactUsManagerProp = {
   pub: Object;
@@ -49,17 +50,18 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
   );
 
   const infos = UTILS.contactUsManager.infos.map(el => {
+    const fieldLabel = TRANSLATIONS[el.field];
     if (!contactUsState.pub[el.field]) {
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}:</Text>
+          <Text style={styles.infoLabel}>{fieldLabel}:</Text>
         </View>
       );
     }
     if (el.field === 'phone') {
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}</Text>
+          <Text style={styles.infoLabel}>{fieldLabel}</Text>
           <Text style={styles.infoValue}>
             : ({contactUsState.pub?.phonePrefix}){contactUsState?.pub[el.field]}
           </Text>
@@ -67,14 +69,17 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
       );
     } else if (el.field === 'openTime' || el.field === 'closeTime') {
       const hours = parseInt(contactUsState.pub[el.field] / 100, 10);
+      const parsedMins = parseInt(contactUsState.pub[el.field] % 100, 10);
       const mins =
-        parseInt(contactUsState.pub[el.field] % 100, 10) === 0
+        parsedMins === 0
           ? '00'
-          : parseInt(contactUsState.pub[el.field] % 100, 10);
+          : parsedMins < 10
+          ? '0' + parsedMins
+          : parsedMins;
       const time = `${hours}:${mins}`;
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}: </Text>
+          <Text style={styles.infoLabel}>{fieldLabel}: </Text>
           <Text style={styles.infoValue}>{time}</Text>
         </View>
       );
@@ -82,7 +87,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
       const date = new Date(contactUsState.pub[el.field]);
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}: </Text>
+          <Text style={styles.infoLabel}>{fieldLabel}: </Text>
           <Text style={styles.infoValue}>{date.toLocaleDateString()}</Text>
         </View>
       );
@@ -99,14 +104,14 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
       }
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}: </Text>
+          <Text style={styles.infoLabel}>{fieldLabel}: </Text>
           <Text style={styles.infoValue}>{daysClosed}</Text>
         </View>
       );
     } else {
       return (
         <View key={el.field} style={styles.infoChildContainer}>
-          <Text style={styles.infoLabel}>{el.label}: </Text>
+          <Text style={styles.infoLabel}>{fieldLabel}: </Text>
           <Text style={styles.infoValue}>{contactUsState.pub[el.field]}</Text>
         </View>
       );
@@ -123,7 +128,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
             <Text style={styles.headerTxt}>{contactUsState.pub?.name}</Text>
             {contactUsState.pub?.showOwner && (
               <Text style={styles.headerSubTxt}>
-                by {contactUsState.pub?.owner?.username}
+                {TRANSLATIONS['publist-by']} {contactUsState.pub?.owner?.username}
               </Text>
             )}
           </View>
@@ -132,7 +137,7 @@ const ContactUsManager = (props: ContactUsManagerProp) => {
         {props.isAtLeastOwner && (
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={() => props.onEditInformation(contactUsState.pub)}>
-              <Text style={styles.btnTxt}>Edit Information</Text>
+              <Text style={styles.btnTxt}>{TRANSLATIONS['contact-us-edit-info-btn']}</Text>
             </TouchableOpacity>
           </View>
         )}

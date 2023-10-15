@@ -5,6 +5,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
+import TRANSLATIONS from '../../../translations/tranlastions';
 
 type OpenCloseDataProps = {
   openTime: Number;
@@ -35,36 +36,44 @@ const OpenCloseData = (props: OpenCloseDataProps) => {
 
   const handleSave = () => {
     const openHours = openCloseData.openTime.getHours();
+    const openDateTimeMins = openCloseData.openTime.getMinutes();
+    const closeDateTimeMins = openCloseData.closeTime.getMinutes();
+    console.log(openDateTimeMins < 10);
     const openMins =
-      openCloseData.openTime.getMinutes() === 0
-        ? openCloseData.openTime.getMinutes() + '0'
-        : openCloseData.openTime.getMinutes();
+      openDateTimeMins === 0
+        ? openDateTimeMins + '0'
+        : openDateTimeMins < 10
+        ? '0' + openDateTimeMins
+        : openDateTimeMins;
     const closeHours = openCloseData.closeTime.getHours();
     const closeMins =
-      openCloseData.closeTime.getMinutes() === 0
-        ? openCloseData.closeTime.getMinutes() + '0'
-        : openCloseData.closeTime.getMinutes();
+      closeDateTimeMins === 0
+        ? closeDateTimeMins + '0'
+        : closeDateTimeMins < 10
+        ? '0' + closeDateTimeMins
+        : closeDateTimeMins;
 
+    //console.log(openMins);
+    //console.log(closeMins);
     const openTime = parseInt(openHours + '' + openMins, 10);
     const closeTime = parseInt(closeHours + '' + closeMins, 10);
 
     const body = {openTime, closeTime};
-
+    //console.log(body);
     props.onSave(body);
   };
 
   return (
     <View style={styles.card}>
       <Text style={styles.headerTxt}>
-        Attention! Any changes Open/Close information will not be applied to
-        existing reservation.
+        {TRANSLATIONS['contact-us-no-retroactivity']}
       </Text>
       {/* <View style={styles.headerContainer}>
 
       </View> */}
       <View style={styles.container}>
         <View style={styles.dateContainer}>
-          <Text>Open Time</Text>
+          <Text>{TRANSLATIONS['contact-us-open-time-label']}</Text>
           <DatePicker
             mode="time"
             date={openCloseData.openTime}
@@ -78,7 +87,7 @@ const OpenCloseData = (props: OpenCloseDataProps) => {
           />
         </View>
         <View style={styles.dateContainer}>
-          <Text>Close Time</Text>
+          <Text>{TRANSLATIONS['contact-us-close-time-label']}</Text>
           <DatePicker
             mode="time"
             date={openCloseData.closeTime}
@@ -94,7 +103,7 @@ const OpenCloseData = (props: OpenCloseDataProps) => {
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
-          <Text style={styles.btnTxt}>Save</Text>
+          <Text style={styles.btnTxt}>{TRANSLATIONS['generic-save']}</Text>
         </TouchableOpacity>
       </View>
     </View>

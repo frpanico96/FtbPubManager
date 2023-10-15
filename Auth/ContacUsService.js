@@ -16,14 +16,14 @@ exports.updateContactInfo = async (req, res, next) => {
       pubToUpdate
         .save()
         .then(newPub => {
-          return res.status(200).json({message: 'Success', newPub});
+          return res.status(200).json({message: 'generic-success', newPub});
         })
         .catch(error => {
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -36,14 +36,14 @@ exports.updateAddressInfo = async (req, res, next) => {
       pubToUpdate
         .save()
         .then(newPub => {
-          return res.status(200).json({message: 'Success', newPub});
+          return res.status(200).json({message: 'generic-success', newPub});
         })
         .catch(error => {
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -57,14 +57,14 @@ exports.updateOpenCloseInfo = async (req, res, next) => {
       pubToUpdate
         .save()
         .then(newPub => {
-          return res.status(200).json({message: 'Success', newPub});
+          return res.status(200).json({message: 'generic-success', newPub});
         })
         .catch(error => {
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -79,15 +79,15 @@ exports.updateVacationInfo = async (req, res, next) => {
       pubToUpdate
         .save()
         .then(newPub => {
-          return res.status(200).json({message: 'Success', newPub});
+          return res.status(200).json({message: 'generic-success', newPub});
         })
         .catch(error => {
           console.log(error);
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
 
@@ -104,13 +104,13 @@ exports.updateReservationInfo = async (req, res, next) => {
       pubToUpdate
         .save()
         .then(newPub => {
-          return res.status(200).json({message: 'Success', newPub});
+          return res.status(200).json({message: 'generic-success', newPub});
         })
         .catch(error => {
-          return res.status(400).json({message: 'Error', error: error.message});
+          return res.status(400).json({message: 'generic-error', error: error.message});
         });
     })
     .catch(error => {
-      return res.status(400).json({message: 'Error', error: error.message});
+      return res.status(400).json({message: 'generic-error', error: error.message});
     });
 };
