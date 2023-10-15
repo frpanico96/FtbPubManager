@@ -13,6 +13,7 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import UTILS from '../../../utilities/utils';
 import Toast from 'react-native-toast-message';
+import TRANSLATIONS from '../../../translations/tranlastions';
 
 type ContactDataProps = {
   phoneNumber: String;
@@ -38,8 +39,8 @@ const ContactData = (props: ContactDataProps) => {
     if (!regex.test(phoneNumber)) {
       Toast.show({
         type: 'error',
-        text1: 'Error',
-        text2: 'Invalid phone number',
+        text1: TRANSLATIONS['generic-error'],
+        text2: TRANSLATIONS['invalid-phone-number'],
         position: 'bottom',
       });
       return;
@@ -47,7 +48,7 @@ const ContactData = (props: ContactDataProps) => {
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Populate Phone Prefix',
+        text2: TRANSLATIONS['invalid-phone-prefix'],
         position: 'bottom',
       });
       return;
@@ -55,7 +56,7 @@ const ContactData = (props: ContactDataProps) => {
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Populate Email',
+        text2: TRANSLATIONS['invalid-email'],
         position: 'bottom',
       });
       return;
@@ -81,7 +82,7 @@ const ContactData = (props: ContactDataProps) => {
         </View>
         <TextInput
           style={[styles.txtInput, styles.phoneInput]}
-          placeholder="Enter phone number"
+          placeholder={TRANSLATIONS['reservation-phone-placeholder']}
           value={phoneNumber}
           onChangeText={setPhoneNumber}
         />
@@ -89,14 +90,14 @@ const ContactData = (props: ContactDataProps) => {
       <View style={styles.emailContainer}>
         <TextInput
           style={[styles.txtInput]}
-          placeholder="Enter email"
+          placeholder={TRANSLATIONS['contact-us-email-placeholder']}
           value={email}
           onChangeText={setEmail}
         />
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
-          <Text style={styles.btnTxt}>Save</Text>
+          <Text style={styles.btnTxt}>{TRANSLATIONS['generic-save']}</Text>
         </TouchableOpacity>
       </View>
     </View>

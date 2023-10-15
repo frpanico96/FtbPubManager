@@ -130,10 +130,12 @@ const PubList = ({
               )}
             </View>
           )}
-          <Text style={styles.pubListHeader}>
-            {TRANSLATIONS['publist-welcome']} {','}{' '}
-            {userInfo ? userInfo.username : 'Guest'}
-          </Text>
+          <View style={styles.userInfoContainer}>
+            <Text style={styles.pubListHeader}>
+              {TRANSLATIONS['publist-welcome']}
+            </Text>
+            <Text style={styles.pubListHeader}>{userInfo ? userInfo.username : TRANSLATIONS['publist-guest']}</Text>
+          </View>
         </View>
         <View style={styles.pubListContainer}>
           <ScrollView
@@ -228,6 +230,11 @@ const styles = StyleSheet.create({
   iconContainer: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userInfoContainer: {
+    flex: 2,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
   },
   pubListHeader: {

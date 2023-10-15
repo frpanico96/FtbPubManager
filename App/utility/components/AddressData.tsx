@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import TRANSLATIONS from '../../../translations/tranlastions';
 
 type AddressDataProps = {
   address: String;
@@ -29,11 +30,11 @@ const AddressData = (props: AddressDataProps) => {
         style={styles.txtInput}
         value={address}
         onChangeText={setAddress}
-        placeholder="Insert Address..."
+        placeholder={TRANSLATIONS['contact-us-address-placeholder']}
       />
       <View style={styles.btnContainer}>
         <TouchableOpacity style={styles.btn} onPress={handleSave}>
-          <Text style={styles.btnTxt}>Save</Text>
+          <Text style={styles.btnTxt}>{TRANSLATIONS['generic-save']}</Text>
         </TouchableOpacity>
       </View>
     </View>

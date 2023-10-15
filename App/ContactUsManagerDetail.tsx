@@ -7,6 +7,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import UTILS from '../utilities/utils';
 import ContactUsManagerDetailModal from './ContactUsManagerDetailModal';
 import Toast from 'react-native-toast-message';
+import TRANSLATIONS from '../translations/tranlastions';
 
 type ContactUsManagerDetailsProps = {
   pub: Object;
@@ -56,16 +57,16 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
         if (jsonRes.error) {
           Toast.show({
             type: 'error',
-            text1: 'Error',
-            text2: jsonRes.error,
+            text1: TRANSLATIONS['generic-error'],
+            text2: TRANSLATIONS[jsonRes.error] ? TRANSLATIONS[jsonRes.error] : jsonRes.error,
             position: 'bottom',
           });
           return;
         }
         Toast.show({
           type: 'success',
-          text1: 'Success',
-          text2: jsonRes.message,
+          text1: TRANSLATIONS['generic-success'],
+          text2: TRANSLATIONS[jsonRes.message] ? TRANSLATIONS[jsonRes.message] : jsonRes.message,
           position: 'bottom',
         });
         setTimeout(() => {
@@ -81,8 +82,8 @@ const ContactUsManagerDetail = (props: ContactUsManagerDetailsProps) => {
         console.log(error);
         Toast.show({
           type: 'error',
-          text1: 'Error',
-          text2: error,
+          text1: TRANSLATIONS['generic-error'],
+          text2: TRANSLATIONS[error] ? TRANSLATIONS[error] : error,
           position: 'bottom',
         });
       });
