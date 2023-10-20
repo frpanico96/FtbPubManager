@@ -23,10 +23,10 @@ export default {
   'go-back-btn': 'Go Back',
   'pub-main-menu': 'Menu',
   'pub-main-resevation': 'Reserve a Table',
-  'pub-main-reservation-additional':
-    'Feature is available only for logged users',
+  'pub-main-user-only-feature': 'Feature is available only for logged users',
   'pub-main-contact-us': 'Contact Us',
   'pub-main-manage-reservation': 'Manage Reservation',
+  'pub-main-review': 'Leave us a Feedback',
   'pub-main-close-pub': 'Close Pub',
   'pub-service-fetch-successful': 'Pub successfully fetched', //Pub Service start
   'pub-service-vacation-error':
