@@ -23,10 +23,11 @@ export default {
   'go-back-btn': 'Torna Indietro',
   'pub-main-menu': 'Menu',
   'pub-main-resevation': 'Prenota un Tavolo',
-  'pub-main-reservation-additional':
+  'pub-main-user-only-feature':
     'La funzionalità è disponibile solo per i clienti registrati',
   'pub-main-contact-us': 'Contattaci',
   'pub-main-manage-reservation': 'Gestisci Prenotazioni',
+  'pub-main-review': 'Lascia una Recensione',
   'pub-main-close-pub': 'Chiudi Pub',
   'pub-service-fetch-successful': 'Pub recuperato con successo', //Pub Service start
   'pub-service-vacation-error':

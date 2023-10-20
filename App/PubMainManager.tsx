@@ -17,6 +17,7 @@ import UTILS from '../utilities/utils';
 import TRANSLATIONS from '../translations/tranlastions';
 import ReservationManager from './ReservationManager';
 import ContactUsManager from './ContactUsManager';
+import ReviewManager from './ReviewManager';
 
 type navigateToDetailObj = {
   action: String;
@@ -85,8 +86,11 @@ const PubMainManager = ({navigation, route}) => {
         onGoBack={handleGoBack}
       />
     ) : route.params?.cmp === UTILS.contactUsAction ? (
-      <ContactUsManager pub={route.params?.pub} isAtLeastOwner={isAtLeastOwner} onEditInformation={(pub) => {
-        const navigationObj: navigateToDetailObj = {
+      <ContactUsManager
+        pub={route.params?.pub}
+        isAtLeastOwner={isAtLeastOwner}
+        onEditInformation={pub => {
+          const navigationObj: navigateToDetailObj = {
             action: '',
             name: UTILS.contactUsManager['contact-us-action'],
             pubId: route.params?.pub?._id,
@@ -94,7 +98,10 @@ const PubMainManager = ({navigation, route}) => {
             pub: pub,
           };
           handleNavigateToDetail(navigationObj);
-      }}/>
+        }}
+      />
+    ) : route.params?.cmp === UTILS.reviewAction ? (
+      <ReviewManager pub={route.params?.pub} />
     ) : null;
 
   return (

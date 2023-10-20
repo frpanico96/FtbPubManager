@@ -6,16 +6,21 @@ import TRANSLATIONS from '../translations/tranlastions';
 
 const UTILS = {
   pubMain: [
-    {name: 'pub-main-menu', label: 'Menu'},
-    {name: 'pub-main-resevation', label: 'Reserve a Table'},
-    {name: 'pub-main-contact-us', label: 'Contact Us'},
-    {name: 'pub-main-manage-reservation', label: 'Manage Reservation'},
-    {name: 'pub-main-close-pub', label: 'Close Pub'},
+    {name: 'pub-main-menu', label: TRANSLATIONS['pub-main-menu']},
+    {name: 'pub-main-resevation', label: TRANSLATIONS['pub-main-resevation']},
+    {name: 'pub-main-contact-us', label: TRANSLATIONS['pub-main-contact-us']},
+    {
+      name: 'pub-main-manage-reservation',
+      label: TRANSLATIONS['pub-main-manage-reservation'],
+    },
+    {name: 'pub-main-review', label: TRANSLATIONS['pub-main-review']},
+    {name: 'pub-main-close-pub', label: TRANSLATIONS['pub-main-close-pub']},
   ],
   menuAction: 'pub-main-menu',
   reservationAction: 'pub-main-resevation',
   reservationManagerAction: 'pub-main-manage-reservation',
   contactUsAction: 'pub-main-contact-us',
+  reviewAction: 'pub-main-review',
   menuManager: {
     'mm-new-menu': 'New Menu Item',
     'menu-action-name': 'new-menu-item',

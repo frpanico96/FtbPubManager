@@ -92,7 +92,7 @@ const PubMain = ({navigation, route}) => {
           <PubMainTile
             key={tile.name}
             disabled={true}
-            additionalText="pub-main-reservation-additional"
+            additionalText="pub-main-user-only-feature"
             pubAction={tile}
             onSelectAction={onPressAction}
           />
@@ -127,6 +127,18 @@ const PubMain = ({navigation, route}) => {
       } else {
         return null;
       }
+    } else if (tile.name === 'pub-main-review') {
+      return (
+        <PubMainTile
+          key={tile.name}
+          disabled={!route.params.userInfo}
+          pubAction={tile}
+          additionalText={
+            route.params.userInfo ? '' : 'pub-main-user-only-feature'
+          }
+          onSelectAction={onPressAction}
+        />
+      );
     } else {
       return (
         <PubMainTile
@@ -156,7 +168,9 @@ const PubMain = ({navigation, route}) => {
         {pubTiles}
         <View style={styles.goBackBtnContainer}>
           <TouchableOpacity style={styles.goBackBtn} onPress={handleGoBack}>
-            <Text style={styles.goBackBtnTxt}>{TRANSLATIONS['go-back-btn']}</Text>
+            <Text style={styles.goBackBtnTxt}>
+              {TRANSLATIONS['go-back-btn']}
+            </Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -185,9 +199,11 @@ const PubMainTile: React.FC<PubTileProps> = ({
           resizeMode="cover"
           style={styles.btnBackgroundImage}
           imageStyle={styles.btnBackgroundInsideImage}>
-          <Text style={styles.btnText}>{TRANSLATIONS[pubAction.name]}</Text>
+          <Text style={styles.btnText}>{pubAction.label}</Text>
           {additionalText && (
-            <Text style={styles.btnAdditionalText}>{TRANSLATIONS[additionalText]}</Text>
+            <Text style={styles.btnAdditionalText}>
+              {TRANSLATIONS[additionalText]}
+            </Text>
           )}
         </ImageBackground>
       </TouchableOpacity>
@@ -237,4 +253,3 @@ const styles = StyleSheet.create({
 });
 
 export default PubMain;
-
