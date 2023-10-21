@@ -12,10 +12,12 @@ import {
 } from 'react-native';
 import IMAGES from '../utilities/asset';
 import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../translations/tranlastions';
+
 import MenuManagerDetail from './MenuManagerDetail';
 import ReservationManagerDetail from './ReservationManagerDetail';
 import ContactUsManagerDetail from './ContactUsManagerDetail';
-import TRANSLATIONS from '../translations/tranlastions';
+import ReviewManagerDetail from './ReviewManagerDetail';
 
 const PubMainManagerDetail = ({navigation, route}) => {
   console.log('### Routing Params: ' + JSON.stringify(route.params));
@@ -73,6 +75,12 @@ const PubMainManagerDetail = ({navigation, route}) => {
       </>
     ) : actionName === UTILS.contactUsManager['contact-us-action'] ? (
       <ContactUsManagerDetail pub={pub} />
+    ) : actionName === UTILS.reviewAction ? (
+      <ReviewManagerDetail
+        review={pub}
+        loggedUser={route.params?.userInfo}
+        isAtLeastOwner={isAtLeastOwner}
+      />
     ) : (
       <Text>Hello</Text>
     );

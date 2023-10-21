@@ -47,7 +47,9 @@ const PubMainManager = ({navigation, route}) => {
   const isPubOwner =
     route.params?.userInfo?.username === route.params?.pub.owner?.username;
   const isAtLeastOwner = isPubOwner || route.params?.userInfo?.role === 'admin';
+  const isLoggedUser = route.params?.userInfo != null;
   console.log('### Is Pub Owner ', isAtLeastOwner);
+  console.log('### Is logged user', isLoggedUser);
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -101,7 +103,21 @@ const PubMainManager = ({navigation, route}) => {
         }}
       />
     ) : route.params?.cmp === UTILS.reviewAction ? (
-      <ReviewManager pub={route.params?.pub} />
+      <ReviewManager
+        pub={route.params?.pub}
+        isLoggedUser={isLoggedUser}
+        isAtLeastOwner={isAtLeastOwner}
+        onNavigateToDetail={(review: Object) => {
+          const navigationObj: navigateToDetailObj = {
+            action: '',
+            name: UTILS.reviewAction,
+            pubId: review?._id,
+            date: '',
+            pub: review,
+          };
+          handleNavigateToDetail(navigationObj);
+        }}
+      />
     ) : null;
 
   return (

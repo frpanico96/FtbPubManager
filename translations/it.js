@@ -25,9 +25,11 @@ export default {
   'pub-main-resevation': 'Prenota un Tavolo',
   'pub-main-user-only-feature':
     'La funzionalità è disponibile solo per i clienti registrati',
+  'pub-main-user-only-reviews':
+    'Solo i clienti registrati possono lasciare una recensione',
   'pub-main-contact-us': 'Contattaci',
   'pub-main-manage-reservation': 'Gestisci Prenotazioni',
-  'pub-main-review': 'Lascia una Recensione',
+  'pub-main-review': 'Recensioni',
   'pub-main-close-pub': 'Chiudi Pub',
   'pub-service-fetch-successful': 'Pub recuperato con successo', //Pub Service start
   'pub-service-vacation-error':
@@ -133,4 +135,5 @@ export default {
   'contact-us-days-closed-label': 'Giorni Chiusura',
   'contact-us-show-owner-label': 'Mostra Proprietario',
   'contact-us-phone-required-label': 'Recapito Telefonico Obbligatorio',
+  'review-btn': 'Lascia una Recensione',
 };

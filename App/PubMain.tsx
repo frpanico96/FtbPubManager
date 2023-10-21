@@ -131,10 +131,10 @@ const PubMain = ({navigation, route}) => {
       return (
         <PubMainTile
           key={tile.name}
-          disabled={!route.params.userInfo}
+          disabled={false}
           pubAction={tile}
           additionalText={
-            route.params.userInfo ? '' : 'pub-main-user-only-feature'
+            route.params?.userInfo ? '' : 'pub-main-user-only-reviews'
           }
           onSelectAction={onPressAction}
         />

@@ -24,9 +24,10 @@ export default {
   'pub-main-menu': 'Menu',
   'pub-main-resevation': 'Reserve a Table',
   'pub-main-user-only-feature': 'Feature is available only for logged users',
+  'pub-main-user-only-reviews': 'Only logged users may leave a Review',
   'pub-main-contact-us': 'Contact Us',
   'pub-main-manage-reservation': 'Manage Reservation',
-  'pub-main-review': 'Leave us a Feedback',
+  'pub-main-review': 'Reviews',
   'pub-main-close-pub': 'Close Pub',
   'pub-service-fetch-successful': 'Pub successfully fetched', //Pub Service start
   'pub-service-vacation-error':
@@ -132,4 +133,6 @@ export default {
   'contact-us-days-closed-label': 'Days Closed',
   'contact-us-show-owner-label': 'Show Owner',
   'contact-us-phone-required-label': 'Phone Number Required',
+  // Reviews
+  'review-btn': 'Leave a Review',
 };

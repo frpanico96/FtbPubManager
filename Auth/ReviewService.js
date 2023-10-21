@@ -8,6 +8,10 @@ const Review = require('../model/Review');
 exports.getReviewsByPub = async (req, res, next) => {
   const {pubId} = req.body;
   await Review.find({pub: pubId, originalReview: null})
+    .populate({
+      path: 'user',
+      select: 'username',
+    })
     .then(reviews => {
       return res.status(200).json({
         message: 'generic-success',

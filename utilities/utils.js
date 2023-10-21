@@ -101,6 +101,19 @@ const UTILS = {
     {label: TRANSLATIONS.dayOfWeek[5], value: 5},
     {label: TRANSLATIONS.dayOfWeek[6], value: 6},
   ],
+  reviewManager: {
+    reviewScoreOptions: {
+      1: {iconName: 'emoticon-sad-outline', color: '#db0d1b'},
+      2: {iconName: 'emoticon-confused-outline', color: '#f06d35'},
+      3: {iconName: 'emoticon-neutral-outline', color: '#d49d06'},
+      4: {iconName: 'emoticon-happy-outline', color: '#a2bf49'},
+      5: {iconName: 'emoticon-excited-outline', color: '#2ea30d'},
+    },
+    reviewThumbsUpColor: '#176102',
+    reviewThumbsDownColor: '#900',
+    reviewCommentsColor: '#717275',
+    reviewMinLen: 12,
+  }
 };
 
 export default UTILS;
