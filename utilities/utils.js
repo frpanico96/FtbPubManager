@@ -103,17 +103,63 @@ const UTILS = {
   ],
   reviewManager: {
     reviewScoreOptions: {
-      1: {iconName: 'emoticon-sad-outline', color: '#db0d1b'},
-      2: {iconName: 'emoticon-confused-outline', color: '#f06d35'},
-      3: {iconName: 'emoticon-neutral-outline', color: '#d49d06'},
-      4: {iconName: 'emoticon-happy-outline', color: '#a2bf49'},
-      5: {iconName: 'emoticon-excited-outline', color: '#2ea30d'},
+      1: {
+        label: TRANSLATIONS['review-value-1'],
+        iconName: 'emoticon-sad-outline',
+        reviewSize: 40,
+        dropdownSize: 30,
+        color: '#db0d1b',
+      },
+      2: {
+        label: TRANSLATIONS['review-value-2'],
+        iconName: 'emoticon-confused-outline',
+        reviewSize: 40,
+        dropdownSize: 30,
+        color: '#f06d35',
+      },
+      3: {
+        label: TRANSLATIONS['review-value-3'],
+        iconName: 'emoticon-neutral-outline',
+        reviewSize: 40,
+        dropdownSize: 30,
+        color: '#d49d06',
+      },
+      4: {
+        label: TRANSLATIONS['review-value-4'],
+        iconName: 'emoticon-happy-outline',
+        reviewSize: 40,
+        dropdownSize: 30,
+        color: '#a2bf49',
+      },
+      5: {
+        label: TRANSLATIONS['review-value-5'],
+        iconName: 'emoticon-excited-outline',
+        reviewSize: 40,
+        dropdownSize: 30,
+        color: '#2ea30d',
+      },
+    },
+    reviewThumbsUp: {
+      iconName: 'thumb-up-outline',
+      size: 20,
+      color: '#176102',
+    },
+    reviewThumbsDown: {
+      iconName: 'thumb-down-outline',
+      size: 20,
+      color: '#900',
+    },
+    reviewComments: {
+      iconName: 'comment-outline',
+      size: 20,
+      color: '#717275',
     },
     reviewThumbsUpColor: '#176102',
     reviewThumbsDownColor: '#900',
     reviewCommentsColor: '#717275',
-    reviewMinLen: 12,
-  }
+    reviewMinLen: 32,
+    timeoutModal: 1000,
+  },
 };
 
 export default UTILS;

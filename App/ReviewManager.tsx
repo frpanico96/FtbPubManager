@@ -12,13 +12,19 @@ import {useFocusEffect} from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import {ReviewAction, ReviewFormBody} from './utility/types/types';
+
 import UTILS from '../utilities/utils';
 import TRANSLATIONS from '../translations/tranlastions';
+import FtbModal from './utility/components/FtbModal';
+import ReviewManagerForm from './ReviewManagerForm';
+import Toast from 'react-native-toast-message';
 
 type ReviewManagerProps = {
   pub: Object;
   isLoggedUser: Boolean;
   isAtLeastOwner: Boolean;
+  username: String;
   onNavigateToDetail: Function;
 };
 
@@ -32,8 +38,12 @@ const ReviewManager = (props: ReviewManagerProps) => {
   console.log('### Is at least Owner', props.isAtLeastOwner);
 
   const [reviews, setReviews] = useState([]);
+  const [toggleModal, setToggleModal] = useState(false);
 
-  const fetchPubReviews = (pubId: String) => {
+  const fetchPubReviews = (pubId: String, refresher: Boolean) => {
+    if (toggleModal) {
+      return;
+    }
     fetch(UTILS.serverBasePath + '/getPubReviews', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
@@ -51,12 +61,58 @@ const ReviewManager = (props: ReviewManagerProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchPubReviews(props.pub._id);
-    }, [props.pub]),
+      fetchPubReviews(props.pub._id, toggleModal);
+    }, [props.pub, toggleModal]),
   );
 
   const handleTilePress = review => {
     props.onNavigateToDetail(review);
+  };
+
+  const handleConfirmModal = (form: ReviewFormBody) => {
+    const apiToCall =
+      form.action === ReviewAction.REVIEW ? '/addReview' : 'addReviewComment';
+    const successMessage =
+      form.action === ReviewAction.REVIEW
+        ? TRANSLATIONS['review-success']
+        : TRANSLATIONS['review-comment-success'];
+    fetch(UTILS.serverBasePath + apiToCall, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: form.body,
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+        if (jsonRes.error) {
+          Toast.show({
+            type: 'error',
+            text1: TRANSLATIONS['generic-error'],
+            text2: TRANSLATIONS[jsonRes.error]
+              ? TRANSLATIONS[jsonRes.error]
+              : jsonRes.error,
+            position: 'bottom',
+          });
+          return;
+        }
+        Toast.show({
+          type: 'success',
+          text1: TRANSLATIONS['generic-success'],
+          text2: successMessage,
+          position: 'bottom',
+        });
+        setTimeout(() => {
+          setToggleModal(!toggleModal);
+        }, UTILS.reviewManager.timeoutModal);
+      })
+      .catch(error => {
+        Toast.show({
+          type: 'error',
+          text1: TRANSLATIONS['generic-error'],
+          text2: TRANSLATIONS[error] ? TRANSLATIONS[error] : error,
+          position: 'bottom',
+        });
+      });
   };
 
   return (
@@ -74,11 +130,27 @@ const ReviewManager = (props: ReviewManagerProps) => {
       </ScrollView>
       <View style={styles.btnContainer}>
         {props.isLoggedUser && (
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => setToggleModal(!toggleModal)}>
             <Text style={styles.btnText}>{TRANSLATIONS['review-btn']}</Text>
           </TouchableOpacity>
         )}
       </View>
+      <FtbModal
+        animationType="slide"
+        transparent={true}
+        visible={toggleModal}
+        onToggleModal={() => setToggleModal(!toggleModal)}
+        componentToShow={
+          <ReviewManagerForm
+            pubId={props.pub._id}
+            originalReviewId={undefined}
+            username={props.username}
+            onConfirmForm={handleConfirmModal}
+          />
+        }
+      />
     </View>
   );
 };
@@ -114,7 +186,7 @@ const TileReview = (props: TileReviewProps) => {
           {Platform.OS === 'ios' && (
             <Icon
               name={scoreIcon?.iconName}
-              size={40}
+              size={scoreIcon?.reviewSize}
               color={scoreIcon?.color}
             />
           )}
@@ -128,9 +200,9 @@ const TileReview = (props: TileReviewProps) => {
           <View style={styles.tileReviewFooterIcon}>
             {Platform.OS === 'ios' && (
               <Icon
-                name="thumb-up-outline"
-                size={20}
-                color={UTILS.reviewManager.reviewThumbsUpColor}
+                name={UTILS.reviewManager.reviewThumbsUp.iconName}
+                size={UTILS.reviewManager.reviewThumbsUp.size}
+                color={UTILS.reviewManager.reviewThumbsUp.color}
               />
             )}
           </View>
@@ -142,9 +214,9 @@ const TileReview = (props: TileReviewProps) => {
           <View style={styles.tileReviewFooterIcon}>
             {Platform.OS === 'ios' && (
               <Icon
-                name="thumb-down-outline"
-                size={20}
-                color={UTILS.reviewManager.reviewThumbsDownColor}
+                name={UTILS.reviewManager.reviewThumbsDown.iconName}
+                size={UTILS.reviewManager.reviewThumbsDown.size}
+                color={UTILS.reviewManager.reviewThumbsDown.color}
               />
             )}
           </View>
@@ -156,9 +228,9 @@ const TileReview = (props: TileReviewProps) => {
           <View style={styles.tileReviewFooterIcon}>
             {Platform.OS === 'ios' && (
               <Icon
-                name="comment-outline"
-                size={20}
-                color={UTILS.reviewManager.reviewCommentsColor}
+                name={UTILS.reviewManager.reviewComments.iconName}
+                size={UTILS.reviewManager.reviewComments.size}
+                color={UTILS.reviewManager.reviewComments.color}
               />
             )}
           </View>
@@ -183,7 +255,7 @@ const styles = StyleSheet.create({
   tileUserDateTxt: {fontWeight: '500', fontSize: 16},
   tileReviewScore: {flex: 1, alignItems: 'flex-end'},
   tileReviewDescriptionContainer: {padding: 10},
-  tileReviewDescription: {width: '100%', fontWeight: '400', fontSize: 24},
+  tileReviewDescription: {width: '100%', fontWeight: '400', fontSize: 20},
   tileReviewFooter: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
