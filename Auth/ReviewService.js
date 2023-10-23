@@ -29,6 +29,10 @@ exports.getReviewsByPub = async (req, res, next) => {
 exports.getReviewComments = async (req, res, next) => {
   const {reviewId} = req.body;
   await Review.find({originalReview: reviewId})
+    .populate({
+      path: 'user',
+      select: 'username',
+    })
     .then(reviews => {
       return res.status(200).json({
         message: 'generic-success',
