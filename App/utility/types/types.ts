@@ -11,4 +11,5 @@ export type ReviewFormBody = {
 export enum ReviewAction {
   REVIEW,
   COMMENT,
+  COMMENT_VIEW,
 }

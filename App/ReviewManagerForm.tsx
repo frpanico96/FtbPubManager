@@ -15,11 +15,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import UTILS from '../utilities/utils';
 import TRANSLATIONS from '../translations/tranlastions';
+import Review from '../model/Review';
+import Toast from 'react-native-toast-message';
 
 type ReviewManagerFormProps = {
   pubId: String;
   username: String;
   originalReviewId: String;
+  body: String;
+  readonly: Boolean;
   onConfirmForm: Function;
 };
 
@@ -51,57 +55,128 @@ const ReviewManagerForm = (props: ReviewManagerFormProps) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState();
   const [items, setItems] = useState(itemsWiIcons);
-  const [reviewBody, setReviewBody] = useState('');
+  const [reviewBody, setReviewBody] = useState(props.body);
+
+  const action: ReviewAction = props.originalReviewId
+    ? props.readonly
+      ? ReviewAction.COMMENT_VIEW
+      : ReviewAction.COMMENT
+    : ReviewAction.REVIEW;
+
+  const placeHolder: string =
+    action === ReviewAction.REVIEW
+      ? TRANSLATIONS['review-body-placeholder']
+      : TRANSLATIONS['review-body-comment-placeholder'];
 
   const handleConfirm = () => {
-    const action: ReviewAction = props.originalReviewId
-      ? ReviewAction.COMMENT
-      : ReviewAction.REVIEW;
     const body = {
-      score: value,
       pubId: props.pubId,
       username: props.username,
       reviewBody,
     };
+
+    if (action === ReviewAction.REVIEW) {
+      body.score = value;
+    }
+    if (action === ReviewAction.COMMENT) {
+      body.reviewId = props.originalReviewId;
+    }
+
     const form: ReviewFormBody = {
       action,
       body: JSON.stringify(body),
     };
 
-    props.onConfirmForm(form);
+    const apiToCall =
+      form.action === ReviewAction.REVIEW ? '/addReview' : '/addReviewComment';
+    const successMessage =
+      form.action === ReviewAction.REVIEW
+        ? TRANSLATIONS['review-success']
+        : TRANSLATIONS['review-comment-success'];
+    fetch(UTILS.serverBasePath + apiToCall, {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body: form.body,
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+        if (jsonRes.error) {
+          Toast.show({
+            type: 'error',
+            text1: TRANSLATIONS['generic-error'],
+            text2: TRANSLATIONS[jsonRes.error]
+              ? TRANSLATIONS[jsonRes.error]
+              : jsonRes.error,
+            position: 'bottom',
+          });
+          return;
+        }
+        Toast.show({
+          type: 'success',
+          text1: TRANSLATIONS['generic-success'],
+          text2: successMessage,
+          position: 'bottom',
+        });
+        setTimeout(() => {
+          props.onConfirmForm();
+        }, UTILS.reviewManager.timeoutModal);
+      })
+      .catch(error => {
+        console.log(error);
+        Toast.show({
+          type: 'error',
+          text1: TRANSLATIONS['generic-error'],
+          text2: TRANSLATIONS[error] ? TRANSLATIONS[error] : error,
+          position: 'bottom',
+        });
+      });
+
+    //props.onConfirmForm(form);
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.dropDownContainer}>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          placeholder={TRANSLATIONS['review-score-placeholder']}
-        />
-      </View>
-      <TextInput
-        style={styles.textArea}
-        value={reviewBody}
-        multiline={true}
-        onChangeText={setReviewBody}
-        placeholder={TRANSLATIONS['review-body-placeholder']}
-      />
-      <View>
-        <TouchableOpacity style={styles.btn} onPress={handleConfirm}>
-          <Text style={styles.btnText}>{TRANSLATIONS['review-form-btn']}</Text>
-        </TouchableOpacity>
-      </View>
+      {action === ReviewAction.REVIEW && (
+        <View style={styles.dropDownContainer}>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            placeholder={TRANSLATIONS['review-score-placeholder']}
+          />
+        </View>
+      )}
+      {action !== ReviewAction.COMMENT_VIEW && (
+        <View>
+          <TextInput
+            style={styles.textArea}
+            value={reviewBody}
+            multiline={true}
+            onChangeText={setReviewBody}
+            placeholder={placeHolder}
+          />
+        </View>
+      )}
+      {action === ReviewAction.COMMENT_VIEW && <Text>{reviewBody}</Text>}
+      {action !== ReviewAction.COMMENT_VIEW && (
+        <View>
+          <TouchableOpacity style={styles.btn} onPress={handleConfirm}>
+            <Text style={styles.btnText}>
+              {TRANSLATIONS['review-form-btn']}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, width: '100%'},
   dropDownContainer: {
     width: '100%',
     zIndex: 2000,

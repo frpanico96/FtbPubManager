@@ -12,9 +12,16 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import UTILS from '../../../utilities/utils';
+import {SlideOutLeft} from 'react-native-reanimated';
 
 type TileReviewProps = {
   review: Object;
+  tileDisabled: Boolean;
+  miniButtonDisabled: Boolean;
+  likeCounter: Number;
+  dislikeCounter: Number;
+  limitReviewBody: Boolean;
+  onPressMiniButton: Function;
   onPressTile: Function;
 };
 
@@ -23,19 +30,34 @@ const ReviewTile = (props: TileReviewProps) => {
   const scoreIcon =
     UTILS.reviewManager.reviewScoreOptions[props?.review?.score];
   const reviewBody =
-    props?.review?.reviewBody?.length > UTILS.reviewManager.reviewMinLen
+    props?.review?.reviewBody?.length > UTILS.reviewManager.reviewMinLen && props.limitReviewBody
       ? props?.review?.reviewBody?.slice(
           0,
           UTILS.reviewManager.reviewMinLen - 1,
         ) + '...'
       : props?.review?.reviewBody;
 
+  const tileDisabled = props.tileDisabled == null ? false : props.tileDisabled;
+  const miniBtnDisabled =
+    props.miniButtonDisabled == null ? true : props.miniButtonDisabled;
+  const likeCounter =
+    props.likeCounter == null ? props.review?.likes : props.likeCounter;
+  const dislikeCounter =
+    props.dislikeCounter == null
+      ? props.review?.dislikes
+      : props.dislikeCounter;
   const handleTilePress = () => {
     props.onPressTile(props.review);
   };
+  const handleMiniButtonPress = (btnName: String) => {
+    props.onPressMiniButton(btnName);
+  };
 
   return (
-    <TouchableOpacity style={styles.reviewTile} onPress={handleTilePress}>
+    <TouchableOpacity
+      style={styles.reviewTile}
+      disabled={tileDisabled}
+      onPress={handleTilePress}>
       <View style={styles.tileReviewInfoContainer}>
         <View style={styles.container}>
           <Text style={styles.tileUserTxt}>
@@ -59,45 +81,35 @@ const ReviewTile = (props: TileReviewProps) => {
         <Text style={styles.tileReviewDescription}>{reviewBody}</Text>
       </View>
       <View style={styles.tileReviewFooter}>
-        <TouchableOpacity style={styles.tileReviewFooterBtn} disabled={true}>
-          <View style={styles.tileReviewFooterIcon}>
-            {Platform.OS === 'ios' && (
-              <Icon
-                name={UTILS.reviewManager.reviewThumbsUp.iconName}
-                size={UTILS.reviewManager.reviewThumbsUp.size}
-                color={UTILS.reviewManager.reviewThumbsUp.color}
-              />
-            )}
-          </View>
-          <View style={styles.tileReviewFooterTxt}>
-            <Text>{props.review?.likes}</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tileReviewFooterBtn} disabled={true}>
-          <View style={styles.tileReviewFooterIcon}>
-            {Platform.OS === 'ios' && (
-              <Icon
-                name={UTILS.reviewManager.reviewThumbsDown.iconName}
-                size={UTILS.reviewManager.reviewThumbsDown.size}
-                color={UTILS.reviewManager.reviewThumbsDown.color}
-              />
-            )}
-          </View>
-          <View style={styles.tileReviewFooterTxt}>
-            <Text>{props.review?.dislikes}</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tileReviewFooterBtn} disabled={true}>
-          <View style={styles.tileReviewFooterIcon}>
-            {Platform.OS === 'ios' && (
-              <Icon
-                name={UTILS.reviewManager.reviewComments.iconName}
-                size={UTILS.reviewManager.reviewComments.size}
-                color={UTILS.reviewManager.reviewComments.color}
-              />
-            )}
-          </View>
-        </TouchableOpacity>
+        {UTILS.reviewManager.miniButtons.map(miniBtn => {
+          const propToShow =
+            miniBtn.name === UTILS.reviewManager['mini-btn-like']
+              ? likeCounter
+              : miniBtn.name === UTILS.reviewManager['mini-btn-dislike']
+              ? dislikeCounter
+              : null;
+
+          return (
+            <TouchableOpacity
+              key={miniBtn.name}
+              style={styles.tileReviewFooterBtn}
+              disabled={miniBtnDisabled}
+              onPress={() => handleMiniButtonPress(miniBtn.name)}>
+              <View style={styles.tileReviewFooterIcon}>
+                {Platform.OS === 'ios' && (
+                  <Icon
+                    name={miniBtn.iconName}
+                    size={miniBtn.size}
+                    color={miniBtn.color}
+                  />
+                )}
+              </View>
+              <View style={styles.tileReviewFooterTxt}>
+                <Text>{propToShow}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     </TouchableOpacity>
   );
@@ -117,7 +129,7 @@ const styles = StyleSheet.create({
   tileUserDateTxt: {fontWeight: '500', fontSize: 16},
   tileReviewScore: {flex: 1, alignItems: 'flex-end'},
   tileReviewDescriptionContainer: {padding: 10},
-  tileReviewDescription: {width: '100%', fontWeight: '400', fontSize: 20},
+  tileReviewDescription: {width: '100%', fontWeight: '400', fontSize: 18},
   tileReviewFooter: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

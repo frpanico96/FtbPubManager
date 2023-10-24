@@ -83,6 +83,7 @@ exports.insertReview = async (req, res, next) => {
 
 exports.commentReview = async (req, res, next) => {
   const {username, pubId, reviewId, reviewBody} = req.body;
+  console.log('Inside Comments');
   await User.findOne({username})
     .then(user => {
       const review = new Review({
@@ -101,6 +102,7 @@ exports.commentReview = async (req, res, next) => {
           });
         })
         .catch(error => {
+          console.log(error);
           return res.status(400).json({
             message: 'generic-error',
             error: error.message,
@@ -108,6 +110,7 @@ exports.commentReview = async (req, res, next) => {
         });
     })
     .catch(error => {
+      console.log(error);
       return res.status(400).json({
         message: 'generic-error',
         error: error.message,

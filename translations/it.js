@@ -143,6 +143,7 @@ export default {
   'review-value-5': 'Decisamente Soddisfatta/o/i',
   'review-score-placeholder': 'Valuta la tua esperienza',
   'review-body-placeholder': 'Inserisci qui la tua recensione',
+  'review-body-comment-placeholder': 'Inserisci qui il tuo commento',
   'review-form-btn': 'Conferma',
   'review-success': 'Recensione inserita con successo',
   'review-comment-success': 'Commento inserito con successo',
