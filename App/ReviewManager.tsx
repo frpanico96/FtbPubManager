@@ -21,20 +21,12 @@ import ReviewTile from './utility/components/ReviewTile';
 import UTILS from '../utilities/utils';
 import TRANSLATIONS from '../translations/tranlastions';
 
-
-
-
 type ReviewManagerProps = {
   pub: Object;
   isLoggedUser: Boolean;
   isAtLeastOwner: Boolean;
   username: String;
   onNavigateToDetail: Function;
-};
-
-type TileReviewProps = {
-  review: Object;
-  onPressTile: Function;
 };
 
 const ReviewManager = (props: ReviewManagerProps) => {
@@ -73,50 +65,8 @@ const ReviewManager = (props: ReviewManagerProps) => {
     props.onNavigateToDetail(review);
   };
 
-  const handleConfirmModal = (form: ReviewFormBody) => {
-    const apiToCall =
-      form.action === ReviewAction.REVIEW ? '/addReview' : 'addReviewComment';
-    const successMessage =
-      form.action === ReviewAction.REVIEW
-        ? TRANSLATIONS['review-success']
-        : TRANSLATIONS['review-comment-success'];
-    fetch(UTILS.serverBasePath + apiToCall, {
-      headers: {'Content-Type': 'application/json'},
-      method: 'POST',
-      body: form.body,
-    })
-      .then(res => res.json())
-      .then(jsonRes => {
-        console.log(jsonRes);
-        if (jsonRes.error) {
-          Toast.show({
-            type: 'error',
-            text1: TRANSLATIONS['generic-error'],
-            text2: TRANSLATIONS[jsonRes.error]
-              ? TRANSLATIONS[jsonRes.error]
-              : jsonRes.error,
-            position: 'bottom',
-          });
-          return;
-        }
-        Toast.show({
-          type: 'success',
-          text1: TRANSLATIONS['generic-success'],
-          text2: successMessage,
-          position: 'bottom',
-        });
-        setTimeout(() => {
-          setToggleModal(!toggleModal);
-        }, UTILS.reviewManager.timeoutModal);
-      })
-      .catch(error => {
-        Toast.show({
-          type: 'error',
-          text1: TRANSLATIONS['generic-error'],
-          text2: TRANSLATIONS[error] ? TRANSLATIONS[error] : error,
-          position: 'bottom',
-        });
-      });
+  const handleConfirmModal = () => {
+    setToggleModal(!toggleModal);
   };
 
   return (
@@ -129,6 +79,10 @@ const ReviewManager = (props: ReviewManagerProps) => {
               key={review._id}
               review={review}
               onPressTile={handleTilePress}
+              tileDisabled={false}
+              miniButtonDisabled={true}
+              limitReviewBody={true}
+              onPressMiniButton={() => console.log('#')}
             />
           ))}
       </ScrollView>
@@ -150,6 +104,8 @@ const ReviewManager = (props: ReviewManagerProps) => {
           <ReviewManagerForm
             pubId={props.pub._id}
             originalReviewId={undefined}
+            body={''}
+            readonly={false}
             username={props.username}
             onConfirmForm={handleConfirmModal}
           />
@@ -158,7 +114,6 @@ const ReviewManager = (props: ReviewManagerProps) => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {flex: 1, width: '100%'},

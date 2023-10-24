@@ -142,6 +142,7 @@ export default {
   'review-value-5': 'Extremely Satisfied',
   'review-score-placeholder': 'Evaluate your experience',
   'review-body-placeholder': 'Input your review here',
+  'review-body-comment-placeholder': 'Input your comment here',
   'review-form-btn': 'Confirm',
   'review-success': 'Review posted successfully',
   'review-comment-success': 'Comment posted succesfully',
