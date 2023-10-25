@@ -122,12 +122,12 @@ exports.reviewFeedback = async (req, res, next) => {
   const {like, dislike, reviewId} = req.body;
   await Review.findById(reviewId)
     .then(reviewToUpdate => {
-      reviewToUpdate.likes = reviewToUpdate.likes
-        ? reviewToUpdate.likes + like
-        : like;
-      reviewToUpdate.dislikes = reviewToUpdate.dislikes
-        ? reviewToUpdate.dislikes + dislike
-        : dislike;
+      if (like && like > reviewToUpdate?.likes) {
+        reviewToUpdate.likes = like;
+      }
+      if (dislike && dislike > reviewToUpdate?.dislikes) {
+        reviewToUpdate.dislikes = dislike;
+      }
       reviewToUpdate
         .save()
         .then(newReview => {

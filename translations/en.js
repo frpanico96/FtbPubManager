@@ -146,4 +146,6 @@ export default {
   'review-form-btn': 'Confirm',
   'review-success': 'Review posted successfully',
   'review-comment-success': 'Comment posted succesfully',
+  'review-positive-negative-feedback-error':
+    'You cannot give a Positive and Negative feedback at the same time!',
 };

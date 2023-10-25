@@ -1,18 +1,11 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 
-import {
-  StyleSheet,
-  Text,
-  ScrollView,
-  View,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, Platform, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import UTILS from '../../../utilities/utils';
-import {SlideOutLeft} from 'react-native-reanimated';
+import FtbMiniButton from './FtbMiniButton';
 
 type TileReviewProps = {
   review: Object;
@@ -30,7 +23,8 @@ const ReviewTile = (props: TileReviewProps) => {
   const scoreIcon =
     UTILS.reviewManager.reviewScoreOptions[props?.review?.score];
   const reviewBody =
-    props?.review?.reviewBody?.length > UTILS.reviewManager.reviewMinLen && props.limitReviewBody
+    props?.review?.reviewBody?.length > UTILS.reviewManager.reviewMinLen &&
+    props.limitReviewBody
       ? props?.review?.reviewBody?.slice(
           0,
           UTILS.reviewManager.reviewMinLen - 1,
@@ -90,24 +84,18 @@ const ReviewTile = (props: TileReviewProps) => {
               : null;
 
           return (
-            <TouchableOpacity
+            <FtbMiniButton
               key={miniBtn.name}
-              style={styles.tileReviewFooterBtn}
+              name={miniBtn.name}
               disabled={miniBtnDisabled}
-              onPress={() => handleMiniButtonPress(miniBtn.name)}>
-              <View style={styles.tileReviewFooterIcon}>
-                {Platform.OS === 'ios' && (
-                  <Icon
-                    name={miniBtn.iconName}
-                    size={miniBtn.size}
-                    color={miniBtn.color}
-                  />
-                )}
-              </View>
-              <View style={styles.tileReviewFooterTxt}>
-                <Text>{propToShow}</Text>
-              </View>
-            </TouchableOpacity>
+              iconName={miniBtn.iconName}
+              iconColor={miniBtn.color}
+              iconSize={miniBtn.size}
+              btnText={propToShow}
+              onPressMiniBtn={(btnName: String) =>
+                handleMiniButtonPress(btnName)
+              }
+            />
           );
         })}
       </View>
@@ -135,16 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     padding: 6,
   },
-  tileReviewFooterBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: 30,
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-  },
-  tileReviewFooterIcon: {},
-  tileReviewFooterTxt: {marginLeft: 5, fontSize: 15, fontWeight: '600'},
 });
 
 export default ReviewTile;

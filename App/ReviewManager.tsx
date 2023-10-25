@@ -103,7 +103,7 @@ const ReviewManager = (props: ReviewManagerProps) => {
         componentToShow={
           <ReviewManagerForm
             pubId={props.pub._id}
-            originalReviewId={undefined}
+            originalReview={undefined}
             body={''}
             readonly={false}
             username={props.username}
