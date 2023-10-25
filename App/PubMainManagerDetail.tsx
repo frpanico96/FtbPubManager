@@ -80,6 +80,7 @@ const PubMainManagerDetail = ({navigation, route}) => {
         review={pub}
         loggedUser={route.params?.userInfo}
         isAtLeastOwner={isAtLeastOwner}
+        onUpdateFeedback={handleNavigateToPreviousScreen}
       />
     ) : (
       <Text>Hello</Text>

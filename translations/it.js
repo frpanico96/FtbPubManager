@@ -147,4 +147,6 @@ export default {
   'review-form-btn': 'Conferma',
   'review-success': 'Recensione inserita con successo',
   'review-comment-success': 'Commento inserito con successo',
+  'review-positive-negative-feedback-error':
+    'Non puoi dare un voto positivo e negativo allo stesso tempo!',
 };

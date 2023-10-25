@@ -21,7 +21,7 @@ import Toast from 'react-native-toast-message';
 type ReviewManagerFormProps = {
   pubId: String;
   username: String;
-  originalReviewId: String;
+  originalReview: Object;
   body: String;
   readonly: Boolean;
   onConfirmForm: Function;
@@ -57,11 +57,12 @@ const ReviewManagerForm = (props: ReviewManagerFormProps) => {
   const [items, setItems] = useState(itemsWiIcons);
   const [reviewBody, setReviewBody] = useState(props.body);
 
-  const action: ReviewAction = props.originalReviewId
+  const action: ReviewAction = props.originalReview
     ? props.readonly
       ? ReviewAction.COMMENT_VIEW
       : ReviewAction.COMMENT
     : ReviewAction.REVIEW;
+
 
   const placeHolder: string =
     action === ReviewAction.REVIEW
@@ -79,7 +80,7 @@ const ReviewManagerForm = (props: ReviewManagerFormProps) => {
       body.score = value;
     }
     if (action === ReviewAction.COMMENT) {
-      body.reviewId = props.originalReviewId;
+      body.reviewId = props.originalReview._id;
     }
 
     const form: ReviewFormBody = {
@@ -150,6 +151,13 @@ const ReviewManagerForm = (props: ReviewManagerFormProps) => {
           />
         </View>
       )}
+      {action === ReviewAction.COMMENT && (
+        <View style={styles.originalReviewContainer}>
+          <Text style={styles.originalReivewText}>
+            {props.originalReview?.reviewBody}
+          </Text>
+        </View>
+      )}
       {action !== ReviewAction.COMMENT_VIEW && (
         <View>
           <TextInput
@@ -161,7 +169,9 @@ const ReviewManagerForm = (props: ReviewManagerFormProps) => {
           />
         </View>
       )}
-      {action === ReviewAction.COMMENT_VIEW && <Text>{reviewBody}</Text>}
+      {action === ReviewAction.COMMENT_VIEW && (
+        <Text style={styles.originalReivewText}>{reviewBody}</Text>
+      )}
       {action !== ReviewAction.COMMENT_VIEW && (
         <View>
           <TouchableOpacity style={styles.btn} onPress={handleConfirm}>
@@ -182,12 +192,19 @@ const styles = StyleSheet.create({
     zIndex: 2000,
     padding: 10,
   },
+  originalReviewContainer: {
+    padding: 10,
+  },
+  originalReivewText: {
+    fontSize: 16,
+  },
   textArea: {
     borderWidth: 1,
     borderRadius: 6,
     maxHeight: 300,
     paddingHorizontal: 5,
     paddingVertical: 100,
+    minWidth: '100%',
   },
   btn: {
     backgroundColor: 'pink',

@@ -15,11 +15,13 @@ import ReviewTile from './utility/components/ReviewTile';
 import ReviewCommentTile from './utility/components/ReviewCommentTile';
 import FtbModal from './utility/components/FtbModal';
 import ReviewManagerForm from './ReviewManagerForm';
+import Toast from 'react-native-toast-message';
 
 type ReviewManagerDetailProp = {
   review: Object;
   isAtLeastOwner: Boolean;
   loggedUser: Object;
+  onUpdateFeedback: Function;
 };
 
 const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
@@ -61,6 +63,22 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
       });
   };
 
+  const updateFeedback = (body: String) => {
+    fetch(UTILS.serverBasePath + '/addReviewFeedback', {
+      headers: {'Content-Type': 'application/json'},
+      method: 'POST',
+      body,
+    })
+      .then(res => res.json())
+      .then(jsonRes => {
+        console.log(jsonRes);
+        props.onUpdateFeedback();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchComments(props.review._id, detailState.toggleModal);
@@ -90,15 +108,14 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
         newState.showConfirm = newState.updatedLike || newState.updatedDislike;
         return newState;
       });
-    }
-    else if (btnName === UTILS.reviewManager['mini-btn-comments']) {
+    } else if (btnName === UTILS.reviewManager['mini-btn-comments']) {
       setDetailState(prev => {
         const newState = {...prev};
         newState.selectedComment = {};
         newState.readOnlyMode = false;
         newState.toggleModal = !prev.toggleModal;
         return newState;
-      })
+      });
     }
   };
 
@@ -111,6 +128,29 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
       newState.toggleModal = !prev.toggleModal;
       return newState;
     });
+  };
+
+  const handleConfirmComments = () => {
+    if (detailState.updatedLike && detailState.updatedDislike) {
+      Toast.show({
+        type: 'error',
+        text1: TRANSLATIONS['generic-error'],
+        text2: TRANSLATIONS['review-positive-negative-feedback-error'],
+        position: 'bottom',
+      });
+      return;
+    }
+
+    const body = {
+      reviewId: props.review?._id,
+    };
+    if (detailState.updatedLike) {
+      body.like = detailState.likeCounter;
+    }
+    if (detailState.updatedDislike) {
+      body.dislike = detailState.dislikeCounter;
+    }
+    updateFeedback(JSON.stringify(body));
   };
 
   return (
@@ -142,7 +182,7 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
       </View>
       <View style={styles.row}>
         {detailState.showConfirm && (
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={handleConfirmComments}>
             <Text style={styles.btnText}>
               {TRANSLATIONS['review-form-btn']}
             </Text>
@@ -163,7 +203,7 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
         componentToShow={
           <ReviewManagerForm
             pubId={props.review?.pub}
-            originalReviewId={props.review?._id}
+            originalReview={props.review}
             body={detailState.selectedComment?.reviewBody}
             readonly={detailState.readOnlyMode}
             username={props.loggedUser?.username}
