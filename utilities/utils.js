@@ -167,6 +167,11 @@ const UTILS = {
     reviewCommentsColor: '#717275',
     reviewMinLen: 32,
     timeoutModal: 1000,
+    tagSizeComment: '19%',
+    tagSizeReview: '40%',
+    tagIconName: 'dot-single',
+    tagIconSize: 20,
+    tagIconColor: 'grey',
   },
 };
 

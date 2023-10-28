@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import UTILS from '../../../utilities/utils';
 import FtbMiniButton from './FtbMiniButton';
+import FtbUserTag from './FtbUserTag';
 
 type TileReviewProps = {
   review: Object;
@@ -57,6 +58,13 @@ const ReviewTile = (props: TileReviewProps) => {
           <Text style={styles.tileUserTxt}>
             {props.review?.user?.username?.toUpperCase()}
           </Text>
+          {props?.review?.postedByRole &&
+            props?.review?.postedByRole !== 'Customer' && (
+              <FtbUserTag
+                tag={props?.review?.postedByRole}
+                width={UTILS.reviewManager.tagSizeReview}
+              />
+            )}
         </View>
         <View style={styles.tileReviewScore}>
           <Text style={styles.tileUserDateTxt}>

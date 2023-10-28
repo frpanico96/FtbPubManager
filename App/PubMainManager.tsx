@@ -107,7 +107,7 @@ const PubMainManager = ({navigation, route}) => {
         pub={route.params?.pub}
         isLoggedUser={isLoggedUser}
         isAtLeastOwner={isAtLeastOwner}
-        username={route.params?.userInfo?.username}
+        loggedUser={route.params?.userInfo}
         onNavigateToDetail={(review: Object) => {
           const navigationObj: navigateToDetailObj = {
             action: '',

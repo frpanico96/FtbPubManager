@@ -25,7 +25,7 @@ type ReviewManagerProps = {
   pub: Object;
   isLoggedUser: Boolean;
   isAtLeastOwner: Boolean;
-  username: String;
+  loggedUser: Object;
   onNavigateToDetail: Function;
 };
 
@@ -106,7 +106,8 @@ const ReviewManager = (props: ReviewManagerProps) => {
             originalReview={undefined}
             body={''}
             readonly={false}
-            username={props.username}
+            loggedUser={props.loggedUser}
+            isAtLeastOwner={props.isAtLeastOwner}
             onConfirmForm={handleConfirmModal}
           />
         }

@@ -148,4 +148,8 @@ export default {
   'review-comment-success': 'Comment posted succesfully',
   'review-positive-negative-feedback-error':
     'You cannot give a Positive and Negative feedback at the same time!',
+  'review-error-existing-feedback':
+    'You have already expressed a feedback on this review',
+  'feedback-success': 'Feedback reported with success',
+  'review-error-forbidden-comment': 'You cannot comment this review',
 };

@@ -40,6 +40,9 @@ const ReviewSchema = new Mongoose.Schema({
   reviewBody: {
     type: String,
   },
+  postedByRole: {
+    type: String,
+  },
 });
 
 const Review = Mongoose.model('review', ReviewSchema);

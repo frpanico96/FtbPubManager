@@ -149,4 +149,7 @@ export default {
   'review-comment-success': 'Commento inserito con successo',
   'review-positive-negative-feedback-error':
     'Non puoi dare un voto positivo e negativo allo stesso tempo!',
+  'review-error-existing-feedback': 'Hai giá dato un voto a questa recensione',
+  'feedback-success': 'Feedback aggiornato con successo',
+  'review-error-forbidden-comment': 'Non puoi commentare questa recensione',
 };

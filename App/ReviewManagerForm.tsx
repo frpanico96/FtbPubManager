@@ -20,7 +20,8 @@ import Toast from 'react-native-toast-message';
 
 type ReviewManagerFormProps = {
   pubId: String;
-  username: String;
+  loggedUser: Object;
+  isAtLeastOwner: Boolean;
   originalReview: Object;
   body: String;
   readonly: Boolean;
@@ -63,17 +64,36 @@ const ReviewManagerForm = (props: ReviewManagerFormProps) => {
       : ReviewAction.COMMENT
     : ReviewAction.REVIEW;
 
-
   const placeHolder: string =
     action === ReviewAction.REVIEW
       ? TRANSLATIONS['review-body-placeholder']
       : TRANSLATIONS['review-body-comment-placeholder'];
 
   const handleConfirm = () => {
+    const postedByRole =
+      props.isAtLeastOwner && props.loggedUser?.role
+        ? props.loggedUser?.role
+        : 'Customer';
+
+    if (
+      action === ReviewAction.COMMENT &&
+      props.loggedUser?.username !== props.originalReview?.user?.username &&
+      !props.isAtLeastOwner
+    ) {
+      Toast.show({
+        type: 'error',
+        text1: TRANSLATIONS['generic-error'],
+        text2: TRANSLATIONS['review-error-forbidden-comment'],
+        position: 'bottom',
+      });
+      return;
+    }
+
     const body = {
       pubId: props.pubId,
-      username: props.username,
+      username: props.loggedUser?.username,
       reviewBody,
+      postedByRole,
     };
 
     if (action === ReviewAction.REVIEW) {
