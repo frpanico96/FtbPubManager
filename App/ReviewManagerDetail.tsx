@@ -72,10 +72,31 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
       .then(res => res.json())
       .then(jsonRes => {
         console.log(jsonRes);
-        props.onUpdateFeedback();
+        if (jsonRes.error) {
+          Toast.show({
+            type: 'error',
+            text1: TRANSLATIONS[jsonRes.message],
+            text2: TRANSLATIONS[jsonRes.error] ? TRANSLATIONS[jsonRes.error] : jsonRes.error,
+            position: 'bottom',
+          });
+        } else {
+          Toast.show({
+            type: 'success',
+            text1: TRANSLATIONS['generic-success'],
+            text2: TRANSLATIONS['feedback-success'],
+            position: 'bottom',
+          });
+          props.onUpdateFeedback();
+        }
       })
       .catch(error => {
         console.log(error);
+        Toast.show({
+          type: 'error',
+          text1: TRANSLATIONS['generic-error'],
+          text2: error,
+          position: 'bottom',
+        });
       });
   };
 
@@ -143,6 +164,7 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
 
     const body = {
       reviewId: props.review?._id,
+      username: props.loggedUser?.username,
     };
     if (detailState.updatedLike) {
       body.like = detailState.likeCounter;
@@ -160,7 +182,7 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
         likeCounter={detailState.likeCounter}
         dislikeCounter={detailState.dislikeCounter}
         tileDisabled={true}
-        miniButtonDisabled={false}
+        miniButtonDisabled={props.loggedUser == null}
         limitReviewBody={false}
         onPressMiniButton={handleMiniBtnPress}
         onPressTile={() => console.log('###')}
@@ -206,7 +228,8 @@ const ReviewManagerDetail = (props: ReviewManagerDetailProp) => {
             originalReview={props.review}
             body={detailState.selectedComment?.reviewBody}
             readonly={detailState.readOnlyMode}
-            username={props.loggedUser?.username}
+            loggedUser={props.loggedUser}
+            isAtLeastOwner={props.isAtLeastOwner}
             onConfirmForm={() =>
               setDetailState(prev => {
                 const newState = {...prev};
@@ -226,7 +249,9 @@ const styles = StyleSheet.create({
   row: {flex: 1},
   commentsContainer: {
     flex: 3,
-    backgroundColor: 'gray',
+    backgroundColor: '#D3D3D3',
+    borderWidth: 1,
+    borderColor: '#708090',
     borderRadius: 6,
     padding: 5,
     marginTop: 3,

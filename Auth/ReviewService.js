@@ -4,6 +4,7 @@
 
 const User = require('../model/User');
 const Review = require('../model/Review');
+const FeedbackUserLog = require('../model/FeedbackUserLog');
 
 exports.getReviewsByPub = async (req, res, next) => {
   const {pubId} = req.body;
@@ -48,7 +49,7 @@ exports.getReviewComments = async (req, res, next) => {
 };
 
 exports.insertReview = async (req, res, next) => {
-  const {username, pubId, reviewBody, score} = req.body;
+  const {username, pubId, reviewBody, score, postedByRole} = req.body;
   await User.findOne({username})
     .then(user => {
       const review = new Review({
@@ -57,6 +58,7 @@ exports.insertReview = async (req, res, next) => {
         reviewBody: reviewBody,
         createdDate: new Date(),
         score: score,
+        postedByRole: postedByRole,
       });
       review
         .save()
@@ -82,7 +84,7 @@ exports.insertReview = async (req, res, next) => {
 };
 
 exports.commentReview = async (req, res, next) => {
-  const {username, pubId, reviewId, reviewBody} = req.body;
+  const {username, pubId, reviewId, reviewBody, postedByRole} = req.body;
   console.log('Inside Comments');
   await User.findOne({username})
     .then(user => {
@@ -92,6 +94,7 @@ exports.commentReview = async (req, res, next) => {
         reviewBody: reviewBody,
         createdDate: new Date(),
         originalReview: reviewId,
+        postedByRole,
       });
       review
         .save()
@@ -119,22 +122,62 @@ exports.commentReview = async (req, res, next) => {
 };
 
 exports.reviewFeedback = async (req, res, next) => {
-  const {like, dislike, reviewId} = req.body;
-  await Review.findById(reviewId)
-    .then(reviewToUpdate => {
-      if (like && like > reviewToUpdate?.likes) {
-        reviewToUpdate.likes = like;
-      }
-      if (dislike && dislike > reviewToUpdate?.dislikes) {
-        reviewToUpdate.dislikes = dislike;
-      }
-      reviewToUpdate
-        .save()
-        .then(newReview => {
-          return res.status(200).json({
-            message: 'generic-success',
-            newReview,
-          });
+  const {like, dislike, reviewId, username} = req.body;
+  let feedbackType = '';
+  await User.findOne({username})
+    .then(logger => {
+      FeedbackUserLog.find({review: reviewId, user: logger._id})
+        .then(feedbackUserLog => {
+          if (feedbackUserLog && feedbackUserLog.length > 0) {
+            return res.status(400).json({
+              message: 'generic-error',
+              error: 'review-error-existing-feedback',
+            });
+          }
+          Review.findById(reviewId)
+            .then(reviewToUpdate => {
+              if (like && like > reviewToUpdate?.likes) {
+                reviewToUpdate.likes = like;
+                feedbackType = 'positive';
+              }
+              if (dislike && dislike > reviewToUpdate?.dislikes) {
+                reviewToUpdate.dislikes = dislike;
+                feedbackType = 'negative';
+              }
+              reviewToUpdate
+                .save()
+                .then(newReview => {
+                  FeedbackUserLog.create({
+                    user: logger._id,
+                    review: reviewId,
+                    feedbackType: feedbackType,
+                  })
+                    .then(newFeedback => {
+                      return res.status(200).json({
+                        message: 'generic-success',
+                        newReview,
+                      });
+                    })
+                    .catch(error => {
+                      return res.status(400).json({
+                        message: 'generic-error',
+                        error: error.message,
+                      });
+                    });
+                })
+                .catch(error => {
+                  return res.status(400).json({
+                    message: 'generic-error',
+                    error: error.message,
+                  });
+                });
+            })
+            .catch(error => {
+              return res.status(400).json({
+                message: 'generic-error',
+                error: error.message,
+              });
+            });
         })
         .catch(error => {
           return res.status(400).json({
