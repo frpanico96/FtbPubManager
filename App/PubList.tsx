@@ -114,7 +114,7 @@ const PubList = ({
         resizeMode="cover"
         style={styles.pubListBackgroundImage}>
         <View style={styles.headerContainer}>
-          {Platform.OS === 'ios' && userInfo && (
+          {(Platform.OS === 'ios' || Platform.OS === 'android') && userInfo && (
             <View style={styles.iconContainer}>
               <TouchableOpacity onPress={handleUserReservationBtn}>
                 <Icon name="menu-open" size={50} color="#900" />

@@ -26,6 +26,7 @@ const Login = ({navigation, route}) => {
 
   const handleSignIn = () => {
     console.log('signed In');
+    console.log(UTILS.serverBasePath);
     fetch(UTILS.serverBasePath + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',

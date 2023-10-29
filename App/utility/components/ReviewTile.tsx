@@ -70,7 +70,7 @@ const ReviewTile = (props: TileReviewProps) => {
           <Text style={styles.tileUserDateTxt}>
             {createdDate?.toLocaleString()}
           </Text>
-          {Platform.OS === 'ios' && (
+          {(Platform.OS === 'ios' || Platform.OS === 'android') && (
             <Icon
               name={scoreIcon?.iconName}
               size={scoreIcon?.reviewSize}

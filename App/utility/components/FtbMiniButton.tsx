@@ -31,7 +31,7 @@ const FtbMiniButton = (props: FtbMiniButtonProps) => {
       disabled={props.disabled}
       onPress={() => handleMiniButtonPress(props.name)}>
       <View style={styles.tileReviewFooterIcon}>
-        {Platform.OS === 'ios' && (
+        {(Platform.OS === 'ios' || Platform.OS === 'android') && (
           <BtnIcon
             name={props.iconName}
             size={props.iconSize}
