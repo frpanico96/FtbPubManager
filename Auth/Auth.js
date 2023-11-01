@@ -17,6 +17,8 @@ const jwtSecret =
 exports.register = async (req, res, next) => {
   const {username, password, isOwner} = req.body;
 
+  console.log('### Registering User');
+
   if (password.length < 6) {
     return res.status(400).json({
       message: 'login-register-pass-length',
@@ -49,18 +51,20 @@ exports.register = async (req, res, next) => {
               res.status(201).json({message: 'login-register-success', user});
             })
             .catch(error => {
+              console.log('### error', error);
               return res.status(400).json({
                 message: 'Error',
                 error: error.message,
               });
             });
         })
-        .catch(error =>
-          res.status(400).json({
+        .catch(error => {
+          console.log('### error ', error);
+          return res.status(400).json({
             message: 'login-register-failure',
             error: error.message,
-          }),
-        );
+          });
+        });
     });
   } catch (err) {
     res.status(401).json({
