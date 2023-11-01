@@ -90,7 +90,8 @@ const UTILS = {
   },
   goBack: 'Go Back',
   save: 'Save',
-  serverBasePath: 'http://localhost:5001/api/auth',
+  serverBasePath:
+    'http://ec2-51-20-189-116.eu-north-1.compute.amazonaws.com:5001/api/auth',
   dayOfWeek: TRANSLATIONS.dayOfWeek,
   dayOfWeekOptions: [
     {label: TRANSLATIONS.dayOfWeek[0], value: 0},
