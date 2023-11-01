@@ -4,6 +4,7 @@
 const express = require('express');
 const {adminAuth} = require('../middleware/auth');
 const router = express.Router();
+const {testPing} = require('./ConnectionTest');
 const {register, login, update, deleteUser, guestLogin} = require('./Auth');
 const {
   insertPub,
@@ -37,6 +38,8 @@ const {
   reviewFeedback,
 } = require('./ReviewService');
 
+/* Test Ping */
+router.route('/ping').get(testPing);
 /* User Api */
 router.route('/register').post(register);
 router.route('/login').post(login);
