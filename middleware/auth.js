@@ -10,6 +10,7 @@ const jwtSecret =
 exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   console.log('### Token', token);
+  console.log('### Funciont Call', authAlgo('admin', token));
   const authAlgoResult = authAlgo('admin', token);
   console.log('### Result', authAlgoResult);
   if (authAlgoResult.success) {
