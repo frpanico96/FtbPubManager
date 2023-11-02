@@ -47,9 +47,12 @@ const authAlgo = (neededRole, token) => {
       if (err) {
         return {success: false, message: 'Not Authorized'};
       } else {
+        console.log('### Inside Non Error Condition');
         if (decodedToken.role !== neededRole) {
+          console.log('### Inside Authorized condition');
           return {success: false, message: 'Not Authorized'};
         } else {
+          console.log('### Inside Authorized condition');
           return {success: true, message: 'Authorized'};
         }
       }
