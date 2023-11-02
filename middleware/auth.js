@@ -43,6 +43,7 @@ const authAlgo = (neededRole, token) => {
   console.log('### Inside Algo', neededRole, token);
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
+      console.log('### DecodedToken', decodedToken);
       if (err) {
         return {success: false, message: 'Not Authorized'};
       } else {
