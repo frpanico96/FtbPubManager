@@ -7,11 +7,11 @@ const jwt = require('jsonwebtoken');
 const jwtSecret =
   '61ee06e2929764ddd97faf6339e56aea9bd5f83b5c6ee3130625c4ff54bdfc3eaf98c6';
 
-exports.adminAuth = (req, res, next) => {
+exports.adminAuth = async (req, res, next) => {
   const token = req.cookies.jwt;
   console.log('### Token', token);
   console.log('### Funciont Call', authAlgo('admin', token));
-  const authAlgoResult = authAlgo('admin', token);
+  const authAlgoResult = await authAlgo('admin', token);
   console.log('### Result', authAlgoResult);
   if (authAlgoResult.success) {
     next();
