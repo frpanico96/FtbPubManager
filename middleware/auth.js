@@ -7,17 +7,23 @@ const jwt = require('jsonwebtoken');
 const jwtSecret =
   '61ee06e2929764ddd97faf6339e56aea9bd5f83b5c6ee3130625c4ff54bdfc3eaf98c6';
 
-exports.adminAuth = async (req, res, next) => {
+exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   console.log('### Token', token);
-  console.log('### Funciont Call', authAlgo('admin', token));
-  const authAlgoResult = await authAlgo('admin', token);
-  console.log('### Result', authAlgoResult);
-  if (authAlgoResult.success) {
-    next();
-  } else {
-    return res.status(401).json({message: authAlgo.message});
-  }
+  let authAlgoResult = [];
+  authAlgo('admin', token)
+    .then(result => {
+      authAlgoResult = result;
+      console.log('### Result', authAlgoResult);
+      if (authAlgoResult.success) {
+        next();
+      } else {
+        return res.status(401).json({message: authAlgo.message});
+      }
+    })
+    .catch(error => {
+      return res.status(401).json({message: error});
+    });
 };
 
 exports.ownerAuth = (req, res, next) => {
@@ -40,30 +46,44 @@ exports.userAuth = (req, res, next) => {
   }
 };
 
-const authAlgo = (neededRole, token) => {
-  console.log('### Inside Algo', neededRole, token);
-  const resultObj = {success: false, message: 'Not Authorized'};
-  if (token) {
+const jwtVerify = async token => {
+  return new Promise((resolve, reject) => {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
-      console.log('### DecodedToken', decodedToken);
-      if (err) {
-        return resultObj;
-      } else {
-        console.log('### Inside Non Error Condition');
-        if (decodedToken.role !== neededRole) {
-          console.log('### Inside Authorized condition');
-          return resultObj;
-        } else {
-          console.log('### Inside Authorized condition');
-          resultObj.success = true;
-          resultObj.message = 'Authorized';
-          console.log('### result Obj', resultObj);
-          return resultObj;
-        }
-      }
+      resolve({err, decodedToken});
     });
-  } else {
-    resultObj.message = 'Not Authorized, token not available';
-    return resultObj;
-  }
+  });
+};
+
+const authAlgo = async (neededRole, token) => {
+  return new Promise((resolve, reject) => {
+    console.log('### Inside Algo', neededRole, token);
+    const resultObj = {success: false, message: 'Not Authorized'};
+    if (token) {
+      jwtVerify(token)
+        .then(result => {
+          console.log('### DecodedToken', result.decodedToken);
+          if (result.err) {
+            reject(resultObj);
+          } else {
+            console.log('### Inside Non Error Condition');
+            if (result.decodedToken.role !== neededRole) {
+              console.log('### Inside Authorized condition');
+              reject(resultObj);
+            } else {
+              console.log('### Inside Authorized condition');
+              resultObj.success = true;
+              resultObj.message = 'Authorized';
+              console.log('### result Obj', resultObj);
+              resolve(resultObj);
+            }
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    } else {
+      resultObj.message = 'Not Authorized, token not available';
+      resolve(resultObj);
+    }
+  });
 };
