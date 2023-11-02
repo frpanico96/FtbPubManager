@@ -9,7 +9,9 @@ const jwtSecret =
 
 exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
+  console.log('### Token', token);
   const authAlgoResult = authAlgo('admin', token);
+  console.log('### Result', authAlgoResult);
   if (authAlgoResult.success) {
     next();
   } else {
@@ -38,6 +40,7 @@ exports.userAuth = (req, res, next) => {
 };
 
 const authAlgo = (neededRole, token) => {
+  console.log('### Inside Algo', neededRole, token);
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       if (err) {
