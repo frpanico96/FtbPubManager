@@ -54,7 +54,7 @@ router.route('/guestLogin').get(guestLogin);
 /* Pub Api */
 router.route('/createPub').post(adminAuth, insertPub);
 router.route('/getPub').post(guestAuth, getPubById);
-router.route('/getPubs').get(guestAuth, getAllPubs);
+router.route('/getPubs').get(getAllPubs);
 router.route('/updatePub').put(adminAuth, updatePub);
 router.route('/deletePub').delete(adminAuth, deletePub);
 /* Menu Api */
