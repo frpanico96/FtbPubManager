@@ -2,7 +2,12 @@
  * Routing file
  */
 const express = require('express');
-const {adminAuth} = require('../middleware/auth');
+const {
+  adminAuth,
+  ownerAuth,
+  customerAuth,
+  guestAuth,
+} = require('../middleware/auth');
 const router = express.Router();
 const {testPing} = require('./ConnectionTest');
 const {register, login, update, deleteUser, guestLogin} = require('./Auth');
@@ -47,35 +52,39 @@ router.route('/update').put(adminAuth, update);
 router.route('/deleteUser').delete(adminAuth, deleteUser);
 router.route('/guestLogin').get(guestLogin);
 /* Pub Api */
-router.route('/createPub').post(insertPub);
-router.route('/getPub').post(getPubById);
-router.route('/getPubs').get(getAllPubs);
+router.route('/createPub').post(adminAuth, insertPub);
+router.route('/getPub').post(guestAuth, getPubById);
+router.route('/getPubs').get(guestAuth, getAllPubs);
 router.route('/updatePub').put(adminAuth, updatePub);
 router.route('/deletePub').delete(adminAuth, deletePub);
 /* Menu Api */
-router.route('/getMenu').post(getMenu);
-router.route('/createMenu').post(insertMenuItem);
-router.route('/updateMenu').post(updateMenu);
+router.route('/getMenu').post(guestAuth, getMenu);
+router.route('/createMenu').post(ownerAuth, insertMenuItem);
+router.route('/updateMenu').post(ownerAuth, updateMenu);
 /* Reservation Api */
-router.route('/getReservation').post(getReservationByDateAndPub);
-router.route('/createReservation').post(insertReservation);
-router.route('/updateReservation').post(updateReservation);
-router.route('/updateReservationStatus').post(updateReservationStatus);
-router.route('/getUserPubReservation').post(getUserReservationByPubId);
-router.route('/stopReservations').post(stopReservations);
-router.route('/getUserReservation').post(getUserReservation);
+router.route('/getReservation').post(ownerAuth, getReservationByDateAndPub);
+router.route('/createReservation').post(customerAuth, insertReservation);
+router.route('/updateReservation').post(customerAuth, updateReservation);
+router
+  .route('/updateReservationStatus')
+  .post(ownerAuth, updateReservationStatus);
+router
+  .route('/getUserPubReservation')
+  .post(customerAuth, getUserReservationByPubId);
+router.route('/stopReservations').post(ownerAuth, stopReservations);
+router.route('/getUserReservation').post(customerAuth, getUserReservation);
 /* Contact Us Api */
-router.route('/updateContactInfo').post(updateContactInfo);
-router.route('/updateAddressInfo').post(updateAddressInfo);
-router.route('/updateOpenCloseInfo').post(updateOpenCloseInfo);
-router.route('/updateVacationInfo').post(updateVacationInfo);
-router.route('/updateReservationInfo').post(updateReservationInfo);
+router.route('/updateContactInfo').post(ownerAuth, updateContactInfo);
+router.route('/updateAddressInfo').post(ownerAuth, updateAddressInfo);
+router.route('/updateOpenCloseInfo').post(ownerAuth, updateOpenCloseInfo);
+router.route('/updateVacationInfo').post(ownerAuth, updateVacationInfo);
+router.route('/updateReservationInfo').post(ownerAuth, updateReservationInfo);
 /* Review Api */
-router.route('/getPubReviews').post(getReviewsByPub);
-router.route('/getReviewComments').post(getReviewComments);
-router.route('/addReview').post(insertReview);
-router.route('/addReviewComment').post(commentReview);
-router.route('/addReviewFeedback').post(reviewFeedback);
+router.route('/getPubReviews').post(guestAuth, getReviewsByPub);
+router.route('/getReviewComments').post(guestAuth, getReviewComments);
+router.route('/addReview').post(customerAuth, insertReview);
+router.route('/addReviewComment').post(customerAuth, commentReview);
+router.route('/addReviewFeedback').post(customerAuth, reviewFeedback);
 //router.route('/createFoodCategory').post(insertFoodCategory);
 //router.route('/createFood').post(insertFood);
 module.exports = router;

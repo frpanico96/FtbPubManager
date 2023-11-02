@@ -6,15 +6,21 @@
 const jwt = require('jsonwebtoken');
 const jwtSecret =
   '61ee06e2929764ddd97faf6339e56aea9bd5f83b5c6ee3130625c4ff54bdfc3eaf98c6';
+const SCORE_MAP = {
+  guest: 10,
+  customer: 20,
+  owner: 30,
+  admin: 40,
+};
 
 exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  console.log('### Token', token);
+  //console.log('### Token', token);
   let authAlgoResult = [];
   authAlgo('admin', token)
     .then(result => {
       authAlgoResult = result;
-      console.log('### Result', authAlgoResult);
+      //console.log('### Result', authAlgoResult);
       if (authAlgoResult.success) {
         next();
       } else {
@@ -28,22 +34,56 @@ exports.adminAuth = (req, res, next) => {
 
 exports.ownerAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  const authAlgoResult = authAlgo('owner', token);
-  if (authAlgoResult.success) {
-    next();
-  } else {
-    return res.status(401).json({message: authAlgo.message});
-  }
+  let authAlgoResult = [];
+  authAlgo('owner', token)
+    .then(result => {
+      authAlgoResult = result;
+      //console.log('### Result', authAlgoResult);
+      if (authAlgoResult.success) {
+        next();
+      } else {
+        return res.status(401).json({message: authAlgo.message});
+      }
+    })
+    .catch(error => {
+      return res.status(401).json({message: error});
+    });
 };
 
-exports.userAuth = (req, res, next) => {
+exports.customerAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  const authAlgoResult = authAlgo('customer', token);
-  if (authAlgoResult.success) {
-    next();
-  } else {
-    return res.status(401).json({message: authAlgo.message});
-  }
+  let authAlgoResult = [];
+  authAlgo('customer', token)
+    .then(result => {
+      authAlgoResult = result;
+      //console.log('### Result', authAlgoResult);
+      if (authAlgoResult.success) {
+        next();
+      } else {
+        return res.status(401).json({message: authAlgo.message});
+      }
+    })
+    .catch(error => {
+      return res.status(401).json({message: error});
+    });
+};
+
+exports.guestAuth = (req, res, next) => {
+  const token = req.cookies.jwt;
+  let authAlgoResult = [];
+  authAlgo('guest', token)
+    .then(result => {
+      authAlgoResult = result;
+      //console.log('### Result', authAlgoResult);
+      if (authAlgoResult.success) {
+        next();
+      } else {
+        return res.status(401).json({message: authAlgo.message});
+      }
+    })
+    .catch(error => {
+      return res.status(401).json({message: error});
+    });
 };
 
 const jwtVerify = async token => {
@@ -56,24 +96,24 @@ const jwtVerify = async token => {
 
 const authAlgo = async (neededRole, token) => {
   return new Promise((resolve, reject) => {
-    console.log('### Inside Algo', neededRole, token);
+    //console.log('### Inside Algo', neededRole, token);
     const resultObj = {success: false, message: 'Not Authorized'};
     if (token) {
       jwtVerify(token)
         .then(result => {
-          console.log('### DecodedToken', result.decodedToken);
+          //console.log('### DecodedToken', result.decodedToken);
           if (result.err) {
             reject(resultObj);
           } else {
-            console.log('### Inside Non Error Condition');
-            if (result.decodedToken.role !== neededRole) {
-              console.log('### Inside Authorized condition');
+            //console.log('### Inside Non Error Condition');
+            if (SCORE_MAP[result.decodedToken.role] < SCORE_MAP[neededRole]) {
+              //console.log('### Inside Authorized condition');
               reject(resultObj);
             } else {
-              console.log('### Inside Authorized condition');
+              //console.log('### Inside Authorized condition');
               resultObj.success = true;
               resultObj.message = 'Authorized';
-              console.log('### result Obj', resultObj);
+              //console.log('### result Obj', resultObj);
               resolve(resultObj);
             }
           }
