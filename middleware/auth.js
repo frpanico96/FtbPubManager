@@ -41,23 +41,28 @@ exports.userAuth = (req, res, next) => {
 
 const authAlgo = (neededRole, token) => {
   console.log('### Inside Algo', neededRole, token);
+  const resultObj = {success: false, message: 'Not Authorized'};
   if (token) {
     jwt.verify(token, jwtSecret, (err, decodedToken) => {
       console.log('### DecodedToken', decodedToken);
       if (err) {
-        return {success: false, message: 'Not Authorized'};
+        return resultObj;
       } else {
         console.log('### Inside Non Error Condition');
         if (decodedToken.role !== neededRole) {
           console.log('### Inside Authorized condition');
-          return {success: false, message: 'Not Authorized'};
+          return resultObj;
         } else {
           console.log('### Inside Authorized condition');
-          return {success: true, message: 'Authorized'};
+          resultObj.success = true;
+          resultObj.message = 'Authorized';
+          console.log('### result Obj', resultObj);
+          return resultObj;
         }
       }
     });
   } else {
-    return {success: false, message: 'Not Authorized, token not available'};
+    resultObj.message = 'Not Authorized, token not available';
+    return resultObj;
   }
 };
