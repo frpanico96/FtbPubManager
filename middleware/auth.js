@@ -4,15 +4,16 @@
  * Grants access to certain admin/owner/loggedCustomer operation
  */
 const jwt = require('jsonwebtoken');
-const jwtSecret =
-  '61ee06e2929764ddd97faf6339e56aea9bd5f83b5c6ee3130625c4ff54bdfc3eaf98c6';
+require('dotenv').config();
+
+const jwtSecret = process.env.JWT_SECRET;
 const SCORE_MAP = {
   guest: 10,
   customer: 20,
   owner: 30,
   admin: 40,
 };
-
+console.log(process.env.JWT_SECRET);
 exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   //console.log('### Token', token);
@@ -96,6 +97,7 @@ const jwtVerify = async token => {
 
 const authAlgo = async (neededRole, token) => {
   return new Promise((resolve, reject) => {
+    //console.log(process.env.JWT_SECRET);
     //console.log('### Inside Algo', neededRole, token);
     const resultObj = {success: false, message: 'Not Authorized'};
     if (token) {

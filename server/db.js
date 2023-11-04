@@ -4,8 +4,10 @@
  * Currently it is a local mongoDB database
  */
 const Mongoose = require('mongoose');
+require('dotenv').config();
 
-const LOCAL_DB = 'mongodb://127.0.0.1:27017/ftbpubmanager';
+const LOCAL_DB = process.env.DB_PATH;
+//'mongodb://127.0.0.1:27017/ftbpubmanager';
 
 const connectDb = async () => {
   await Mongoose.connect(LOCAL_DB, {

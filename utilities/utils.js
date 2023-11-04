@@ -3,6 +3,7 @@
  * In order to not hardCode them in the component files
  */
 import TRANSLATIONS from '../translations/tranlastions';
+import LOCAL_CONFIGS from '../localconfig.json';
 
 const UTILS = {
   pubMain: [
@@ -90,8 +91,7 @@ const UTILS = {
   },
   goBack: 'Go Back',
   save: 'Save',
-  serverBasePath:
-    'http://ec2-51-20-189-116.eu-north-1.compute.amazonaws.com:5001/api/auth',
+  serverBasePath: LOCAL_CONFIGS.SERVER_BASE_PATH,
   dayOfWeek: TRANSLATIONS.dayOfWeek,
   dayOfWeekOptions: [
     {label: TRANSLATIONS.dayOfWeek[0], value: 0},

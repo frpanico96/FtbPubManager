@@ -67,3 +67,6 @@ yarn-error.log
 
 # Fonts
 ### /Fonts 22-15-07-411
+
+.env
+localconfig.json
