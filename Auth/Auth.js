@@ -188,6 +188,12 @@ exports.guestLogin = async (req, res, next) => {
     timeStamp: new Date(),
   })
     .then(log => {
+      const maxAge = 3 * 60 * 60;
+      const token = jwt.sign({role: 'guest'}, jwtSecret, {expiresIn: maxAge});
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: maxAge * 1000,
+      });
       res.status(200).json({message: 'Success'});
     })
     .catch(error => {
