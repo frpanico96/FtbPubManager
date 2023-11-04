@@ -3,7 +3,7 @@
  */
 
 const Reservation = require('../model/Reservation');
-const Contact = require('../model/contact');
+const Contact = require('../model/Contact');
 const Pub = require('../model/Pub');
 const User = require('../model/User');
 const WorkingDay = require('../model/WorkingDay');

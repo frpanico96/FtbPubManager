@@ -11,11 +11,14 @@ const Log = require('../model/Log');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtSecret =
-  '61ee06e2929764ddd97faf6339e56aea9bd5f83b5c6ee3130625c4ff54bdfc3eaf98c6';
+require('dotenv').config();
+
+const jwtSecret = process.env.JWT_SECRET;
 
 exports.register = async (req, res, next) => {
   const {username, password, isOwner} = req.body;
+
+  console.log('### Registering User');
 
   if (password.length < 6) {
     return res.status(400).json({
@@ -49,18 +52,20 @@ exports.register = async (req, res, next) => {
               res.status(201).json({message: 'login-register-success', user});
             })
             .catch(error => {
+              console.log('### error', error);
               return res.status(400).json({
                 message: 'Error',
                 error: error.message,
               });
             });
         })
-        .catch(error =>
-          res.status(400).json({
+        .catch(error => {
+          console.log('### error ', error);
+          return res.status(400).json({
             message: 'login-register-failure',
             error: error.message,
-          }),
-        );
+          });
+        });
     });
   } catch (err) {
     res.status(401).json({
@@ -183,6 +188,12 @@ exports.guestLogin = async (req, res, next) => {
     timeStamp: new Date(),
   })
     .then(log => {
+      const maxAge = 3 * 60 * 60;
+      const token = jwt.sign({role: 'guest'}, jwtSecret, {expiresIn: maxAge});
+      res.cookie('jwt', token, {
+        httpOnly: true,
+        maxAge: maxAge * 1000,
+      });
       res.status(200).json({message: 'Success'});
     })
     .catch(error => {
