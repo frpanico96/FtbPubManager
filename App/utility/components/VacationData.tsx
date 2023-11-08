@@ -67,7 +67,7 @@ const VacationData = (props: VacationDataProps) => {
       </Text>
       <View style={styles.container}>
         <View style={styles.dateContainer}>
-          <Text style={styles.dateTxt}>{TRANSLATIONS['contact-us-vacation-end-label']}</Text>
+          <Text style={styles.dateTxt}>{TRANSLATIONS['contact-us-vacation-start-label']}</Text>
           <DatePicker
             mode="date"
             date={vacation.vacationStart}
