@@ -16,7 +16,7 @@ require('dotenv').config();
 const jwtSecret = process.env.JWT_SECRET;
 
 exports.register = async (req, res, next) => {
-  const {username, password, isOwner} = req.body;
+  const {username, password} = req.body;
 
   console.log('### Registering User');
 
@@ -31,7 +31,7 @@ exports.register = async (req, res, next) => {
       await User.create({
         username,
         password: hash,
-        role: isOwner ? 'owner' : 'customer',
+        role: 'customer',
       })
         .then(user => {
           const maxAge = 3 * 60 * 60;
@@ -76,6 +76,7 @@ exports.register = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+  console.log('Logging in');
   const {username, password} = req.body;
   if (!username || !password) {
     return res.status(400).json({

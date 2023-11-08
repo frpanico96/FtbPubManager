@@ -27,12 +27,16 @@ const Login = ({navigation, route}) => {
   const handleSignIn = () => {
     console.log('signed In');
     console.log(UTILS.serverBasePath);
+    console.log(username, password);
     fetch(UTILS.serverBasePath + '/login', {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
-      body: JSON.stringify({username: username, password: password}),
+      body: JSON.stringify({username, password}),
     })
-      .then(res => res.json())
+      .then(res => {
+        console.log(JSON.stringify(res, null, 4));
+        return res.json();
+      })
       .then(jsonRes => {
         console.log(jsonRes);
         Toast.show({

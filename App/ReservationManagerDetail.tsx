@@ -4,7 +4,7 @@
  */
 import React, {useState, useCallback, useRef} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
-import {View, Text, TouchableOpacity, StyleSheet, Animated} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Animated, Platform} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 
@@ -247,7 +247,9 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   };
 
   const renderRightActions = (progress, dragX) => {
-    const upperOutput = isAtLeastOwner ? 0.61 : 0.96;
+    const upperCustomer = Platform.OS === 'android' ? 1.6 : 0.96;
+    const upperOwner = Platform.OS === 'android' ? 0.84 : 0.61;
+    const upperOutput = isAtLeastOwner ? upperOwner : upperCustomer;
     const textFontSize = isAtLeastOwner ? 10 : 12;
     const scale = dragX.interpolate({
       inputRange: [-100, 0],
