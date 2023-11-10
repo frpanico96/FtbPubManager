@@ -13,11 +13,11 @@ const SCORE_MAP = {
   owner: 30,
   admin: 40,
 };
-console.log(process.env.JWT_SECRET);
+//console.log(process.env.JWT_SECRET);
 exports.adminAuth = (req, res, next) => {
   const token = req.cookies.jwt;
   //console.log('### Token', token);
-  let authAlgoResult = [];
+  let authAlgoResult = {};
   authAlgo('admin', token)
     .then(result => {
       authAlgoResult = result;
@@ -35,8 +35,12 @@ exports.adminAuth = (req, res, next) => {
 
 exports.ownerAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  let authAlgoResult = [];
-  authAlgo('owner', token)
+  const {pubId} = req.body;
+  if (!pubId) {
+    return res.status(400).json({message: 'Input Error'});
+  }
+  let authAlgoResult = {};
+  authAlgo('owner', token, pubId)
     .then(result => {
       authAlgoResult = result;
       //console.log('### Result', authAlgoResult);
@@ -53,7 +57,7 @@ exports.ownerAuth = (req, res, next) => {
 
 exports.customerAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  let authAlgoResult = [];
+  let authAlgoResult = {};
   authAlgo('customer', token)
     .then(result => {
       authAlgoResult = result;
@@ -71,7 +75,7 @@ exports.customerAuth = (req, res, next) => {
 
 exports.guestAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  let authAlgoResult = [];
+  let authAlgoResult = {};
   authAlgo('guest', token)
     .then(result => {
       authAlgoResult = result;
@@ -95,7 +99,7 @@ const jwtVerify = async token => {
   });
 };
 
-const authAlgo = async (neededRole, token) => {
+const authAlgo = async (neededRole, token, checkOwner = '') => {
   return new Promise((resolve, reject) => {
     //console.log(process.env.JWT_SECRET);
     //console.log('### Inside Algo', neededRole, token);
@@ -112,6 +116,14 @@ const authAlgo = async (neededRole, token) => {
               //console.log('### Inside Authorized condition');
               reject(resultObj);
             } else {
+              if (
+                checkOwner &&
+                SCORE_MAP[result.decodedToken.role] < SCORE_MAP.admin &&
+                result.decodedToken?.pubs.indexOf(checkOwner) < 0
+              ) {
+                reject(resultObj);
+                return;
+              }
               //console.log('### Inside Authorized condition');
               resultObj.success = true;
               resultObj.message = 'Authorized';
