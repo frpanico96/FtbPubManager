@@ -27,7 +27,7 @@ exports.insertMenuItem = async (req, res, next) => {
     isVegetarianOk,
     price,
     currency,
-    pub,
+    pubId,
   } = req.body;
 
   if (food && foodCategory && ingredients) {
@@ -39,10 +39,10 @@ exports.insertMenuItem = async (req, res, next) => {
       isVegetarianOk,
       price,
       currency,
-      pub,
+      pub: pubId,
     })
       .then(menuItem => {
-        Pub.findById(pub)
+        Pub.findById(pubId)
           .then(pubToUpdate => {
             pubToUpdate.menu.push(menuItem._id);
             pubToUpdate.save().then(newPub => {

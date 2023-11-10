@@ -20,6 +20,7 @@ type ReservationManagerStatusProp = {
   mode: String;
   status: String;
   callBack: Boolean;
+  pubId: String;
   onConfirmAction: Function;
 };
 
@@ -41,6 +42,7 @@ const ReservationManagerStatus: React.FC<ReservationManagerStatusProp> = ({
   mode,
   status,
   callBack,
+  pubId,
   onConfirmAction,
 }) => {
   const handleConfirm = (status: String, callback: Boolean) => {
@@ -49,6 +51,7 @@ const ReservationManagerStatus: React.FC<ReservationManagerStatusProp> = ({
       callback,
       username,
       reservationId,
+      pubId,
     };
     console.log(bodyObj);
     const apiToCall = '/updateReservationStatus';

@@ -43,7 +43,7 @@ type SaveFormProps = {
   isVegetarianOk: Boolean;
   price: Number;
   currency: String;
-  pub: String;
+  pubId: String;
 };
 
 const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
@@ -86,7 +86,7 @@ const MenuManagerDetail: React.FC<MenuManagerDetailProps> = ({
 
   const handleSaveForm = (saveObj: SaveFormProps) => {
     const formObj = {...saveObj};
-    formObj.pub = pubId;
+    formObj.pubId = pubId;
     console.log(formObj);
     handleSaveToDb(formObj);
   };

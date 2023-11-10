@@ -63,6 +63,7 @@ const ReservationManagerModal: React.FC<ModalProps> = ({
         reservationId={reservation?._id}
         status={reservation?.status}
         callBack={reservation?.callBack}
+        pubId={pub._id}
         onConfirmAction={() => onToggleModal(!toggleModal)}
       />
     );
