@@ -10,7 +10,7 @@
     "test": "jest",
     "serverstart": "node ./server/server.js",
     "dev": "nodemon ./server/server.js",
-    "postinstall": "patch-package"
+    "postinstall": "npx patch-package"
   },
   "dependencies": {
     "@chakrahq/react-native-side-menu": "^1.3.4",
