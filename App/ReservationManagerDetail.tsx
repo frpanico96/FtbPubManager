@@ -105,7 +105,7 @@ const ReservationManagerDetail: React.FC<ReservationManagerDetailProp> = ({
     const bodyObj = {
       workdayId: workDay._id,
       stopReservations: !workDay.stopReservations,
-      pubId: pub._id;
+      pubId: pub._id,
     };
     fetch(UTILS.serverBasePath + apiToCall, {
       headers: {'Content-Type': 'application/json'},
