@@ -24,6 +24,7 @@ const {
   insertReservation,
   updateReservation,
   updateReservationStatus,
+  cancelReservation,
   getUserReservationByPubId,
   stopReservations,
   getUserReservation,
@@ -68,6 +69,7 @@ router.route('/updateReservation').post(customerAuth, updateReservation);
 router
   .route('/updateReservationStatus')
   .post(ownerAuth, updateReservationStatus);
+router.route('/cancelReservation').post(customerAuth, cancelReservation);
 router
   .route('/getUserPubReservation')
   .post(customerAuth, getUserReservationByPubId);

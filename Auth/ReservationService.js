@@ -638,6 +638,87 @@ exports.updateReservationStatus = async (req, res, next) => {
     );
 };
 
+exports.cancelReservation = async (req, res, next) => {
+  const {status, username, reservationId} = req.body;
+  await Reservation.findById(reservationId)
+    .then(reservationToUpdate => {
+      if (reservationToUpdate.status !== 'booked') {
+        return res.status(401).json({
+          message: 'generic-error',
+          error: 'reservation-error-closed-reservation',
+        });
+      } else {
+        reservationToUpdate.status = status;
+        reservationToUpdate
+          .save()
+          .then(newReservation => {
+            /* Guest Reservation */
+            if (!username) {
+              return res.status(200).json({
+                message: 'generic-success',
+                newReservation,
+              });
+              /* Logged Reservation */
+            } else {
+              User.findOne({username: username})
+                .then(userToUpdate => {
+                  return res.status(200).json({
+                    message: 'generic-success',
+                    newReservation,
+                  });
+                  // Cancelling reservation does not update status
+                  // the code is commented out rather than delete
+                  // to give the possibility to future updates.
+                  /*let score =
+                    status === 'shown' ? 1 : status === 'not shown' ? -2 : 0;
+                  console.log('#Status Score', score);
+                  console.log(oldCallbackStatus);
+                  const callBackScore =
+                    callback !== oldCallbackStatus && callback ? -1 : 0;
+                  // console.log('#CallBack score',callBackScore);
+                  score += callBackScore;
+                  // console.log('#Score', score);
+                  userToUpdate.score += score;
+                  //console.log(userToUpdate.score);
+                  userToUpdate
+                    .save()
+                    .then(newUser => {
+                      return res.status(200).json({
+                        message: 'generic-success',
+                        newReservation,
+                      });
+                    })
+                    .catch(error =>
+                      res.status(400).json({
+                        message: 'generic-error',
+                        error: error.message,
+                      }),
+                    );*/
+                })
+                .catch(error =>
+                  res.status(400).json({
+                    message: 'generic-error',
+                    error: error.message,
+                  }),
+                );
+            }
+          })
+          .catch(error =>
+            res.status(400).json({
+              message: 'generic-error',
+              error: error.message,
+            }),
+          );
+      }
+    })
+    .catch(error =>
+      res.status(400).json({
+        message: 'generic-error',
+        error: error.message,
+      }),
+    );
+};
+
 exports.stopReservations = async (req, res, next) => {
   const {workdayId, stopReservations} = req.body;
   await WorkingDay.findById(workdayId)

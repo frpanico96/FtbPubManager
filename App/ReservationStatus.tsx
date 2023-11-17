@@ -54,7 +54,7 @@ const ReservationManagerStatus: React.FC<ReservationManagerStatusProp> = ({
       pubId,
     };
     console.log(bodyObj);
-    const apiToCall = '/updateReservationStatus';
+    const apiToCall = mode === UTILS.reservationManager['action-type-cancel'] ? '/cancelReservation' : '/updateReservationStatus';
     fetch(UTILS.serverBasePath + apiToCall, {
       headers: {'Content-Type': 'application/json'},
       method: 'POST',
