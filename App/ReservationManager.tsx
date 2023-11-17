@@ -8,6 +8,7 @@ import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import LoadingSpinner from './utility/components/LoadingSpinner';
 import TRANSLATIONS from '../translations/tranlastions';
+import UTILS from '../utilities/utils';
 
 type ReservationManagerProp = {
   isAtLeastOwner: Boolean;
@@ -68,6 +69,7 @@ const ReservationManagerDatePicker: React.FC<
         <DatePicker
           mode="date"
           is24hourSource="device"
+          textColor={UTILS.datePickerColor}
           date={date}
           onDateChange={setDate}
         />

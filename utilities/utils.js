@@ -174,6 +174,7 @@ const UTILS = {
     tagIconSize: 20,
     tagIconColor: 'grey',
   },
+  datePickerColor: '#000000',
 };
 
 export default UTILS;

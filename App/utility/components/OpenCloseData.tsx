@@ -6,6 +6,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
 import TRANSLATIONS from '../../../translations/tranlastions';
+import UTILS from '../../../utilities/utils';
 
 type OpenCloseDataProps = {
   openTime: Number;
@@ -77,6 +78,7 @@ const OpenCloseData = (props: OpenCloseDataProps) => {
           <DatePicker
             mode="time"
             date={openCloseData.openTime}
+            textColor={UTILS.datePickerColor}
             onDateChange={newDate => {
               setOpenCloseData(prev => {
                 const newState = {...prev};
@@ -91,6 +93,7 @@ const OpenCloseData = (props: OpenCloseDataProps) => {
           <DatePicker
             mode="time"
             date={openCloseData.closeTime}
+            textColor={UTILS.datePickerColor}
             onDateChange={newDate => {
               setOpenCloseData(prev => {
                 const newState = {...prev};

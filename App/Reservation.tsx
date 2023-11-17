@@ -216,6 +216,7 @@ const ReservationForm: React.FC<ReservationPropForm> = ({
         onDateChange={setChosenDate}
         minimumDate={minimumDate}
         minuteInterval={15}
+        textColor={UTILS.datePickerColor}
         mode={isUpdate ? 'time' : 'datetime'}
       />
       <TextInput

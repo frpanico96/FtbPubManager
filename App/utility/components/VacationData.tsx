@@ -71,6 +71,7 @@ const VacationData = (props: VacationDataProps) => {
           <DatePicker
             mode="date"
             date={vacation.vacationStart}
+            textColor={UTILS.datePickerColor}
             onDateChange={newDate => {
               setVacation(prev => {
                 const newState = {...prev};
@@ -85,6 +86,7 @@ const VacationData = (props: VacationDataProps) => {
           <DatePicker
             mode="date"
             date={vacation.vacationEnd}
+            textColor={UTILS.datePickerColor}
             onDateChange={newDate => {
               setVacation(prev => {
                 const newState = {...prev};
