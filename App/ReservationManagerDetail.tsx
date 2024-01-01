@@ -248,8 +248,8 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   };
 
   const renderRightActions = (progress, dragX) => {
-    const upperCustomer = Platform.OS === 'android' ? 1.6 : 0.96;
-    const upperOwner = Platform.OS === 'android' ? 0.84 : 0.61;
+    const upperCustomer = Platform.OS === 'android' ? 1.6 : 1.6;
+    const upperOwner = Platform.OS === 'android' ? 0.84 : 0.84;
     const upperOutput = isAtLeastOwner ? upperOwner : upperCustomer;
     const textFontSize = isAtLeastOwner ? 10 : 12;
     const scale = dragX.interpolate({

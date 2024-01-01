@@ -16,6 +16,11 @@ On the App Home Page you can decide wheter you want to log in, or just check out
 
 After you are in, you will be presented a list of all pubs and just select the one you are curious about!
 
+Currently available in:
+
+- English
+- Italian
+
 ## Open Source and features to come
 
 This project is meant to be open source so anyone can contribute to it by opening a pull request or otherwise an issue.
