@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
   },
   pubMainHeader: {
     padding: 4,
+    paddingTop: 20,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

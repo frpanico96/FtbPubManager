@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'space-evenly',
     alignItems: 'center',
+    paddingTop: 10,
   },
   pubListHeader: {
     fontFamily: 'sans-serif',
