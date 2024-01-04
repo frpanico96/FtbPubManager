@@ -6,7 +6,7 @@ The Pub Manager App is thought with the idea of having multiple people reaching 
 or customer) multiple Pubs which may or may not be related to each other.
 
 <div style="margin: auto;">
-  <img src="./assets/ReadmeAssets/Cover.jpeg" width="250">
+  <img align="center" src="./assets/ReadmeAssets/Cover.jpeg" width="250">
 </div>
 This app allows multiple feature such as:
 
