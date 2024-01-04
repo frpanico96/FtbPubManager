@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import SelectMultiple from 'react-native-select-multiple';
 
-import UTILS from '../../../utilities/utils';
+import UTILS from '../../../NodeApp/utilities/utils';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-toast-message';
-import TRANSLATIONS from '../../../translations/tranlastions';
+import TRANSLATIONS from '../../../NodeApp/translations/tranlastions';
 
 type ReservationInfoDataProps = {
   reservationDelay: Number;

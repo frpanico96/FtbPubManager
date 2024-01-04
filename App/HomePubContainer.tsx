@@ -6,7 +6,7 @@
 import React from 'react';
 import HomePage from '../App/Home';
 import PubList from '../App/PubList';
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 
 const HomePubContainer = ({navigation, route}) => {
   const handleNavigate = (cmp: String) => {

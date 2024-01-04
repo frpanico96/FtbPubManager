@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, Platform, TouchableOpacity} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import UTILS from '../../../utilities/utils';
+import UTILS from '../../../NodeApp/utilities/utils';
 import FtbMiniButton from './FtbMiniButton';
 import FtbUserTag from './FtbUserTag';
 

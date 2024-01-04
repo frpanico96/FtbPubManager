@@ -7,8 +7,8 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import LoadingSpinner from './utility/components/LoadingSpinner';
-import TRANSLATIONS from '../translations/tranlastions';
-import UTILS from '../utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
+import UTILS from '../NodeApp/utilities/utils';
 
 type ReservationManagerProp = {
   isAtLeastOwner: Boolean;

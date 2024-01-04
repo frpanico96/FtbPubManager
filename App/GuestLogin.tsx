@@ -5,7 +5,7 @@ import React, {useEffect} from 'react';
 import LoadingSpinner from './utility/components/LoadingSpinner';
 import Toast from 'react-native-toast-message';
 
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 
 const GuestLogin = ({navigation, route}) => {
   useEffect(() => {

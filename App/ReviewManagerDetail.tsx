@@ -8,8 +8,8 @@ import {
   View,
 } from 'react-native';
 
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 import {useFocusEffect} from '@react-navigation/native';
 import ReviewTile from './utility/components/ReviewTile';
 import ReviewCommentTile from './utility/components/ReviewCommentTile';

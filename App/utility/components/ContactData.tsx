@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 
 import DropDownPicker from 'react-native-dropdown-picker';
-import UTILS from '../../../utilities/utils';
+import UTILS from '../../../NodeApp/utilities/utils';
 import Toast from 'react-native-toast-message';
-import TRANSLATIONS from '../../../translations/tranlastions';
+import TRANSLATIONS from '../../../NodeApp/translations/tranlastions';
 
 type ContactDataProps = {
   phoneNumber: String;

@@ -7,7 +7,7 @@ type FtbUserTagProps = {
 };
 
 import EntypoCommentIcon from 'react-native-vector-icons/Entypo';
-import UTILS from '../../../utilities/utils';
+import UTILS from '../../../NodeApp/utilities/utils';
 
 const FtbUserTag = (props: FtbUserTagProps) => {
   const tagWidth = StyleSheet.create({

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import TRANSLATIONS from '../../../translations/tranlastions';
+import TRANSLATIONS from '../../../NodeApp/translations/tranlastions';
 import Toast from 'react-native-toast-message';
 
 type FtbModalProps = {

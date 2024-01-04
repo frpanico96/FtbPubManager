@@ -4,10 +4,10 @@
 import React, { useCallback, useState } from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 import { useFocus } from 'native-base/lib/typescript/components/primitives';
 import { useFocusEffect } from '@react-navigation/native';
-import TRANSLATIONS from '../translations/tranlastions';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type ContactUsManagerProp = {
   pub: Object;

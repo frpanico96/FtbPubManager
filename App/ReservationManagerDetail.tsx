@@ -8,10 +8,10 @@ import {View, Text, TouchableOpacity, StyleSheet, Animated, Platform} from 'reac
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {GestureHandlerRootView, ScrollView} from 'react-native-gesture-handler';
 
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 import CheckBox from '@react-native-community/checkbox';
 import ReservationManagerModal from './ReservationManagerModal';
-import TRANSLATIONS from '../translations/tranlastions';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type DateObj = {
   dateStr: String;
@@ -248,8 +248,8 @@ const ReservationTile: React.FC<ReservationTileProp> = ({
   };
 
   const renderRightActions = (progress, dragX) => {
-    const upperCustomer = Platform.OS === 'android' ? 1.6 : 1.6;
-    const upperOwner = Platform.OS === 'android' ? 0.84 : 0.84;
+    const upperCustomer = Platform.OS === 'android' ? 1.6 : 0.9;
+    const upperOwner = Platform.OS === 'android' ? 0.84 : 0.64;
     const upperOutput = isAtLeastOwner ? upperOwner : upperCustomer;
     const textFontSize = isAtLeastOwner ? 10 : 12;
     const scale = dragX.interpolate({

@@ -11,9 +11,9 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import IMAGES from '../utilities/asset';
+import IMAGES from '../NodeApp/utilities/asset';
 
-import TRANSLATIONS from '../translations/tranlastions';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type HomePageProps = {
   onNavigate: Function;

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-import UTILS from '../../../utilities/utils';
+import UTILS from '../../../NodeApp/utilities/utils';
 import FtbUserTag from './FtbUserTag';
 
 type ReviewCommentTileProps = {

@@ -6,10 +6,10 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Reservation from './Reservation';
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 import ReservationManagerStatus from './ReservationStatus';
 import Toast from 'react-native-toast-message';
-import TRANSLATIONS from '../translations/tranlastions';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type ModalProps = {
   toggleModal: Boolean;

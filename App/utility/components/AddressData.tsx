@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import TRANSLATIONS from '../../../translations/tranlastions';
+import TRANSLATIONS from '../../../NodeApp/translations/tranlastions';
 
 type AddressDataProps = {
   address: String;

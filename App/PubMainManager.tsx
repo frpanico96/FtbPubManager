@@ -12,9 +12,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import IMAGES from '../utilities/asset';
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import IMAGES from '../NodeApp/utilities/asset';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 import ReservationManager from './ReservationManager';
 import ContactUsManager from './ContactUsManager';
 import ReviewManager from './ReviewManager';

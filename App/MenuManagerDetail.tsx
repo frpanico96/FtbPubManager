@@ -14,8 +14,8 @@ import Toast from 'react-native-toast-message';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
 
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type MenuManagerDetailProps = {
   pubId: String;

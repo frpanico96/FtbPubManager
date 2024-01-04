@@ -5,8 +5,8 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
-import TRANSLATIONS from '../../../translations/tranlastions';
-import UTILS from '../../../utilities/utils';
+import TRANSLATIONS from '../../../NodeApp/translations/tranlastions';
+import UTILS from '../../../NodeApp/utilities/utils';
 
 type OpenCloseDataProps = {
   openTime: Number;

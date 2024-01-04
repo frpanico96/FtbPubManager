@@ -7,9 +7,9 @@ import {TextInput, TouchableOpacity, View, Text} from 'react-native';
 import {ImageBackground, StyleSheet} from 'react-native';
 import Toast from 'react-native-toast-message';
 
-import IMAGES from '../utilities/asset';
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import IMAGES from '../NodeApp/utilities/asset';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 import {type UserInfo} from './utility/types/types';
 
 const Login = ({navigation, route}) => {

@@ -7,11 +7,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-toast-message';
-import TRANSLATIONS from '../translations/tranlastions';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type ReservationManagerStatusProp = {
   date: String;

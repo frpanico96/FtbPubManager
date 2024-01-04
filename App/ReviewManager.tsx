@@ -18,8 +18,8 @@ import FtbModal from './utility/components/FtbModal';
 import ReviewManagerForm from './ReviewManagerForm';
 import ReviewTile from './utility/components/ReviewTile';
 
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type ReviewManagerProps = {
   pub: Object;

@@ -13,9 +13,9 @@ import {ReviewAction} from './utility/types/types';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
-import Review from '../model/Review';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
+import Review from '../NodeApp/model/Review';
 import Toast from 'react-native-toast-message';
 
 type ReviewManagerFormProps = {

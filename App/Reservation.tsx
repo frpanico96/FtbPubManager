@@ -13,8 +13,8 @@ import {
 import DatePicker from 'react-native-date-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from 'react-native-toast-message';
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type ContactInfo = {
   phoneNumber: String;

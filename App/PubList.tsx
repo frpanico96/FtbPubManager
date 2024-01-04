@@ -15,9 +15,9 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import IMAGES from '../utilities/asset';
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import IMAGES from '../NodeApp/utilities/asset';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 import {type UserInfo} from './utility/types/types';
 /* Example of pub Object
 const testPub = {

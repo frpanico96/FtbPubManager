@@ -6,13 +6,13 @@ import {View, Modal, Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 import ContactData from './utility/components/ContactData';
 
-import UTILS from '../utilities/utils';
+import UTILS from '../NodeApp/utilities/utils';
 import Toast from 'react-native-toast-message';
 import AddressData from './utility/components/AddressData';
 import OpenCloseData from './utility/components/OpenCloseData';
 import VacationData from './utility/components/VacationData';
 import ReservationInfoData from './utility/components/ReservationInfoData';
-import TRANSLATIONS from '../translations/tranlastions';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 type ContactUsManagerDetailModalProps = {
   toggleModal: Boolean;

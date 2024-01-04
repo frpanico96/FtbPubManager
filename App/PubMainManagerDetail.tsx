@@ -10,9 +10,9 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import IMAGES from '../utilities/asset';
-import UTILS from '../utilities/utils';
-import TRANSLATIONS from '../translations/tranlastions';
+import IMAGES from '../NodeApp/utilities/asset';
+import UTILS from '../NodeApp/utilities/utils';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 import MenuManagerDetail from './MenuManagerDetail';
 import ReservationManagerDetail from './ReservationManagerDetail';

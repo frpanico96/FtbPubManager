@@ -14,9 +14,9 @@ import {
 } from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
 import CheckBox from '@react-native-community/checkbox';
-import UTILS from '../utilities/utils';
-import IMAGES from '../utilities/asset';
-import TRANSLATIONS from '../translations/tranlastions';
+import UTILS from '../NodeApp/utilities/utils';
+import IMAGES from '../NodeApp/utilities/asset';
+import TRANSLATIONS from '../NodeApp/translations/tranlastions';
 
 const MM_UTILS = UTILS.menuManager;
 

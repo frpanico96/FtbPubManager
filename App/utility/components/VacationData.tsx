@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Toast from 'react-native-toast-message';
-import TRANSLATIONS from '../../../translations/tranlastions';
+import TRANSLATIONS from '../../../NodeApp/translations/tranlastions';
 
 type VacationDataProps = {
   vacationStartDate: Date;
