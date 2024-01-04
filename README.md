@@ -5,7 +5,7 @@
 The Pub Manager App is thought with the idea of having multiple people reaching the same app to manage (as owner
 or customer) multiple Pubs which may or may not be related to each other.
 
-![image](./assets/ReadmeAssets/Cover.jpeg=250x250)
+<img src="./assets/ReadmeAssets/Cover.jpeg" width="150">
 
 This app allows multiple feature such as:
 
