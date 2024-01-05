@@ -50,8 +50,8 @@ In the home page the user can choose between:
 - Login as a customer
 - Login as a guest
 
-<img src="./assets/ReadmeAssets/HomePage.jpeg" width="120">
-<img src="./assets/ReadmeAssets/SignPage.jpeg" width="120">
+<img src="./assets/ReadmeAssets/HomePage.jpeg" width="150">
+<img src="./assets/ReadmeAssets/SignPage.jpeg" width="150">
 
 Logging as a guest allows you to simply check out which pubs are present in the app, their contacts and their menu.
 
@@ -84,8 +84,8 @@ From here you can choose one of the action you are willing to do
 
 On the Menu page, the Menu will be show in an accordion fashion: pressing one of the voices of the menu it will expands showing all the items for that particular voice (e.g. Appetizers)
 
-<img src="./assets/ReadmeAssets/MenuPage.jpeg" width="120">
-<img src="./assets/ReadmeAssets/MenuEditPage.jpeg" width="120">
+<img src="./assets/ReadmeAssets/MenuPage.jpeg" width="150">
+<img src="./assets/ReadmeAssets/MenuEditPage.jpeg" width="150">
 
 <ins>Owners</ins> can create a new Meun Item via a button that they have on the UI or edit an existing menu item by long pressing it.
 
@@ -108,10 +108,10 @@ The reservation will have no name on it (i.e. anonymous reservation)
 
 It is possible to see your reservations for that particular pub on the **Reservation Manager** page
 
-<img src="./assets/ReadmeAssets/ReservationManagerPage.jpeg" width="120">
-<img src="./assets/ReadmeAssets/ReservationManagerPageActions.jpeg" width="120">
-<img src="./assets/ReadmeAssets/ReservationManagerPageCancel.jpeg" width="120">
-<img src="./assets/ReadmeAssets/ReservationManagerPageEdit.jpeg" width="120">
+<img src="./assets/ReadmeAssets/ReservationManagerPage.jpeg" width="150">
+<img src="./assets/ReadmeAssets/ReservationManagerPageActions.jpeg" width="150">
+<img src="./assets/ReadmeAssets/ReservationManagerPageCancel.jpeg" width="150">
+<img src="./assets/ReadmeAssets/ReservationManagerPageEdit.jpeg" width="150">
 
 By the swipeable gesture handle from left to right it is possible to perfor actions on the reservation:
 
@@ -149,12 +149,12 @@ From the Contact Info page, users can see many information about the pub such as
 
 <ins>Owners</ins> have an additional button on the page to make modification about the information shown on the page.
 
-<img src="./assets/ReadmeAssets/ContactInfoDetail.png" width="100">
-<img src="./assets/ReadmeAssets/ContactInfoDetailContact.png" width="100">
-<img src="./assets/ReadmeAssets/ContactInfoDetailAddress.png" width="100">
-<img src="./assets/ReadmeAssets/ContactInfoDetailOpenCloseTime.png" width="100">
-<img src="./assets/ReadmeAssets/ContactInfoDetailVacation.png" width="100">
-<img src="./assets/ReadmeAssets/ContactInfoDetailOtherInfo.png" width="100">
+<img src="./assets/ReadmeAssets/ContactInfoDetail.png" width="150">
+<img src="./assets/ReadmeAssets/ContactInfoDetailContact.png" width="150">
+<img src="./assets/ReadmeAssets/ContactInfoDetailAddress.png" width="150">
+<img src="./assets/ReadmeAssets/ContactInfoDetailOpenCloseTime.png" width="150">
+<img src="./assets/ReadmeAssets/ContactInfoDetailVacation.png" width="150">
+<img src="./assets/ReadmeAssets/ContactInfoDetailOtherInfo.png" width="150">
 
 It can also modify:
 
@@ -170,8 +170,8 @@ Logged users can also give a feedback to the pub via the Review service.
 
 You can give a score of what your experience was at the pub
 
-<img src="./assets/ReadmeAssets/ReviewPageForm.png" width="120">
-<img src="./assets/ReadmeAssets/ReviewPageFormDropdown.png" width="120">
+<img src="./assets/ReadmeAssets/ReviewPageForm.png" width="150">
+<img src="./assets/ReadmeAssets/ReviewPageFormDropdown.png" width="150">
 
 Other users can like or dislike your review, while only pub owner and the user that created the review itself can comment the review (owner of the pub is marked with a tag under the name).
 
