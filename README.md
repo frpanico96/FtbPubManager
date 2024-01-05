@@ -1,5 +1,22 @@
 # FTB Pub Manager by FTB Studio
 
+##### Table of Contents
+
+- [A Pub Management application you have never seen before](#a-pub-management-application-you-have-never-seen-before)
+  - [Home Page](#home-page)
+  - [Pub List Page](#pub-list-page)
+  - [Pub Home Page](#pub-home-page)
+  - [Menu](#menu)
+  - [Reservations](#reservations)
+  - [Reservation Manager](#reservation-manager)
+  - [Contact Info](#contact-info)
+  - [Reviews](#reviews)
+- [Open Source and features to come](#open-source-and-features-to-come)
+- [Installation](#installation)
+  - [iOS build](#ios-build)
+  - [Android build](#android-build)
+  - [Run Server](#run-server)
+
 ## A Pub Management application you have never seen before
 
 ```
@@ -175,9 +192,9 @@ Let's discover new features for the app yet to come:
 - Creating a workflow enabling users to submit a registration for their pubs
 - Notifications
 
-## Techincal Details
+## Installation
 
-To be able to run this app (even locally) there are few steps to pursue:
+To be able to run this app (assuming you are fully setup for ReactNative) there are few steps to pursue:
 
 - Create a local .env file with keys
   - JWT_SECRET
@@ -185,4 +202,76 @@ To be able to run this app (even locally) there are few steps to pursue:
 - Create a local "localconfig.json" with an Object containing the following key
   - SERVER_BASE_PATH
 
-You can find the docker and docker compose file in the project, ready to use!
+Run the command
+
+```
+$ npm install
+```
+
+It may throw a post-installation error you can ignore since it will not affect the build
+
+### iOS build
+
+To correctly build on iOS execute the following command
+
+```
+$ cd ios && pod install && cd .. && npm run ios
+```
+
+### Android build
+
+**Do not use versions higher than JDK 17**
+
+Before running Android check if the app build correctly
+
+```
+$ cd android && ./gradlew clean
+```
+
+It usually trhows the following error
+
+```
+A problem occurred evaluating project ':react-native-i18n'.
+> Could not find method implement() for arguments [com.facebook.react:react-native:+] on object of type org.gradle.api.internal.artifacts.dsl.dependencies.DefaultDependencyHandler.
+```
+
+So before launching the clean command go to
+./node_modules/react-native-i18n/android/build.gradle
+
+and perform the following substitution
+
+```
+/* OLD */
+dependencies {
+  compile "com.facebook.react:react-native:+" // From node_modules
+}
+
+/* NEW */
+dependencies {
+  implementation "com.facebook.react:react-native:+" // From node_modules
+}
+```
+
+After doing this, the ./gradlew clean command will terminate succesfully.
+
+Than you can run android version of the app
+
+```
+$ cd .. && npm run android
+```
+
+### Run Server
+
+To run the server (assuming you already have Docker) always in the project folder
+
+```
+$ docker-compose up
+```
+
+If the following command throws the error
+
+```
+mongo exited with code 14
+```
+
+cleanup the data folder and run "docker-compose up" again
